@@ -27,27 +27,27 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<WebContainer/>} >
-          <Route path="/home" element={<Home/>} />
-          <Route path="/about" element={<About/>}/>
-          <Route path="/contact" element={<Contact/>}/>
-          <Route path="/services/package" element={<Package/>} />
-          <Route path="/meraviglia-club" element={<Club/>}/>
-          <Route path="/services/types-of-travel" element={<TypeTravel/>}/>
-          <Route path="/services/partners" element={<Partner/>}/>
+          <Route path="home" element={<Home/>} />
+          <Route path="about" element={<About/>}/>
+          <Route path="contact" element={<Contact/>}/>
+          <Route path="services/package" element={<Package/>} />
+          <Route path="meraviglia-club" element={<Club/>}/>
+          <Route path="services/types-of-travel" element={<TypeTravel/>}/>
+          <Route path="services/partners" element={<Partner/>}/>
         </Route>
         <Route path="/login"element={ <Login/>}/>
-      <Route path="/dashboard" element={<DashboardContainer/>}>
-          <Route path="/login" element={<DashboardLogin/>}/>
-          <Route path="/admin" element={<DashboardAdmin/>}/>
-          <Route path="/user" element={<DashboardUser/>}/>
-          <Route path="/booking" element={<DashboardBooking/>}/>
-          <Route path="/bookingmeeting" element={<DashboardBookingMeeting/>}/>
-          <Route path="/website-content"element={<DashboardWebContent/>}/>
-          <Route path="/inbox" element={<DashboardInbox/>}/>
-          <Route path="/type-travel" element={<DashboardTypeTravel/>}/>
-          <Route path="/news" element={<DashboardNews/>}/>
-          <Route path="/package" element={<DashboardPackage/>}/>
-          <Route path="/partner" element={<DashboardPartner/>}/>
+      <Route path="/dashboard/" element={<DashboardContainer/>}>
+          <Route path="login" element={<DashboardLogin/>}/>
+          <Route path="admin" element={<DashboardAdmin/>}/>
+          <Route path="user" element={<DashboardUser/>}/>
+          <Route path="booking" element={<DashboardBooking/>}/>
+          <Route path="bookingmeeting" element={<DashboardBookingMeeting/>}/>
+          <Route path="website-content"element={<DashboardWebContent/>}/>
+          <Route path="inbox" element={<DashboardInbox/>}/>
+          <Route path="type-travel" element={<DashboardTypeTravel/>}/>
+          <Route path="news" element={<DashboardNews/>}/>
+          <Route path="package" element={<DashboardPackage/>}/>
+          <Route path="partner" element={<DashboardPartner/>}/>
         </Route>
       </Routes>
       </BrowserRouter>
