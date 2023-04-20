@@ -8,3 +8,13 @@
     justify-content: center;
     align-items: center;
 }
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-container input {
+    margin-bottom: 10px;
+  }
+  
