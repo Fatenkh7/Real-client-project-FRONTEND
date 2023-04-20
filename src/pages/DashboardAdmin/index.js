@@ -1,11 +1,19 @@
-import { Table, Space } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Space, Input } from "antd";
+import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
+import Button from "../../components/Button";
+import Popup from "../../components/Popup";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [addPop, setAddPop] = useState(false);
+  const [editPop, setEditPop] = useState(false);
+  const closePop = () => {
+    setAddPop(false);
+    setEditPop(false);
+  };
 
   useEffect(() => {
     axios
@@ -21,12 +29,12 @@ export default function Home() {
 
   const handleEdit = (record) => {
     console.log(`Edit record ${record.key}`);
-    // handle edit logic here
+    // handle edit here
   };
 
   const handleDelete = (record) => {
     console.log(`Delete record ${record.key}`);
-    // handle delete logic here
+    // handle delete here
   };
 
   const columns = [
@@ -89,15 +97,16 @@ export default function Home() {
   };
 
   const handleAddAdmin = () => {
-    // handle add admin logic here
+    setAddPop(true);
+    console.log("clicked");
+  };
+  const handleSubmit = () => {
     console.log("Add new admin");
   };
 
   return (
     <div className="container-admins">
-      <div className="button-container">
-        <button onClick={handleAddAdmin}>Add New Admin</button>
-      </div>
+      <Button onClick={handleAddAdmin}>Add Admin</Button>
       <Table
         columns={columns}
         style={{
@@ -108,6 +117,60 @@ export default function Home() {
         dataSource={data}
         onChange={onChange}
       />
+      {addPop && (
+        <Popup title="Add Admin" close={closePop}>
+          <div>
+            <Input
+              id="outlined-controlled"
+              placeholder="First Name"
+              name="first_name"
+              allowClear
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Last Name"
+              name="last_name"
+              allowClear
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Username"
+              name="username"
+              allowClear
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Email"
+              name="email"
+              allowClear
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Is Super"
+              name="is_super"
+              allowClear
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Password"
+              name="password"
+              allowClear
+            />
+            <Button
+              variant="contained"
+              disableElevation
+              style={{ height: 55 }}
+              sx={{ backgroundColor: "#3d0066" }}
+              onClick={() => {
+                handleSubmit();
+                setAddPop(false);
+              }}
+            >
+              Submit
+            </Button>
+          </div>
+        </Popup>
+      )}
     </div>
   );
 }
