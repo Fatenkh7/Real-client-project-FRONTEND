@@ -1,0 +1,13 @@
+
+.button-container {
+    position: relative;
+    bottom: 320px;
+    left: 700px;
+  }
+  
+  .button-container button {
+    font-size: 13px;
+    padding: 12px 24px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
