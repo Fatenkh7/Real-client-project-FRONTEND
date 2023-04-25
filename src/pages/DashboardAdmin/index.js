@@ -169,13 +169,18 @@ export default function Home() {
 
   return (
     <div className="container-admins">
-      <Button onClick={handleAddAdmin}>Add Admin</Button>
+      <div className="add--button_container">
+        <Button onClick={handleAddAdmin}>Add Admin</Button>
+      </div>
       <Table
+        //  scroll={{ y: 400 }}
         columns={columns}
         style={{
-          marginTop: "-300px",
+          height:"560px",
           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-          width: "1600px",
+          width: "95%",
+          background: "white",
+          borderRadius:"4px",
         }}
         dataSource={data}
         onChange={onChange}
