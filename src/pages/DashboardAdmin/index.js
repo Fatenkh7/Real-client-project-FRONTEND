@@ -7,11 +7,19 @@ import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
 
-export default function Home() {
+export default function Home(props) {
   const [data, setData] = useState([]);
   const [addPop, setAddPop] = useState(false);
   const [editPop, setEditPop] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [adminData, setAdminData] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    isSuper: false,
+  });
 
   const closePop = () => {
     setAddPop(false);
@@ -154,16 +162,28 @@ export default function Home() {
     setAddPop(true); // show add admin popup
   };
 
-  const handleSubmit = (record) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdminData({ ...adminData, [name]: value });
+  };
+
+  const handleAddNewAdmin = () => {
     axios
-      .post("http://localhost:5000/admin/add", record)
+      .post("http://localhost:5000/admin/add", adminData)
       .then((response) => {
-        setData([...data, response.data]); // add the new admin to the existing data array
-        console.log(response.data);
-        setAddPop(false); // hide the add admin popup
+        setData([...data, response.data.response]);
+        setAddPop(false);
+        setAdminData({
+          firstName: "",
+          lastName: "",
+          userName: "",
+          email: "",
+          password: "",
+          isSuper: "",
+        });
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error);
       });
   };
 
@@ -176,11 +196,11 @@ export default function Home() {
         //  scroll={{ y: 400 }}
         columns={columns}
         style={{
-          height:"560px",
+          height: "560px",
           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           width: "95%",
           background: "white",
-          borderRadius:"4px",
+          borderRadius: "4px",
         }}
         dataSource={data}
         onChange={onChange}
@@ -190,40 +210,54 @@ export default function Home() {
           <div className="input-container">
             <Input
               id="outlined-controlled"
+              name="firstName"
+              value={adminData.firstName}
+              onChange={handleInputChange}
               placeholder="First Name"
-              name="first_name"
               allowClear
             />
             <Input
               id="outlined-uncontrolled"
+              name="lastName"
+              value={adminData.lastName}
+              onChange={handleInputChange}
+              allowClear
               placeholder="Last Name"
-              name="last_name"
-              allowClear
             />
             <Input
               id="outlined-uncontrolled"
+              name="userName"
+              value={adminData.userName}
+              onChange={handleInputChange}
+              allowClear
               placeholder="Username"
-              name="username"
-              allowClear
             />
             <Input
               id="outlined-uncontrolled"
-              placeholder="Email"
               name="email"
+              value={adminData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
               allowClear
             />
             <Form.Item label="Is Super">
               <Switch
                 id="outlined-uncontrolled"
+                name="isSuper"
+                checked={adminData.isSuper}
+                onChange={(value) =>
+                  setAdminData({ ...adminData, isSuper: value })
+                }
                 placeholder="Is Super"
-                name="is_super"
                 allowClear
               />
             </Form.Item>
             <Input
               id="outlined-uncontrolled"
-              placeholder="Password"
               name="password"
+              value={adminData.password}
+              onChange={handleInputChange}
+              placeholder="Password"
               allowClear
             />
             <button
@@ -244,7 +278,7 @@ export default function Home() {
               }}
               onClick={() => {
                 Swal.fire({
-                  title: "Are you sure you want to added?",
+                  title: "Are you sure you want to add this admin?",
                   icon: "question",
                   showCancelButton: true,
                   confirmButtonColor: "#3a70a1",
@@ -252,7 +286,8 @@ export default function Home() {
                   confirmButtonText: "Yes, add it!",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    handleSubmit();
+                    // handleSubmit();
+                    handleAddNewAdmin();
                     setEditPop(false);
                     Swal.fire(
                       "Added!",
@@ -341,7 +376,7 @@ export default function Home() {
                     confirmButtonText: "Yes, edit it!",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      handleSubmit();
+                      handleAddNewAdmin();
                       setEditPop(false);
                       Swal.fire(
                         "Edited!",
