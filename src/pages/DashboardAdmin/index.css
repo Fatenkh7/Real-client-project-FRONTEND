@@ -1,0 +1,30 @@
+.container-admins {
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-container input {
+  margin-bottom: 10px;
+}
+
+/* .ant-table-tbody {
+  height: 800px
+} */
+.add--button_container {
+  position: absolute;
+  top: -50px;
+  right: 2.5%;
+}
+.ant-table{
+  height:500px;
+}
