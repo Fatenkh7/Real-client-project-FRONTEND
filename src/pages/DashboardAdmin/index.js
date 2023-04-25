@@ -7,6 +7,7 @@ import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
 
+
 export default function Home() {
   const [data, setData] = useState([]);
   const [addPop, setAddPop] = useState(false);
