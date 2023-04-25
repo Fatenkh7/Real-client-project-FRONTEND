@@ -150,21 +150,21 @@ export default function Home() {
   };
 
   const handleAddAdmin = () => {
-    setAddPop(true);
-    console.log("clicked");
+    setSelectedRecord(null); // reset selected record
+    setAddPop(true); // show add admin popup
   };
+
   const handleSubmit = (record) => {
     axios
       .post("http://localhost:5000/admin/add", record)
       .then((response) => {
-        setData([...data, response]); // add the new admin to the existing data array
+        setData([...data, response.data]); // add the new admin to the existing data array
         console.log(response.data);
+        setAddPop(false); // hide the add admin popup
       })
       .catch((error) => {
         console.log(error.message);
       });
-    setSelectedRecord(null); // clear the selected record
-    setEditPop(false); // hide the popup
   };
 
   return (
@@ -295,15 +295,15 @@ export default function Home() {
                 allowClear
                 value={selectedRecord.email}
               />
-            <Form.Item label="Is Super">
-              <Switch
-                id="outlined-uncontrolled"
-                placeholder="Is Super"
-                name="is_super"
-                allowClear
-                value={selectedRecord.isSuper}
-              />
-            </Form.Item>
+              <Form.Item label="Is Super">
+                <Switch
+                  id="outlined-uncontrolled"
+                  placeholder="Is Super"
+                  name="is_super"
+                  allowClear
+                  value={selectedRecord.isSuper}
+                />
+              </Form.Item>
               <Input
                 id="outlined-uncontrolled"
                 placeholder="Password"
