@@ -10,7 +10,8 @@ export default function DashboardUser(){
         let URL=process.env.REACT_APP_BASE_URL
         const fetchUsers= async()=>{
             const config = {
-                headers: { authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQzZTdkNjc3NDFiZGFmNjE0YWY2NmFlIiwidXNlck5hbWUiOiJiYWJhYmEiLCJpYXQiOjE2ODE4OTE1NzIsImV4cCI6MTY4MTkwNTk3Mn0.-TZqDw92KAo5C7FDh51eANL3zoSFPVfTrsatMBSFoKg` },
+                headers: { authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyMDE4MDQwLCJleHAiOjE2ODIwMzI0NDB9.lBdCxD5uKOeO-IuTRD96m57uUH9sbChZ4xJTqTdLWFU` ,
+              id:"6440873447d89363b2a41259", role:"superAdmin"},
               }
          const data= await axios.get(`http://localhost:5000/user`, config )
          console.log(data.data.data)
@@ -39,61 +40,30 @@ export default function DashboardUser(){
      const columns = [
     {
       title: 'First Name',
-      dataIndex:'firstName',
+      dataIndex:['firstName', "lastName"],
+      render: (text,row) => <p>{row["firstName"]}{" "}{row["lastName"]}</p>,
       key: 'firstName',
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Jim',
-          value: 'Jim',
-        },
-      ],
-      filteredValue: filteredInfo.name || null,
-      onFilter: (value, record) => record.name.includes(value),
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortOrder: sortedInfo.columnKey === 'name' ? sortedInfo.order : null,
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
+      sortOrder: sortedInfo.columnKey === 'firstName' ? sortedInfo.order : null,
       ellipsis: true,
     },
     {
       title: 'Phone Number',
       dataIndex: 'phone',
       key: 'phone',
-      sorter: (a, b) => a.age - b.age,
-      sortOrder: sortedInfo.columnKey === 'age' ? sortedInfo.order : null,
+      sorter: (a, b) => a.phone - b.phone,
+      sortOrder: sortedInfo.columnKey === 'phone' ? sortedInfo.order : null,
       ellipsis: true,
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      filters: [
-        {
-          text: 'London',
-          value: 'London',
-        },
-        {
-          text: 'New York',
-          value: 'New York',
-        },
-      ],
-      filteredValue: filteredInfo.address || null,
-      onFilter: (value, record) => record.address.includes(value),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortOrder: sortedInfo.columnKey === 'address' ? sortedInfo.order : null,
+      sorter: (a, b) => a.email.length - b.email.length,
+      sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
       ellipsis: true,
     },
   ];
-    return(<><Space
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        <Button onClick={setAgeSort}>Sort age</Button>
-        <Button onClick={clearFilters}>Clear filters</Button>
-        <Button onClick={clearAll}>Clear filters and sorters</Button>
-      </Space>
-      <Table columns={columns} dataSource={users} onChange={handleChange} /></>)
+    return(<>
+      <Table columns={columns} dataSource={users} onChange={handleChange} rowKey="_id"/></>)
 }
