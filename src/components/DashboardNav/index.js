@@ -64,6 +64,9 @@ export default function DashboardNav() {
               <Link to="/dashboard/package">Package</Link>
             </Menu.Item>
           </Menu.SubMenu>
+          <Menu.Item key="11">
+              <Link to="/dashboard/type-travel">Type Travel</Link>
+            </Menu.Item>
         </Menu>
       </Header>
     </Layout>
