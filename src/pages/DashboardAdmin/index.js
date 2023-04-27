@@ -11,7 +11,8 @@ export default function Home(props) {
   const [data, setData] = useState([]);
   const [addPop, setAddPop] = useState(false);
   const [editPop, setEditPop] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [editedItemId, setEditedItemId] = useState("");
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [adminData, setAdminData] = useState({
     firstName: "",
     lastName: "",
@@ -20,6 +21,27 @@ export default function Home(props) {
     password: "",
     isSuper: false,
   });
+  const [editValues, setEditValues] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    isSuper: false,
+  });
+  const getEditItem = (id) => {
+    const gettedItem = data.filter((item) => id === item._id);
+    setEditedItemId(id);
+    setEditValues({
+      firstName: gettedItem[0].firstName,
+      lastName: gettedItem[0].lastName,
+      userName: gettedItem[0].userName,
+      email: gettedItem[0].email,
+      password: gettedItem[0].password,
+      isSuper: gettedItem[0].isSuper,
+    });
+    setEditPop(true);
+  };
 
   const closePop = () => {
     setAddPop(false);
@@ -27,45 +49,34 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/admin")
-      .then((response) => {
+    try {
+      axios.get("http://localhost:5000/admin").then((response) => {
         setData(response.data.response);
-        console.log(response.data.response);
-      })
-      .catch((error) => {
-        console.log(error);
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
-  const handleEdit = (record) => {
-    setSelectedRecord(record);
-    setEditPop(true);
-  };
+const handleEditValues = (event) => {
+  const { name, value } = event.target;
+  setEditValues(prevState => ({ ...prevState, [name]: value }));
+};
 
-  const handleDelete = (record) => {
-    setSelectedRecord(record);
-    Swal.fire({
-      title: "Are you sure you want to delete this Admin?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3a70a1",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`http://localhost:5000/admin/${record.key}`)
-          .then((response) => {
-            setData(response.data.response);
-            console.log(response.data.response);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    });
-  };
+const handleSave = async () => {
+  try {
+    const updatedAdmin = { ...editValues };
+    const response = await axios.put(
+      `http://localhost:5000/admin/${editedItemId}`,
+      updatedAdmin
+    );
+    setEditPop(false);
+  } catch (error) {
+    console.log(error);
+    Swal.fire("Error!", "There was an error updating the admin.", "error");
+  }
+};
+
 
   const columns = [
     {
@@ -121,8 +132,12 @@ export default function Home(props) {
       title: "Actions",
       key: "actions",
       render: (text, record) => (
-        <Space size="middle">
-          <a onClick={() => handleEdit(record)}>
+        <Space size="middle" key={record._id}>
+          <a
+            onClick={() => {
+              getEditItem(record._id);
+            }}
+          >
             <EditOutlined />
           </a>
           <a
@@ -134,14 +149,24 @@ export default function Home(props) {
                 confirmButtonColor: "#3a70a1",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!",
-              }).then((result) => {
+              }).then(async (result) => {
                 if (result.isConfirmed) {
-                  handleDelete(record);
-                  Swal.fire(
-                    "Deleted!",
-                    "Your admin has been deleted.",
-                    "success"
-                  );
+                  try {
+                    await handleDelete(record._id);
+                    console.log("select", result.isConfirmed);
+                    Swal.fire(
+                      "Deleted!",
+                      "Your admin has been deleted.",
+                      "success"
+                    );
+                  } catch (error) {
+                    console.log(error);
+                    Swal.fire(
+                      "Error!",
+                      "There was an error deleting the admin.",
+                      "error"
+                    );
+                  }
                 }
               })
             }
@@ -158,7 +183,7 @@ export default function Home(props) {
   };
 
   const handleAddAdmin = () => {
-    setSelectedRecord(null); // reset selected record
+    setSelectedAdmin(null); // reset selected record
     setAddPop(true); // show add admin popup
   };
 
@@ -167,24 +192,35 @@ export default function Home(props) {
     setAdminData({ ...adminData, [name]: value });
   };
 
-  const handleAddNewAdmin = () => {
-    axios
-      .post("http://localhost:5000/admin/add", adminData)
-      .then((response) => {
-        setData([...data, response.data.response]);
-        setAddPop(false);
-        setAdminData({
-          firstName: "",
-          lastName: "",
-          userName: "",
-          email: "",
-          password: "",
-          isSuper: "",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+  const handleAddNewAdmin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/admin/add",
+        adminData
+      );
+      //children error if the data is not object
+      // setData([...data, response.data.response]);
+      setAddPop(false);
+      setAdminData({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        password: "",
+        isSuper: "",
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/admin/${id}`);
+      setData(data.filter((admin) => admin._id !== id));
+      console.log("Admin deleted successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -193,8 +229,10 @@ export default function Home(props) {
         <Button onClick={handleAddAdmin}>Add Admin</Button>
       </div>
       <Table
-        //  scroll={{ y: 400 }}
         columns={columns}
+        key="admin-table"
+        pagination={{ pageSize: 8 }}
+        rowKey={(record) => record._id}
         style={{
           height: "560px",
           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
@@ -214,14 +252,12 @@ export default function Home(props) {
               value={adminData.firstName}
               onChange={handleInputChange}
               placeholder="First Name"
-              allowClear
             />
             <Input
               id="outlined-uncontrolled"
               name="lastName"
               value={adminData.lastName}
               onChange={handleInputChange}
-              allowClear
               placeholder="Last Name"
             />
             <Input
@@ -229,7 +265,6 @@ export default function Home(props) {
               name="userName"
               value={adminData.userName}
               onChange={handleInputChange}
-              allowClear
               placeholder="Username"
             />
             <Input
@@ -238,7 +273,6 @@ export default function Home(props) {
               value={adminData.email}
               onChange={handleInputChange}
               placeholder="Email"
-              allowClear
             />
             <Form.Item label="Is Super">
               <Switch
@@ -249,7 +283,6 @@ export default function Home(props) {
                   setAdminData({ ...adminData, isSuper: value })
                 }
                 placeholder="Is Super"
-                allowClear
               />
             </Form.Item>
             <Input
@@ -258,7 +291,6 @@ export default function Home(props) {
               value={adminData.password}
               onChange={handleInputChange}
               placeholder="Password"
-              allowClear
             />
             <button
               type="primary"
@@ -303,95 +335,126 @@ export default function Home(props) {
           </div>
         </Popup>
       )}
-      {editPop &&
-        selectedRecord && ( // show popup if editPop is true and selectedRecord is not null
-          <Popup title="Edit Admin" close={closePop}>
-            <div className="input-container">
-              <Input
-                id="outlined-controlled"
-                placeholder="First Name"
-                name="first_name"
-                allowClear
-                value={selectedRecord.firstName} // populate input fields with selected record data
-              />
-              <Input
+      {editPop && (
+        <Popup title="Edit Admin" close={closePop}>
+          <div className="input-container">
+            <Input
+              id="outlined-controlled"
+              placeholder="First Name"
+              name="firstName"
+              onChange={(e) => {
+                setEditValues((prevState) => ({
+                  ...prevState,
+                  firstName: e.target.value,
+                }));
+              }}
+              value={editValues.firstName}
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Last Name"
+              name="lastName"
+              onChange={(e) => {
+                setEditValues((prevState) => ({
+                  ...prevState,
+                  lastName: e.target.value,
+                }));
+              }}
+              value={editValues.lastName}
+            />
+            <Input
+              id="outlined-uncontrolled"
+              name="userName"
+              onChange={(e) => {
+                setEditValues((prevState) => ({
+                  ...prevState,
+                  userName: e.target.value,
+                }));
+              }}
+              value={editValues.userName}
+              placeholder="Username"
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Email"
+              name="email"
+              onChange={(e) => {
+                setEditValues((prevState) => ({
+                  ...prevState,
+                  email: e.target.value,
+                }));
+              }}
+              value={editValues.email}
+            />
+            <Form.Item label="Is Super">
+              <Switch
                 id="outlined-uncontrolled"
-                placeholder="Last Name"
-                name="last_name"
-                allowClear
-                value={selectedRecord.lastName}
-              />
-              <Input
-                id="outlined-uncontrolled"
-                placeholder="Username"
-                name="username"
-                allowClear
-                value={selectedRecord.userName}
-              />
-              <Input
-                id="outlined-uncontrolled"
-                placeholder="Email"
-                name="email"
-                allowClear
-                value={selectedRecord.email}
-              />
-              <Form.Item label="Is Super">
-                <Switch
-                  id="outlined-uncontrolled"
-                  placeholder="Is Super"
-                  name="is_super"
-                  allowClear
-                  value={selectedRecord.isSuper}
-                />
-              </Form.Item>
-              <Input
-                id="outlined-uncontrolled"
-                placeholder="Password"
-                name="password"
-                allowClear
-              />
-              <button
-                type="primary"
-                ghost
-                shape="round"
-                size="middle"
-                style={{
-                  backgroundColor: "#37a2f5",
-                  border: "none",
-                  color: "white",
-                  fontSize: "14px",
-                  padding: "12px 12px",
-                  borderRadius: "4px",
-                  display: "block",
-                  margin: "0 auto",
-                  marginTop: "10px",
+                placeholder="Is Super"
+                name="isSuper"
+                onChange={(value) => {
+                  setEditValues((prevState) => ({
+                    ...prevState,
+                    isSuper: value,
+                  }));
                 }}
-                onClick={() => {
-                  Swal.fire({
-                    title: "Are you sure you want to edit this admin?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3a70a1",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, edit it!",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      handleAddNewAdmin();
-                      setEditPop(false);
-                      Swal.fire(
-                        "Edited!",
-                        "Your admin has been edited.",
-                        "success"
-                      );
-                    }
-                  });
-                }}
-              >
-                Edit
-              </button>
-            </div>
-          </Popup>
-        )}
+                value={editValues.isSuper}
+              />
+            </Form.Item>
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Password"
+              name="password"
+              type="password"
+              // value={editValues.password}
+              onChange={(e) => {
+                setEditValues((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }));
+              }}
+            />
+            <button
+              type="primary"
+              ghost
+              shape="round"
+              size="middle"
+              style={{
+                backgroundColor: "#37a2f5",
+                border: "none",
+                color: "white",
+                fontSize: "14px",
+                padding: "12px 12px",
+                borderRadius: "4px",
+                display: "block",
+                margin: "0 auto",
+                marginTop: "10px",
+              }}
+              onClick={() => {
+                Swal.fire({
+                  title: "Are you sure you want to edit this admin?",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3a70a1",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, edit it!",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    handleSave();
+                    setEditPop(false);
+                    Swal.fire(
+                      "Edited!",
+                      "Your admin has been edited.",
+                      "success"
+                    );
+                  }
+                });
+              }}
+            >
+              Edit
+            </button>
+          </div>
+        </Popup>
+      )}
     </div>
   );
 }
