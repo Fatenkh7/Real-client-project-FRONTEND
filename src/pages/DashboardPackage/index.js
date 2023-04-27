@@ -6,6 +6,7 @@ import axios from "axios";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
+import FormData from "form-data";
 
 const Package = () => {
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,6 @@ const Package = () => {
   // const fileInput=useRef();
   const fileInput = useRef(null);
 
-
   const handleAddAdmin = () => {
     setSelectedRecord(null); // reset selected record
     setAddPop(true); // show add admin popup
@@ -34,6 +34,9 @@ const Package = () => {
   const isCustom = () => {
     setCustome(!custome);
   };
+
+
+  
   const handleSubmit = (record) => {
     console.log(record);
     axios
@@ -46,17 +49,28 @@ const Package = () => {
       });
   };
 
+
+  const formData = new FormData();
+  formData.append("idImage", event.target.files[0]);
+  
+formData.append("title", packageTitle.current.state.value);
+
+
   const addImage = (image) => {
     axios
-      .post("http://localhost:8000/image/add", image)
+      .post("http://localhost:8000/image/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
+        console.log(response);
         setAddPop(false);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
-
 
   const handleEdit = (record) => {
     setSelectedRecord(record);
@@ -274,20 +288,12 @@ const Package = () => {
                   allowClear
                 />
                 <Upload
-                  name="image"
+                  idImage="image"
                   action="http://localhost:8000/image/add"
-                  // listType="picture"
-                  // className="avatar-uploader"
-                  // showUploadList={false}
-                 /* onChange={(info) => {
-                    const file = info.file.originFileObj;
-                    setImageFile(file);
-                  }}*/
-                  //ref={fileInput}
                 >
                   <button>
                     <PlusOutlined /> Upload Image
-                  </button>
+                  </button >
                   <input
                     type="file"
                     ref={fileInput}
@@ -312,6 +318,7 @@ const Package = () => {
                     marginTop: "10px",
                   }}
                   onClick={() => {
+                    addImage();
                     Swal.fire({
                       title: "Are you sure you want to added?",
                       icon: "question",
@@ -321,7 +328,9 @@ const Package = () => {
                       confirmButtonText: "Yes, add it!",
                     }).then((result) => {
                       if (result.isConfirmed) {
-                        addImage({image:fileInput.current.file[0]})
+                        formData.append("idImage", fileInput.current.files[0]);
+                        console.log(fileInput.current);
+                        // addImage({ idImage: fileInput.current.file[0] });
                         handleSubmit({
                           packageTitle: packageTitle.current.input.value,
                           description: description.current.input.value,
@@ -393,22 +402,22 @@ const Package = () => {
                     name="idCustomer"
                     allowClear
                   />
-                 <Upload
-                  name="image"
-                  //action="/uploads"
-                  // listType="picture"
-                  // className="avatar-uploader"
-                  // showUploadList={false}
-                >
-                  <button onClick={() => uploadInputRef.current.click()}>
-                    <PlusOutlined /> Upload Image
-                  </button>
-                  <input
-                    type="file"
-                    ref={uploadInputRef}
-                    style={{ display: "none" }}
-                  />
-                </Upload>
+                  <Upload
+                    idImage="image"
+                    action="http://localhost:8000/package"
+
+                    // listType="picture"
+                    // showUploadList={false}
+                  >
+                    <button onClick={() => uploadInputRef.current.click()}>
+                      <PlusOutlined /> Upload Image
+                    </button>
+                    <input
+                      type="file"
+                      ref={uploadInputRef}
+                      style={{ display: "none" }}
+                    />
+                  </Upload>
 
                   <button
                     type="primary"
