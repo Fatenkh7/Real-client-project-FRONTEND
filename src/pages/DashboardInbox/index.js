@@ -33,28 +33,14 @@ export default function Home() {
     setEditPop(true);
   };
 
-  const handleDelete = (record) => {
-    setSelectedRecord(record);
-    Swal.fire({
-      title: "Are you sure you want to delete this inbox?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3a70a1",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`http://localhost:5000/inbox/${record.key}`)
-          .then((response) => {
-            setData(response.data.response);
-            console.log(response.data.response);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    });
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/inbox/${id}`);
+      setData(data.filter((inbox) => inbox._id !== id));
+      console.log("Inbox deleted successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const columns = [
