@@ -1,5 +1,9 @@
-import { Table, Space, Input, Switch, Form } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Space, Input, Switch, Form, Upload } from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
@@ -13,6 +17,8 @@ export default function Home(props) {
   const [editPop, setEditPop] = useState(false);
   const [editedItemId, setEditedItemId] = useState("");
   const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
   const [adminData, setAdminData] = useState({
     firstName: "",
     lastName: "",
@@ -20,6 +26,7 @@ export default function Home(props) {
     email: "",
     password: "",
     isSuper: false,
+    image: null,
   });
   const [editValues, setEditValues] = useState({
     firstName: "",
@@ -58,25 +65,24 @@ export default function Home(props) {
     }
   }, []);
 
-const handleEditValues = (event) => {
-  const { name, value } = event.target;
-  setEditValues(prevState => ({ ...prevState, [name]: value }));
-};
+  const handleEditValues = (event) => {
+    const { name, value } = event.target;
+    setEditValues((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-const handleSave = async () => {
-  try {
-    const updatedAdmin = { ...editValues };
-    const response = await axios.put(
-      `http://localhost:5000/admin/${editedItemId}`,
-      updatedAdmin
-    );
-    setEditPop(false);
-  } catch (error) {
-    console.log(error);
-    Swal.fire("Error!", "There was an error updating the admin.", "error");
-  }
-};
-
+  const handleSave = async () => {
+    try {
+      const updatedAdmin = { ...editValues };
+      const response = await axios.put(
+        `http://localhost:5000/admin/${editedItemId}`,
+        updatedAdmin
+      );
+      setEditPop(false);
+    } catch (error) {
+      console.log(error);
+      Swal.fire("Error!", "There was an error updating the admin.", "error");
+    }
+  };
 
   const columns = [
     {
@@ -182,9 +188,38 @@ const handleSave = async () => {
     console.log("params", pagination, filters, sorter, extra);
   };
 
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/image/add",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setAdminData({
+        ...adminData,
+        image: response.data.id,
+        title:response.data.title,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleAddAdmin = () => {
     setSelectedAdmin(null); // reset selected record
     setAddPop(true); // show add admin popup
+  };
+
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    setAdminData({ ...adminData, image });
   };
 
   const handleInputChange = (e) => {
@@ -194,12 +229,15 @@ const handleSave = async () => {
 
   const handleAddNewAdmin = async () => {
     try {
+      if (imageFile) {
+        await handleImageUpload();
+      }
+
       const response = await axios.post(
         "http://localhost:5000/admin/add",
         adminData
       );
-      //children error if the data is not object
-      // setData([...data, response.data.response]);
+
       setAddPop(false);
       setAdminData({
         firstName: "",
@@ -208,6 +246,7 @@ const handleSave = async () => {
         email: "",
         password: "",
         isSuper: "",
+        image: "",
       });
     } catch (error) {
       console.log(error);
@@ -292,6 +331,20 @@ const handleSave = async () => {
               onChange={handleInputChange}
               placeholder="Password"
             />
+            <Form.Item label="Image">
+            <Input
+              id="outlined-uncontrolled"
+              name="title"
+              placeholder="Image Title"
+            />
+              <Upload
+                beforeUpload={handleImageChange}
+                fileList={imageFile ? [imageFile] : []}
+                // onRemove={handleImageRemove}
+              >
+                <button icon={<UploadOutlined />}>Upload</button>
+              </Upload>
+            </Form.Item>
             <button
               type="primary"
               ghost
