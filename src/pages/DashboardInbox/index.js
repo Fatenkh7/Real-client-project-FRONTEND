@@ -73,23 +73,33 @@ export default function Home() {
       key: "actions",
       render: (text, record) => (
         <Space size="middle">
-          <a
+            <a
             onClick={() =>
               Swal.fire({
-                title: "Are you sure you want to delete this inbox?",
+                title: "Are you sure you want to delete this Inbox?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3a70a1",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!",
-              }).then((result) => {
+              }).then(async (result) => {
                 if (result.isConfirmed) {
-                  handleDelete(record);
-                  Swal.fire(
-                    "Deleted!",
-                    "Your admin has been deleted.",
-                    "success"
-                  );
+                  try {
+                    await handleDelete(record._id);
+                    console.log("select", result.isConfirmed);
+                    Swal.fire(
+                      "Deleted!",
+                      "This inbox has been deleted.",
+                      "success"
+                    );
+                  } catch (error) {
+                    console.log(error);
+                    Swal.fire(
+                      "Error!",
+                      "There was an error deleting this inbox.",
+                      "error"
+                    );
+                  }
                 }
               })
             }
@@ -108,7 +118,6 @@ export default function Home() {
   return (
     <div className="container-inbox">
       <Table
-        //  scroll={{ y: 400 }}
         columns={columns}
         style={{
           height:"560px",
