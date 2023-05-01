@@ -31,26 +31,28 @@
 
 @media only screen and (max-width: 600px) {
   .container-admins {
-  margin-top: -50px;
+    margin-top: -50px;
   }
   
   .input-container {
-  width: 90%;
-  margin: 0 auto;
+    width: 90%;
+    margin: 0 auto;
   }
   
   .input-container input {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
   }
   
   .add--button_container {
-  position: static;
-  margin-top: 20px;
+    position: absolute;
+    top: -50px;
+    right: 2.5%;
   }
-  
+
   .ant-table {
-  height: auto;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
+    max-height: 300px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    table-layout: auto;
   }
   }

@@ -29,7 +29,6 @@ export default function Home(props) {
     image: "",
     title: "",
   });
-  
 
   const [editValues, setEditValues] = useState({
     firstName: "",
@@ -64,7 +63,8 @@ export default function Home(props) {
       try {
         const response = await axios.get("http://localhost:5000/admin");
         const rawData = response.data.response;
-        if (Array.isArray(rawData)) {  // check if rawData is an array
+        if (Array.isArray(rawData)) {
+          // check if rawData is an array
           setData(rawData);
         }
       } catch (error) {
@@ -86,7 +86,9 @@ export default function Home(props) {
         `http://localhost:5000/admin/${editedItemId}`,
         updatedAdmin
       );
-      setData(data.map((admin) => (admin._id === editedItemId ? updatedAdmin : admin)));
+      setData(
+        data.map((admin) => (admin._id === editedItemId ? updatedAdmin : admin))
+      );
       setEditPop(false);
     } catch (error) {
       console.log(error);
@@ -136,7 +138,7 @@ export default function Home(props) {
       console.log(error);
     }
   };
-  
+
   const handleAddAdmin = () => {
     setSelectedAdmin(null); // reset selected record
     setAddPop(true); // show add admin popup
@@ -145,9 +147,9 @@ export default function Home(props) {
   const handleImageChange = (e) => {
     const image = e.target.files[0];
     if (image) {
-      setAdminData(prevState => ({ ...prevState, image }));
+      setAdminData((prevState) => ({ ...prevState, image }));
     }
-  };  
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -157,13 +159,12 @@ export default function Home(props) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/admin/${id}`);
-      setData(prevState => prevState.filter((admin) => admin._id !== id));
+      setData((prevState) => prevState.filter((admin) => admin._id !== id));
       console.log("Admin deleted successfully!");
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   const columns = [
     {
@@ -174,9 +175,13 @@ export default function Home(props) {
       sorter: (a, b) => a.image.length - b.image.length,
       sortDirections: ["descend"],
       render: (image, record) => (
-        <img src={`http://localhost:5000/image/${record.image}`} alt="Admin Avatar" style={{ width: 50, height: 50 }} />
-      ),      
-    },    
+        <img
+          src={`http://localhost:5000/image/${record.image}`}
+          alt="Admin Avatar"
+          style={{ width: 50, height: 50 }}
+        />
+      ),
+    },
     {
       title: "First Name",
       dataIndex: "firstName",
@@ -213,10 +218,10 @@ export default function Home(props) {
         <Switch
           checked={isSuper}
           onChange={() => {
-            setAdminData(prevState => ({ ...prevState, isSuper: !isSuper }));
+            setAdminData((prevState) => ({ ...prevState, isSuper: !isSuper }));
           }}
         />
-      ),      
+      ),
     },
     {
       title: "Actions",
@@ -277,21 +282,21 @@ export default function Home(props) {
       <div className="add--button_container">
         <Button onClick={handleAddAdmin}>Add Admin</Button>
       </div>
-      <Table
-        columns={columns}
-        key="admin-table"
-        pagination={{ pageSize: 8 }}
-        rowKey={(record) => record._id}
-        style={{
-          height: "560px",
-          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-          width: "95%",
-          background: "white",
-          borderRadius: "4px",
-        }}
-        dataSource={data}
-        onChange={onChange}
-      />
+        <Table
+          columns={columns}
+          key="admin-table"
+          pagination={{ pageSize: 8 }}
+          rowKey={(record) => record._id}
+          style={{
+            height: "560px",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            width: "95%",
+            background: "white",
+            borderRadius: "4px",
+          }}
+          dataSource={data}
+          onChange={onChange}
+        />
       {addPop && (
         <Popup title="Add Admin" close={closePop}>
           <div className="input-container">
