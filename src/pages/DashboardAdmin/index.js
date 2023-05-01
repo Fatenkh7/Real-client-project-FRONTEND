@@ -26,8 +26,11 @@ export default function Home(props) {
     email: "",
     password: "",
     isSuper: false,
-    image: null,
+    image: "",
+    title: "",
   });
+  
+
   const [editValues, setEditValues] = useState({
     firstName: "",
     lastName: "",
@@ -36,6 +39,7 @@ export default function Home(props) {
     password: "",
     isSuper: false,
   });
+
   const getEditItem = (id) => {
     const gettedItem = data.filter((item) => id === item._id);
     setEditedItemId(id);
@@ -56,13 +60,18 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    try {
-      axios.get("http://localhost:5000/admin").then((response) => {
-        setData(response.data.response);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/admin");
+        const rawData = response.data.response;
+        if (Array.isArray(rawData)) {  // check if rawData is an array
+          setData(rawData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, []);
 
   const handleEditValues = (event) => {
@@ -77,6 +86,7 @@ export default function Home(props) {
         `http://localhost:5000/admin/${editedItemId}`,
         updatedAdmin
       );
+      setData(data.map((admin) => (admin._id === editedItemId ? updatedAdmin : admin)));
       setEditPop(false);
     } catch (error) {
       console.log(error);
@@ -84,15 +94,89 @@ export default function Home(props) {
     }
   };
 
+  const handleAddNewAdmin = async () => {
+    try {
+      // Upload the image file
+      if (adminData.image) {
+        const formData = new FormData();
+        formData.append("image", adminData.image);
+        formData.append("title", adminData.title);
+        const response = await axios.post(
+          "http://localhost:5000/image/add",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        // Save the ID of the uploaded image in the admin model
+        setAdminData({ ...adminData, image: response.data._id });
+      }
+
+      // Add the new admin
+      const response = await axios.post(
+        "http://localhost:5000/admin/add",
+        adminData
+      );
+
+      setAddPop(false);
+      setAdminData({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        password: "",
+        isSuper: false,
+        image: null,
+        title: "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const handleAddAdmin = () => {
+    setSelectedAdmin(null); // reset selected record
+    setAddPop(true); // show add admin popup
+  };
+
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    if (image) {
+      setAdminData(prevState => ({ ...prevState, image }));
+    }
+  };  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdminData({ ...adminData, [name]: value });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/admin/${id}`);
+      setData(prevState => prevState.filter((admin) => admin._id !== id));
+      console.log("Admin deleted successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
   const columns = [
     {
       title: "Image",
-      dataIndex: "Image",
+      dataIndex: "image",
       filters: [],
-      onFilter: (value, record) => record.Image.indexOf(value) === 0,
-      sorter: (a, b) => a.Image.length - b.Image.length,
+      onFilter: (value, record) => record.image.indexOf(value) === 0,
+      sorter: (a, b) => a.image.length - b.image.length,
       sortDirections: ["descend"],
-    },
+      render: (image, record) => (
+        <img src={`http://localhost:5000/image/${record.image}`} alt="Admin Avatar" style={{ width: 50, height: 50 }} />
+      ),      
+    },    
     {
       title: "First Name",
       dataIndex: "firstName",
@@ -129,10 +213,10 @@ export default function Home(props) {
         <Switch
           checked={isSuper}
           onChange={() => {
-            record.isSuper = !record.isSuper;
+            setAdminData(prevState => ({ ...prevState, isSuper: !isSuper }));
           }}
         />
-      ),
+      ),      
     },
     {
       title: "Actions",
@@ -186,80 +270,6 @@ export default function Home(props) {
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
-  };
-
-  const handleImageUpload = async () => {
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/image/add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setAdminData({
-        ...adminData,
-        image: response.data.id,
-        title:response.data.title,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleAddAdmin = () => {
-    setSelectedAdmin(null); // reset selected record
-    setAddPop(true); // show add admin popup
-  };
-
-  const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    setAdminData({ ...adminData, image });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAdminData({ ...adminData, [name]: value });
-  };
-
-  const handleAddNewAdmin = async () => {
-    try {
-      if (imageFile) {
-        await handleImageUpload();
-      }
-
-      const response = await axios.post(
-        "http://localhost:5000/admin/add",
-        adminData
-      );
-
-      setAddPop(false);
-      setAdminData({
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
-        isSuper: "",
-        image: "",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/admin/${id}`);
-      setData(data.filter((admin) => admin._id !== id));
-      console.log("Admin deleted successfully!");
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -332,11 +342,11 @@ export default function Home(props) {
               placeholder="Password"
             />
             <Form.Item label="Image">
-            <Input
-              id="outlined-uncontrolled"
-              name="title"
-              placeholder="Image Title"
-            />
+              <Input
+                id="outlined-uncontrolled"
+                name="title"
+                placeholder="Image Title"
+              />
               <Upload
                 beforeUpload={handleImageChange}
                 fileList={imageFile ? [imageFile] : []}

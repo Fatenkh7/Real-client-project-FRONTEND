@@ -28,3 +28,29 @@
 .ant-table{
   height:500px;
 }
+
+@media only screen and (max-width: 600px) {
+  .container-admins {
+  margin-top: -50px;
+  }
+  
+  .input-container {
+  width: 90%;
+  margin: 0 auto;
+  }
+  
+  .input-container input {
+  margin-bottom: 20px;
+  }
+  
+  .add--button_container {
+  position: static;
+  margin-top: 20px;
+  }
+  
+  .ant-table {
+  height: auto;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  }
+  }
