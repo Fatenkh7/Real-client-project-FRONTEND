@@ -37,7 +37,7 @@ const Partner = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:8000/partner', { headers })
+      axios.get('http://localhost:5000/partner', { headers })
         .then(response => {
             setData(response.data.response);
           console.log(response.data)

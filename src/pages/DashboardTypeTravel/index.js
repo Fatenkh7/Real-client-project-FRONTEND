@@ -35,7 +35,7 @@ const TypeTravel = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:8000/typeTravel', { headers })
+      axios.get('http://localhost:5000/typeTravel', { headers })
         .then(response => {
             setData(response.data.response);
           console.log(response.data)
