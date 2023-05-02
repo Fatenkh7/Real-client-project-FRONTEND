@@ -4,7 +4,7 @@ import {
   DeleteOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./index.css";
 import Button from "../../components/Button";
@@ -18,6 +18,7 @@ export default function Home(props) {
   const [editedItemId, setEditedItemId] = useState("");
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const inputFileRef = useRef(null);
 
   const [adminData, setAdminData] = useState({
     firstName: "",
@@ -26,7 +27,7 @@ export default function Home(props) {
     email: "",
     password: "",
     isSuper: false,
-    image: "",
+    image: null,
     title: "",
   });
 
@@ -64,7 +65,6 @@ export default function Home(props) {
         const response = await axios.get("http://localhost:5000/admin");
         const rawData = response.data.response;
         if (Array.isArray(rawData)) {
-          // check if rawData is an array
           setData(rawData);
         }
       } catch (error) {
@@ -98,31 +98,28 @@ export default function Home(props) {
 
   const handleAddNewAdmin = async () => {
     try {
-      // Upload the image file
-      if (adminData.image) {
-        const formData = new FormData();
-        formData.append("image", adminData.image);
-        formData.append("title", adminData.title);
-        const response = await axios.post(
-          "http://localhost:5000/image/add",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        // Save the ID of the uploaded image in the admin model
-        setAdminData({ ...adminData, image: response.data._id });
+      if (!adminData.image || !adminData.title) {
+        throw new Error("Please select an image and title.");
       }
-
-      // Add the new admin
-      const response = await axios.post(
-        "http://localhost:5000/admin/add",
-        adminData
+  
+      const formData = new FormData();
+      formData.append("image", imageFile);
+      formData.append("title", adminData.title);
+      const imageResponse = await axios.post(
+        "http://localhost:5000/image/add",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-
+      const newAdminData = { ...adminData, image: imageResponse.data._id };
+      const addAdminResponse = await axios.post(
+        "http://localhost:5000/admin/add",
+        newAdminData
+      );
+      setData((prevState) => [...prevState, addAdminResponse.data.response]);
       setAddPop(false);
       setAdminData({
         firstName: "",
@@ -136,8 +133,9 @@ export default function Home(props) {
       });
     } catch (error) {
       console.log(error);
+      Swal.fire("Error!", "There was an error creating the admin.", "error");
     }
-  };
+  };  
 
   const handleAddAdmin = () => {
     setSelectedAdmin(null); // reset selected record
@@ -147,7 +145,12 @@ export default function Home(props) {
   const handleImageChange = (e) => {
     const image = e.target.files[0];
     if (image) {
-      setAdminData((prevState) => ({ ...prevState, image }));
+      setAdminData((prevState) => ({
+        ...prevState,
+        image,
+        imageUrl: URL.createObjectURL(image),
+      }));
+      setImageFile(image);
     }
   };
 
@@ -282,21 +285,21 @@ export default function Home(props) {
       <div className="add--button_container">
         <Button onClick={handleAddAdmin}>Add Admin</Button>
       </div>
-        <Table
-          columns={columns}
-          key="admin-table"
-          pagination={{ pageSize: 8 }}
-          rowKey={(record) => record._id}
-          style={{
-            height: "560px",
-            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-            width: "95%",
-            background: "white",
-            borderRadius: "4px",
-          }}
-          dataSource={data}
-          onChange={onChange}
-        />
+      <Table
+        columns={columns}
+        key="admin-table"
+        pagination={{ pageSize: 8 }}
+        rowKey={(record) => record._id}
+        style={{
+          height: "560px",
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+          width: "95%",
+          background: "white",
+          borderRadius: "4px",
+        }}
+        dataSource={data}
+        onChange={onChange}
+      />
       {addPop && (
         <Popup title="Add Admin" close={closePop}>
           <div className="input-container">
@@ -346,20 +349,43 @@ export default function Home(props) {
               onChange={handleInputChange}
               placeholder="Password"
             />
-            <Form.Item label="Image">
-              <Input
-                id="outlined-uncontrolled"
-                name="title"
-                placeholder="Image Title"
-              />
+            <Form.Item name="image" label="Image">
               <Upload
                 beforeUpload={handleImageChange}
                 fileList={imageFile ? [imageFile] : []}
-                // onRemove={handleImageRemove}
+                showUploadList={false} // added this to hide the file list
               >
-                <button icon={<UploadOutlined />}>Upload</button>
+                {adminData.image || imageFile ? (
+                  <img
+                    src={
+                      adminData.image
+                        ? `http://localhost:5000/image/${adminData.image}`
+                        : URL.createObjectURL(imageFile)
+                    }
+                    alt="Admin"
+                    style={{ maxWidth: "100%" }}
+                  />
+                ) : (
+                  <Button icon={<UploadOutlined />}>Upload</Button>
+                )}
               </Upload>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={inputFileRef}
+                onChange={handleImageChange}
+              />
+              <Form.Item name="title" label="Title">
+                <Input
+                  name="title"
+                  placeholder="Image Title"
+                  value={adminData.title}
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
             </Form.Item>
+
             <button
               type="primary"
               ghost
