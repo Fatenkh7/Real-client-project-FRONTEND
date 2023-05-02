@@ -176,7 +176,6 @@ export default function Home() {
         //  scroll={{ y: 400 }}
         columns={columns}
         style={{
-          height:"560px",
           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           width: "95%",
           background: "white",

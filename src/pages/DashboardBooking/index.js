@@ -41,7 +41,7 @@ const Booking = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:8000/booking', { headers })
+      axios.get('http://localhost:5000/booking', { headers })
         .then(response => {
           setData(response.data.data);
         })

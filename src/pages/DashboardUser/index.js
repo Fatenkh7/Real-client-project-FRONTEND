@@ -19,6 +19,11 @@ export default function DashboardUser(){
   const phone=useRef();
   const email=useRef();
   const passport=useRef();
+  const editfname=useRef();
+  const editlname=useRef();
+  const editphone=useRef();
+  const editemail=useRef();
+  const editpassport=useRef();
     const closePop = () => {
       setAddPop(false);
       setEditPop(false);
@@ -144,9 +149,12 @@ export default function DashboardUser(){
       headers: { authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTAyNzg0LCJleHAiOjE2ODI1MTcxODR9.DoQmPzWQtPvRFhY1EviAPFWVv09mFbJ3NDpOtiBmOVA` ,
     id:"6440873447d89363b2a41259", role:"superAdmin"},
     }
+    console.log(record)
     axios
       .post("http://localhost:5000/user/add", record, config)
       .then((response) => {
+        console.log("res", response)
+        if(response.status===201){
         Swal.fire({
           title: "User Added Successfully",
           position: 'top-end',
@@ -155,9 +163,25 @@ export default function DashboardUser(){
           timer: 1500
         })
         setAddPop(false); // hide the add admin popup
+      }
+      else {
+        Swal.fire({
+          title: response.message,
+          position: 'top-end',
+          icon: 'warning',
+          showConfirmButton: false,
+          timer: 3000
+        })
+      }
       })
       .catch((error) => {
-        console.log(error.message);
+        Swal.fire({
+          title: error.response.data.data.message,
+          position: 'top-end',
+          icon: 'warning',
+          showConfirmButton: false,
+          timer: 3000
+        })
       });
   };
   const handleEditUser=()=>{
@@ -186,19 +210,27 @@ export default function DashboardUser(){
       <div className="add--button_container">
         <Button onClick={handleAdd}>Add User</Button>
       </div>
-      <Table columns={columns} dataSource={users} onChange={handleChange} rowKey="_id"/>
+      <Table columns={columns} scroll={{ x: 400 }}
+      style={{
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+          width: "95%",
+          background: "white",
+          borderRadius:"4px",
+        }} dataSource={users} onChange={handleChange} rowKey="_id"/>
       {addPop && (
         <Popup title="Add User" close={closePop}>
           <div className="input-container">
-          <label >First Name</label>
+          <label >First Name <span className="required">*</span></label>
             <Input
               id="outlined-controlled"
               placeholder="First Name"
               name="first_name"
               allowClear
+              required
+              status="error"
               ref={fname}
             />
-             <label >Last Name</label>
+             <label >Last Name <span className="required">*</span></label>
             <Input
               id="outlined-uncontrolled"
               placeholder="Last Name"
@@ -206,7 +238,7 @@ export default function DashboardUser(){
               allowClear
               ref={lname}
             />
-            <label >Phone Number</label>
+            <label >Phone Number <span className="required">*</span></label>
             <Input
               id="outlined-uncontrolled"
               placeholder="Phone Number"
@@ -256,13 +288,14 @@ export default function DashboardUser(){
                   confirmButtonText: "Yes, add it!",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    handleSubmitUser({firstName:fname.current.input.value, lastName:lname.current.input.value, phone:phone.current.input.value, isMember:false, email:email.current.input.value,passportId:passport.current.input.id });
-                    setEditPop(false);
+                    console.log(fname.current)
+                    handleSubmitUser({firstName:fname.current.input.value, lastName:lname.current.input.value, phone:phone.current.input.value, isMember:false, email:email.current.input.value,passportId:passport.current.input.value });
+                    /*setEditPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Admin has been added.",
                       "success"
-                    );
+                    );*/
                   }
                 });
               }}
@@ -276,45 +309,56 @@ export default function DashboardUser(){
         selectedRecord && ( // show popup if editPop is true and selectedRecord is not null
           <Popup title="Edit User" close={closePop}>
             <div className="input-container">
+              <label>First Name</label>
               <Input
                 id="outlined-controlled"
                 placeholder="First Name"
                 name="first_name"
                 allowClear
-                value={selectedRecord.firstName} // populate input fields with selected record data
+                required
+                ref={editfname}
+                defaultValue={selectedRecord.firstName} // populate input fields with selected record data
               />
+              <label>Last Name</label>
               <Input
+              required
                 id="outlined-uncontrolled"
                 placeholder="Last Name"
                 name="last_name"
+                ref={editlname}
                 allowClear
-                value={selectedRecord.lastName}
+                defaultValue={selectedRecord.lastName}
               />
+              <label>Phone Number</label>
               <Input
                 id="outlined-uncontrolled"
                 placeholder="Phone Number"
-                name="username"
+                name="phone"
                 allowClear
-                value={selectedRecord.phone}
+                ref={editphone}
+                defaultValue={selectedRecord.phone}
               />
+              <label>Passport Number</label>
                <Input
                 id="outlined-uncontrolled"
                 placeholder="Passport Number"
                 name="passportId"
+                ref={editpassport}
                 allowClear
-                value={selectedRecord.passportId}
+                defaultValue={selectedRecord.passportId}
               />
+              <label>Email</label>
               <Input
                 id="outlined-uncontrolled"
                 placeholder="Email"
                 name="email"
                 allowClear
-                value={selectedRecord.email}
+                defaultValue={selectedRecord.email}
               />
               <Input
                 id="outlined-uncontrolled"
                 placeholder="Preferred Airlines"
-                name="password"
+                name="prefairlines"
                 allowClear
                 ref={airlines}
               />
@@ -344,7 +388,21 @@ export default function DashboardUser(){
                     confirmButtonText: "Yes, edit it!",
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      //handleSubmitUser();
+                      //handleSubmitUser({firstName:editfname});
+                      let form={};
+                      if(editfname.current.input._wrapperState.initialValue!=editfname.current.input.value){
+                        form.firstName=editfname.current.input.value;
+                      }
+                      if(editlname.current.input._wrapperState.initialValue!=editlname.current.input.value){
+                        form.lastName=editfname.current.input.value;
+                      }
+                      if(editphone.current.input._wrapperState.initialValue!=editphone.current.input.value){
+                        form.phone=editphone.current.input.value;
+                      }
+                      if(editpassport.current.input._wrapperState.initialValue!=editpassport.current.input.value){
+                        form.passportId=editpassport.current.input.value;
+                      }
+                      console.log(form)
                       setEditPop(false);
                       Swal.fire(
                         "Edited!",
@@ -361,14 +419,17 @@ export default function DashboardUser(){
           </Popup>
         )}
         {morePop && selectedRecord && (
+          
           <Popup title="User Information" close={closePop} >
+            {console.log(selectedRecord)}
             <p>First Name:{" "}{selectedRecord.firstName}</p>
             <p>Last Name:{" "}{selectedRecord.lastName}</p>
             <p>Phone Number:{" "}{selectedRecord.phone}</p>
             <p>Email:{" "}{selectedRecord.email}</p>
             <p>Points:{" "}{selectedRecord.points}</p>
-            <p>Pref destinations: {" "}{JSON.parse(selectedRecord.preferredDestinations).map(e => {return <span key={e}>{e}{" "}</span>})}</p>
-            <p>First Name:{" "}{JSON.parse(selectedRecord.preferredAirlines).map(e=>{return <span key={e}>{e}{" "}</span>})}</p>
+            <p>Passport:{" "}{selectedRecord.passportId? selectedRecord.passportId : ""}</p>
+            <p>Pref destinations: {" "}{selectedRecord.preferredDestinations.length>0? JSON.parse(selectedRecord.preferredDestinations).map(e => {return <span key={e}>{e}{" "}</span>}): ""}</p>
+            <p>Pref Airlines:{" "}{selectedRecord.preferredAirlines.length>0? JSON.parse(selectedRecord.preferredAirlines).map(e=>{return <span key={e}>{e}{" "}</span>}) : " "}</p>
           </Popup>
         )}
       
