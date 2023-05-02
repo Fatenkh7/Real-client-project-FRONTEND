@@ -55,6 +55,10 @@ const Package = () => {
   const [imageFile, setImageFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  const [users, setUsers] = useState('');
+
+  const { Option } = Select;
+
   const onFileChange = (event) => {
     setSelectedFile(event.fileList[0]);
   };
@@ -86,8 +90,9 @@ const Package = () => {
           },
         }
       );
-
-      const imageId = response.data._id;
+      console.log("aaaaaaaaaaaaaaaaaaaa")
+  console.log("@res@", response);
+     const imageId = response.data._id;
       setFormData((prevFormData) => ({
         ...prevFormData,
         idImage: imageId, // set the idImage field in formData to the imageId
@@ -100,18 +105,20 @@ const Package = () => {
       console.error(error);
       setMessage("Error adding image");
     }
-  };
+};
 
   const getAllUsers = async () => {
     try {
       const { data: response } = await axios.get("http://localhost:8000/user");
-      setData(response.data);
+      setUsers(response.data);
       console.log("data:", data);
     } catch (error) {
       console.error(error.message);
     }
     setLoading(false);
   };
+
+  
 
   const postPackage = async (event) => {
     // Create package data object
@@ -165,26 +172,43 @@ const Package = () => {
   //get data after rendering
   useEffect(() => {
     fetchData();
+    getAllUsers(); 
   }, []);
 
   // delete a particular row
+  // const deleteRow = async (_id) => {
+  //   let originalPackages = [...data];
+  //   try {
+  //     await axios.delete(`http://localhost:8000/package/${_id}`);
+  //     setData(data.filter((p) => p._id !== _id));
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Oops...",
+  //       text: "Something went wrong!",
+  //     });
+
+  //     setData(originalPackages);
+  //     fetchData();
+  //   }
+  // };
+
   const deleteRow = async (_id) => {
     let originalPackages = [...data];
     try {
       await axios.delete(`http://localhost:8000/package/${_id}`);
-      setData(data.filter((p) => p._id !== _id));
+      setData((prevData) =>
+        prevData.filter((p) => p._id !== _id)
+      );
+      setMessage("Package deleted successfully!");
     } catch (error) {
-      console.error(error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
-
+      console.error(error);
       setData(originalPackages);
-      fetchData();
+      setMessage("Error deleting package!");
     }
   };
+  
 
   const columns = [
     {
@@ -232,27 +256,17 @@ const Package = () => {
       title: "Customer Information",
       dataIndex: "idCustomer",
       key: "idCustomer",
-      render: (idCustomer) => (
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder="Select a user"
-          optionFilterProp="children"
-          value={idCustomer}
-          onChange={(value) => {
-            setFormData((prevFormData) => ({
-              ...prevFormData,
-              idCustomer: value,
-            }));
-          }}
-        >
-          {data.map((user) => (
-            <Select.Option key={user._id} value={user._id}>
-              {user.firstName} {user.lastName}
-            </Select.Option>
-          ))}
-        </Select>
-      ),
+      render: (customer) => {
+        if (customer) {
+          return (
+            <div>
+              <strong>Name:</strong> {customer.firstName} {customer.lastName}
+            </div>
+          );
+        } else {
+          return <div></div>;
+        }
+      },
     },
     {
       title: "Actions",
@@ -344,12 +358,30 @@ const Package = () => {
                 allowClear
               />
             </Form.Item>
-            <Input
-              id="outlined-uncontrolled"
-              placeholder="Customer Information"
-              name="Customer Information"
-              allowClear
-            />
+      
+
+<Select
+  showSearch
+  placeholder="Select customer"
+  optionFilterProp="children"
+  value={formData.idCustomer}
+  onChange={(value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      idCustomer: value,
+    }));
+  }}
+  filterOption={(input, option) =>
+    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+>
+  {users.map((user) => (
+    <Option key={user._id} value={user._id}>
+      {user.firstName} {user.lastName}
+    </Option>
+  ))}
+</Select>
+
             <Input
               id="outlined-uncontrolled"
               placeholder="Image Title"
@@ -361,6 +393,8 @@ const Package = () => {
               }
             />
 
+            
+
             <Form.Item
               name="image"
               label="Image"
@@ -371,13 +405,28 @@ const Package = () => {
                 },
               ]}
             >
-              <Upload
-                onChange={onFileChange}
-                accept=".jpg,.jpeg,.png"
-                fileList={selectedFile ? [selectedFile] : []}
-              >
-                <Button icon={<UploadOutlined />}>Select Image</Button>
-              </Upload>
+             
+
+<Upload
+  accept=".jpg,.jpeg,.png"
+  beforeUpload={(file) => {
+    setSelectedFile(file);
+    return false; // Prevent AntD from uploading the file immediately
+  }}
+  onChange={(info) => {
+    const { status } = info.file;
+    if (status === "done") {
+      setMessage("Image uploaded successfully!");
+    } else if (status === "error") {
+      setMessage("Error uploading image!");
+    }
+  }}
+>
+  <Button onClick={imageUploadResponse} icon={<UploadOutlined />} size="middle">
+    Click to upload image
+  </Button>
+</Upload>
+
             </Form.Item>
 
             <Form.Item
