@@ -1,0 +1,18 @@
+.content-container{
+    display: grid;
+    grid-template-columns: 15% 85%;
+    grid-gap: 30px;
+    padding: 50px 100px;
+}
+.content-container .contact-nav{
+    border-right:1px solid #ccc;
+}
+.contact-nav h3{
+    padding: 20px 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0;
+}
+.contact-nav h3:hover{
+    background-color: #ccc;
+}

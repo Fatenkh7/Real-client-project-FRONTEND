@@ -1,0 +1,35 @@
+.all-contact-form{
+    display: grid;
+    grid-template-columns: 60% 40%;
+}
+.all-contact-form .div-1 h1 {
+    margin-top: 0px;
+}
+.all-contact-form .div-2{
+    display: flex;
+    flex-direction: column;
+
+}
+.div-1 .form1 input,.div-1 .form1 textarea {
+ padding: 10px;
+ font-size: 18px;   
+}
+
+.div-2 .phoneNumber{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 18px;
+}
+.div-2 .email-form{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 18px;
+}
+.div-2 .facebook{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 18px;
+}
