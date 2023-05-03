@@ -167,7 +167,7 @@ const Partner = () => {
     };
   
     return (
-        <div className="container-admins">
+        <div className="container-partner">
         <div className="add--button_container">
           <Button onClick={() => {
         setOpenPop(true)
