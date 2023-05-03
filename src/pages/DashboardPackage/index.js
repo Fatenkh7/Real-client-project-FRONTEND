@@ -82,7 +82,7 @@ const Package = () => {
       imageData.append("title", formData.title);
 
       const response = await axios.post(
-        "http://localhost:8000/image/add",
+        "http://localhost:5000/image/add",
         imageData,
         {
           headers: {
@@ -109,7 +109,7 @@ const Package = () => {
 
   const getAllUsers = async () => {
     try {
-      const { data: response } = await axios.get("http://localhost:8000/user");
+      const { data: response } = await axios.get("http://localhost:5000/user");
       setUsers(response.data);
       console.log("data:", data);
     } catch (error) {
@@ -135,7 +135,7 @@ const Package = () => {
       packageData.append("image", imageFile);
 
       const packageResponse = await axios.post(
-        "http://localhost:8000/package/add",
+        "http://localhost:5000/package/add",
         packageData
       );
 
@@ -159,7 +159,7 @@ const Package = () => {
   const fetchData = async () => {
     try {
       const { data: response } = await axios.get(
-        "http://localhost:8000/package"
+        "http://localhost:5000/package"
       );
       setData(response.data);
       console.log("data:", data);
@@ -179,7 +179,7 @@ const Package = () => {
   // const deleteRow = async (_id) => {
   //   let originalPackages = [...data];
   //   try {
-  //     await axios.delete(`http://localhost:8000/package/${_id}`);
+  //     await axios.delete(`http://localhost:5000/package/${_id}`);
   //     setData(data.filter((p) => p._id !== _id));
   //   } catch (error) {
   //     console.error(error.message);
@@ -197,7 +197,7 @@ const Package = () => {
   const deleteRow = async (_id) => {
     let originalPackages = [...data];
     try {
-      await axios.delete(`http://localhost:8000/package/${_id}`);
+      await axios.delete(`http://localhost:5000/package/${_id}`);
       setData((prevData) =>
         prevData.filter((p) => p._id !== _id)
       );
@@ -222,7 +222,7 @@ const Package = () => {
       key: "idImage",
       render: (idImage) => (
         <img
-          src={`http://localhost:8000/${idImage.image}`}
+          src={`http://localhost:5000/${idImage.image}`}
           alt={idImage.title}
           width="100"
         />
