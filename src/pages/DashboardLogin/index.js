@@ -29,6 +29,7 @@ export default function Home() {
       cookies.set("token", response.data.token);
       // Redirect to dashboard page after successful login
       window.location = "/dashboard";
+      alert(" Login Succssed ");
     } catch (error) {
       console.error(error);
       // Show error message to user
