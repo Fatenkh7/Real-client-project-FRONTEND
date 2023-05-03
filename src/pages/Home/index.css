@@ -4,6 +4,7 @@
     display:block;
     padding:0;
     margin:0;
+    margin-bottom:40px ;
 
 }
 /*.dimmer{
@@ -22,7 +23,6 @@
     align-items:flex-start;
     -webkit-backdrop-filter: brightness(50%);
     backdrop-filter: brightness(50%);
-    margin-bottom: 40px;
 
 }
 #hero p{
@@ -34,29 +34,38 @@
     -webkit-backdrop-filter: brightness(80%);
     backdrop-filter: brightness(80%);
 }
-#benefits{
-    margin-bottom: 40px;
+#benefits, #contact{
     padding: 40px;
 }
-#benefits div{
-    margin-bottom: 40px;
+#benefits>div{
+    margin-bottom: 80px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     column-gap: 40px;
 }
-#sechr{
-    width:80%;
+.benefit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 20px;
+}
+.benefit p{
+    font-size: 30px;
+}
+.sechr{
+    width:70%;
     margin:auto;
     border:1px solid var(--accent)
 }
 #services{
     padding: 40px;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
 }
-#services h3, #benefits h3{
+#services h3, #benefits h3, #contact h3{
     font-size: 60px;
-    margin-bottom: 40px;
+    margin-bottom: 120px;
     color:var(--blue)
 }
 #packages{
@@ -67,13 +76,14 @@
     height:50%;
     column-gap: 20px;
     justify-content: space-between;
+    margin-bottom: 40px;
 }
 #hero span{
     /*color:var(--accent);*/
 }
 .home section:first-child{
     background-color: rgba(0, 0, 0, 0.3);
-   background-image: url("https://bigseventravel.com/wp-content/uploads/2020/03/italy-4093227_1920.jpg");
+ /*  background-image: url("https://bigseventravel.com/wp-content/uploads/2020/03/italy-4093227_1920.jpg");*/
     background-repeat: no-repeat;
     background-blend-mode: saturation;
     background-size: cover;
@@ -82,5 +92,10 @@
 @media screen and (max-width:600px){
     #hero p{
         font-size:60px;
+    }
+    #services h3, #benefits h3, #contact h3{
+        font-size: 40px;
+        margin-bottom: 40px;
+        color:var(--blue);
     }
 }
