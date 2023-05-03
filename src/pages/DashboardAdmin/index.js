@@ -17,8 +17,10 @@ export default function Home(props) {
   const [editPop, setEditPop] = useState(false);
   const [editedItemId, setEditedItemId] = useState("");
   const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const inputFileRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [message, setMessage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
 
   const [adminData, setAdminData] = useState({
     firstName: "",
@@ -27,6 +29,7 @@ export default function Home(props) {
     email: "",
     password: "",
     isSuper: false,
+    idImage: "",
     image: null,
     title: "",
   });
@@ -95,64 +98,71 @@ export default function Home(props) {
       Swal.fire("Error!", "There was an error updating the admin.", "error");
     }
   };
+  const onFileChange = (event) => {
+    setSelectedFile(event.fileList[0]);
+  };
 
-  const handleAddNewAdmin = async () => {
+  const imageUploadResponse = async () => {
     try {
-      if (!adminData.image || !adminData.title) {
-        throw new Error("Please select an image and title.");
-      }
-  
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      formData.append("title", adminData.title);
-      const imageResponse = await axios.post(
+      const imageData = new FormData();
+      imageData.append("image", selectedFile.originFileObj, selectedFile.name);
+      imageData.append("title", adminData.title);
+
+      const response = await axios.post(
         "http://localhost:5000/image/add",
-        formData,
+        imageData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
-      const newAdminData = { ...adminData, image: imageResponse.data._id };
-      const addAdminResponse = await axios.post(
-        "http://localhost:5000/admin/add",
-        newAdminData
-      );
-      setData((prevState) => [...prevState, addAdminResponse.data.response]);
-      setAddPop(false);
-      setAdminData({
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
-        isSuper: false,
-        image: null,
-        title: "",
-      });
+      console.log("aaaaaaaaaaaaaaaaaaaa");
+      console.log("@res@", response);
+      const imageId = response.data._id;
+      setAdminData((prevFormData) => ({
+        ...prevFormData,
+        idImage: imageId, // set the idImage field in formData to the imageId
+      }));
+
+      setMessage("image added successfully!");
+
+      return response;
     } catch (error) {
-      console.log(error);
-      Swal.fire("Error!", "There was an error creating the admin.", "error");
+      console.error(error);
+      setMessage("Error adding image");
     }
-  };  
+  };
+
+  const handleAddNewAdmin = async (event) => {
+    try {
+      const newAdmin = new FormData();
+      newAdmin.append("firstName", adminData.firstName);
+      newAdmin.append("lastName", adminData.lastName);
+      newAdmin.append("isSuper", adminData.isSuper);
+      newAdmin.append("userName", adminData.userName);
+      newAdmin.append("email", adminData.email);
+      newAdmin.append("idImage", adminData.idImage);
+      newAdmin.append("password", adminData.password);
+      newAdmin.append("title", adminData.title);
+      newAdmin.append("image", imageFile);
+
+      const adminResponse = await axios.post(
+        "http://localhost:5000/admin/add",
+        newAdmin
+      );
+
+      console.log(adminResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleAddAdmin = () => {
     setSelectedAdmin(null); // reset selected record
     setAddPop(true); // show add admin popup
   };
 
-  const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    if (image) {
-      setAdminData((prevState) => ({
-        ...prevState,
-        image,
-        imageUrl: URL.createObjectURL(image),
-      }));
-      setImageFile(image);
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -172,19 +182,22 @@ export default function Home(props) {
   const columns = [
     {
       title: "Image",
-      dataIndex: "image",
-      filters: [],
-      onFilter: (value, record) => record.image.indexOf(value) === 0,
-      sorter: (a, b) => a.image.length - b.image.length,
-      sortDirections: ["descend"],
-      render: (image, record) => (
-        <img
-          src={`http://localhost:5000/image/${record.image}`}
-          alt="Admin Avatar"
-          style={{ width: 50, height: 50 }}
-        />
+      dataIndex: "idImage",
+      key: "idImage",
+      render: (idImage) => (
+        <>
+          {idImage && idImage.image ? (
+            <img
+              src={`http://localhost:5000/uploads/${idImage.image}`}
+              alt={idImage.title}
+              width="100"
+            />
+          ) : (
+            <span>No image available</span>
+          )}
+        </>
       ),
-    },
+    },    
     {
       title: "First Name",
       dataIndex: "firstName",
@@ -351,37 +364,42 @@ export default function Home(props) {
             />
             <Form.Item name="image" label="Image">
               <Upload
-                beforeUpload={handleImageChange}
-                fileList={imageFile ? [imageFile] : []}
-                showUploadList={false} // added this to hide the file list
+                accept=".jpg,.jpeg,.png"
+                beforeUpload={(file) => {
+                  setSelectedFile(file);
+                  return false; // Prevent AntD from uploading the file immediately
+                }}
+                onChange={(info) => {
+                  const { status } = info.file;
+                  if (status === "done") {
+                    setMessage("Image uploaded successfully!");
+                  } else if (status === "error") {
+                    setMessage("Error uploading image!");
+                  }
+                }}
               >
-                {adminData.image || imageFile ? (
-                  <img
-                    src={
-                      adminData.image
-                        ? `http://localhost:5000/image/${adminData.image}`
-                        : URL.createObjectURL(imageFile)
-                    }
-                    alt="Admin"
-                    style={{ maxWidth: "100%" }}
-                  />
-                ) : (
-                  <Button icon={<UploadOutlined />}>Upload</Button>
-                )}
+                <button
+                  onClick={imageUploadResponse}
+                  icon={<UploadOutlined />}
+                  size="middle"
+                >
+                  Click to upload image
+                </button>
               </Upload>
               <input
                 type="file"
                 accept="image/*"
                 style={{ display: "none" }}
                 ref={inputFileRef}
-                onChange={handleImageChange}
               />
               <Form.Item name="title" label="Title">
                 <Input
                   name="title"
                   placeholder="Image Title"
                   value={adminData.title}
-                  onChange={handleInputChange}
+                  onChange={(e) =>
+                    setAdminData({ ...adminData, title: e.target.value })
+                  }
                 />
               </Form.Item>
             </Form.Item>
