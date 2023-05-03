@@ -1,0 +1,86 @@
+.section{
+    width: 100%;
+    box-sizing: border-box;
+    display:block;
+    padding:0;
+    margin:0;
+
+}
+/*.dimmer{
+    z-index:1;
+    background-color: rbga(0,0,0,20%);
+    height: 100%;
+    width:100%
+}*/
+#hero{
+    height:calc(100vh - 55px);
+    padding:40px;
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items:flex-start;
+    -webkit-backdrop-filter: brightness(50%);
+    backdrop-filter: brightness(50%);
+    margin-bottom: 40px;
+
+}
+#hero p{
+    margin: 0;
+    font-size: 120px;
+    color:white;
+    display: inline-block;
+    font-weight: 600;
+    -webkit-backdrop-filter: brightness(80%);
+    backdrop-filter: brightness(80%);
+}
+#benefits{
+    margin-bottom: 40px;
+    padding: 40px;
+}
+#benefits div{
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 40px;
+}
+#sechr{
+    width:80%;
+    margin:auto;
+    border:1px solid var(--accent)
+}
+#services{
+    padding: 40px;
+    margin-bottom: 40px;
+}
+#services h3, #benefits h3{
+    font-size: 60px;
+    margin-bottom: 40px;
+    color:var(--blue)
+}
+#packages{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:90%;
+    height:50%;
+    column-gap: 20px;
+    justify-content: space-between;
+}
+#hero span{
+    /*color:var(--accent);*/
+}
+.home section:first-child{
+    background-color: rgba(0, 0, 0, 0.3);
+   background-image: url("https://bigseventravel.com/wp-content/uploads/2020/03/italy-4093227_1920.jpg");
+    background-repeat: no-repeat;
+    background-blend-mode: saturation;
+    background-size: cover;
+  
+}
+@media screen and (max-width:600px){
+    #hero p{
+        font-size:60px;
+    }
+}
