@@ -1,129 +1,115 @@
-import React, { useRef,useState } from "react";
+import React, { useRef, useState } from "react";
 import "./index.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-
 export default function Home() {
   const btnRef = useRef(null);
   const formRef = useRef(null);
-  const [login , setlogin]=useState({
-    username:'',
-    password:'',})
+  const [login, setLogin] = useState({
+    userName: "",
+    password: "",
+  });
 
-  function signIn() {
-    if (formRef.current.checkValidity()) {
-      btnRef.current.classList.add("pending");
-      window.setTimeout(function () {
-        btnRef.current.classList.add("granted");
-      }, 1500);
-    }
-  }
-  
-  const handleloginChange = (e) => {
-    const value = e.target.value;
-    setlogin({
+  const handleInputChange = (event) => {
+    setLogin({
       ...login,
-      [e.target.name]: value,
+      [event.target.name]: event.target.value,
     });
   };
-  
-   async function handelSubmit(e){
-    e.preventDefault();
-  
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/admin/login', {
-        username: login.username,
-        password: login.password
+      const response = await axios.post("http://localhost:5000/admin/login", {
+        userName: login.userName,
+        password: login.password,
       });
-  
-      const token = response.data.access_token
-      ;
-      console.log(response)
-      // Set the token in the cookies
-      Cookies.set('token', token    );
-      
-      axios.create({
-  
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('token')}`
-        }
-      });
-      console.log(token)
-      // Redirect the user to the dashboard page
-  
-      if (token) {window.location.href = 'http://localhost:3000/dashboard/admin'};
-      
+      const cookies = new Cookies();
+      cookies.set("token", response.data.token);
+      // Redirect to dashboard page after successful login
+      window.location = "/dashboard";
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      // Show error message to user
+      alert("Invalid username or password");
     }
-  
-  }
-  console.log(login)
+  };
+
   return (
     <div className="login-container">
-    <div className="tile">
-      <div className="tile-header">
-        <h2
-          style={{
-            color: "white",
-            opacity: 0.75,
-            fontSize: "4rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          SIGN IN
-        </h2>
-      </div>
-
-      <div className="tile-body">
-        <form ref={formRef}>
-          <label className="form-input">
-            <i className="material-icons">person</i>
-            <input type="text" autoFocus required />
-            <span className="label">Username</span>
-            <span className="underline"></span>
-          </label>
-
-          <label className="form-input">
-            <i className="material-icons">lock</i>
-            <input type="password" required />
-            <span className="label">Password</span>
-            <div className="underline"></div>
-          </label>
-
-          <div
-            className="submit-container clearfix"
-            style={{ marginTop: "2rem" }}
+      <div className="tile">
+        <div className="tile-header">
+          <h2
+            style={{
+              color: "white",
+              opacity: 0.75,
+              fontSize: "4rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
           >
+            SIGN IN
+          </h2>
+        </div>
+
+        <div className="tile-body">
+          <form ref={formRef} onSubmit={handleSubmit}>
+            <label className="form-input">
+              <i className="material-icons">person</i>
+              <input
+                type="text"
+                name="userName"
+                value={login.userName}
+                onChange={handleInputChange}
+                autoFocus
+                required
+              />
+              <span className="label">Username</span>
+              <span className="underline"></span>
+            </label>
+
+            <label className="form-input">
+              <i className="material-icons">lock</i>
+              <input
+                type="password"
+                name="password"
+                value={login.password}
+                onChange={handleInputChange}
+                required
+              />
+              <span className="label">Password</span>
+              <div className="underline"></div>
+            </label>
+
             <div
-              ref={btnRef}
-              role="button"
-              type="button"
-              className="btn btn-irenic float-right"
-              tabIndex="0"
-              onClick={signIn}
+              className="submit-container clearfix"
+              style={{ marginTop: "2rem" }}
             >
-              <span>SIGN IN</span>
-            </div>
+              <button
+                ref={btnRef}
+                type="submit"
+                className="btn btn-irenic float-right"
+              >
+                <span>SIGN IN</span>
+              </button>
 
-            <div className="login-pending">
-              <div>
-                <span className="dot1"></span>
-                <span className="dot2"></span>
-              </div>
+              <div className="login-pending">
+                <div>
+                  <span className="dot1"></span>
+                  <span className="dot2"></span>
+                </div>
 
-              <div className="login-granted-content">
-                <i className="material-icons">done</i>
+                <div className="login-granted-content">
+                  <i className="material-icons">done</i>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
-        }
+}
