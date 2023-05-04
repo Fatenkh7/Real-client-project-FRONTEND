@@ -31,31 +31,12 @@ const Package = () => {
     isCustomized: false,
     idImage: "",
     idCustomer: "",
-
-    //image
-    image: null,
-    title: "",
-
-    //user
-    // firstName: "",
-    // lastName: "",
-    // isMember: false,
-    // createDate: new Date().toISOString().slice(0, 10),
-    // isConfirmed: true,
-    // points: 0,
-    // email: "",
-    // password: "",
-    // phone: "",
-    // title: "",
-    // passportId: "",
-    // preferredDestinations: [],
-    // preferredAirlines: [],
   });
 
   const [imageFile, setImageFile] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState("");
 
   const { Option } = Select;
 
@@ -77,8 +58,9 @@ const Package = () => {
 
   const imageUploadResponse = async () => {
     try {
+      console.log("batata", selectedFile[0]);
       const imageData = new FormData();
-      imageData.append("image", selectedFile.originFileObj, selectedFile.name);
+      imageData.append("image", selectedFile, selectedFile.name);
       imageData.append("title", formData.title);
 
       const response = await axios.post(
@@ -90,13 +72,10 @@ const Package = () => {
           },
         }
       );
-      console.log("aaaaaaaaaaaaaaaaaaaa")
-  console.log("@res@", response);
-     const imageId = response.data._id;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        idImage: imageId, // set the idImage field in formData to the imageId
-      }));
+      console.log("aaaaaaaaaaaaaaaaaaaa");
+      console.log("@res@", response.data.newImage._id);
+      let imageId = response.data.newImage._id;
+      setFormData({...formData, idImage:imageId});
 
       setMessage("image added successfully!");
 
@@ -105,35 +84,31 @@ const Package = () => {
       console.error(error);
       setMessage("Error adding image");
     }
-};
+  };
 
   const getAllUsers = async () => {
     try {
       const { data: response } = await axios.get("http://localhost:5000/user");
       setUsers(response.data);
-      console.log("data:", data);
     } catch (error) {
       console.error(error.message);
     }
     setLoading(false);
   };
 
-  
-
   const postPackage = async (event) => {
     // Create package data object
     try {
-      const packageData = new FormData();
-      packageData.append("packageTitle", formData.packageTitle);
-      packageData.append("description", formData.description);
-      packageData.append("locations", JSON.stringify(formData.locations));
-      packageData.append("duration", formData.duration);
-      packageData.append("isCustomized", formData.isCustomized);
-      packageData.append("idImage", formData.idImage);
-      packageData.append("idCustomer", formData.idCustomer);
-      packageData.append("title", formData.title);
-      packageData.append("image", imageFile);
-
+      let packageData = {};
+      packageData.packageTitle=formData.packageTitle;
+      packageData.description= formData.description;
+      packageData.locations= JSON.stringify(formData.locations);
+      packageData.duration= formData.duration;
+      packageData.isCustomized= formData.isCustomized;
+      packageData.idImage= formData.idImage;
+      packageData.idCustomer= formData.idCustomer;
+      packageData.idImage= formData.idImage;
+      console.log("forms data batata", packageData)
       const packageResponse = await axios.post(
         "http://localhost:5000/package/add",
         packageData
@@ -162,7 +137,6 @@ const Package = () => {
         "http://localhost:5000/package"
       );
       setData(response.data);
-      console.log("data:", data);
     } catch (error) {
       console.error(error.message);
     }
@@ -172,7 +146,7 @@ const Package = () => {
   //get data after rendering
   useEffect(() => {
     fetchData();
-    getAllUsers(); 
+    getAllUsers();
   }, []);
 
   // delete a particular row
@@ -198,9 +172,7 @@ const Package = () => {
     let originalPackages = [...data];
     try {
       await axios.delete(`http://localhost:5000/package/${_id}`);
-      setData((prevData) =>
-        prevData.filter((p) => p._id !== _id)
-      );
+      setData((prevData) => prevData.filter((p) => p._id !== _id));
       setMessage("Package deleted successfully!");
     } catch (error) {
       console.error(error);
@@ -208,7 +180,6 @@ const Package = () => {
       setMessage("Error deleting package!");
     }
   };
-  
 
   const columns = [
     {
@@ -228,6 +199,7 @@ const Package = () => {
         />
       ),
     },
+    
     {
       title: "Description",
       dataIndex: "description",
@@ -317,8 +289,6 @@ const Package = () => {
         dataSource={data.map((row, index) => ({ ...row, key: index }))}
       />
 
-      
-
       {/* form to add a new package */}
 
       {<Button onClick={addPackage}>Add Package</Button>}
@@ -331,24 +301,28 @@ const Package = () => {
               placeholder="Package Title"
               name="Package Title"
               allowClear
+              onChange={(e)=> {setFormData({...formData, packageTitle:e.target.value})}}
             />
             <Input
               id="outlined-uncontrolled"
               placeholder="Description"
               name="Description"
               allowClear
+              onChange={(e)=> {setFormData({...formData, description:e.target.value})}}
             />
             <Input
               id="outlined-uncontrolled"
               placeholder="Location"
               name="Location"
               allowClear
+              onChange={(e)=> {setFormData({...formData, locations:e.target.value})}}
             />
             <Input
               id="outlined-uncontrolled"
               placeholder="Duration"
               name="Duration"
               allowClear
+              onChange={(e)=> {setFormData({...formData, duration:e.target.value})}}
             />
             <Form.Item label="Tailored">
               <Switch
@@ -358,42 +332,55 @@ const Package = () => {
                 allowClear
               />
             </Form.Item>
-      
 
-<Select
-  showSearch
-  placeholder="Select customer"
-  optionFilterProp="children"
-  value={formData.idCustomer}
-  onChange={(value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      idCustomer: value,
-    }));
-  }}
-  filterOption={(input, option) =>
-    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-  }
->
-  {users.map((user) => (
-    <Option key={user._id} value={user._id}>
-      {user.firstName} {user.lastName}
-    </Option>
-  ))}
-</Select>
-
-            <Input
-              id="outlined-uncontrolled"
-              placeholder="Image Title"
-              name="Image Title"
-              allowClear
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
+            <Select
+              showSearch
+              placeholder="Select customer"
+              optionFilterProp="children"
+              value={formData.idCustomer}
+              onChange={(value) => {
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  idCustomer: value,
+                }));
+              }}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-            />
+            >
+              {users.map((user) => (
+                <Option key={user._id} value={user._id}>
+                  {user.firstName} {user.lastName}
+                </Option>
+              ))}
+            </Select>
 
-            
+            <Form.Item
+              name="image"
+              label="Image"
+              rules={[
+                {
+                  required: true,
+                  message: "Please upload an image",
+                },
+              ]}
+            >
+              <Upload
+                accept=".jpg,.jpeg,.png"
+                beforeUpload={(file) => {
+                  setSelectedFile(file);
+                  return false; // Prevent AntD from uploading the file immediately
+                }}
+                onChange={(info) => {
+                  const { status } = info.file;
+                  if (status === "done") {
+                    setMessage("Image uploaded successfully!");
+                  } else if (status === "error") {
+                    setMessage("Error uploading image!");
+                  }
+                }}
+              ></Upload>
+            </Form.Item>
 
             <Form.Item
               name="image"
@@ -422,13 +409,10 @@ const Package = () => {
     }
   }}
 >
-  <Button onClick={imageUploadResponse} icon={<UploadOutlined />} size="middle">
-    Click to upload image
-  </Button>
++
 </Upload>
 
             </Form.Item>
-
             <Form.Item
               name="title"
               label="Image Title"
@@ -476,16 +460,29 @@ const Package = () => {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     //call post function
-                    postPackage();
-
-                    setEditPop(false);
+                    imageUploadResponse().then(function (success) {
+                      console.log("response image",success);
+                      postPackage().then(
+                        function(success){
+                          setEditPop(false);
                     Swal.fire(
                       "Added!",
-                      "Your Admin has been added.",
+                      "Your Package has been added.",
                       "success"
                     );
+                        }
+                      )
+                    }).catch(
+                      Swal.fire(
+                      "Added!",
+                      "Error",
+                      "warning"
+                    )
+                    
+                    );
+                    
                   }
-                });
+                }).catch(console.error())
               }}
             >
               Submit
