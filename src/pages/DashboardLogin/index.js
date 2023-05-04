@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./index.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const btnRef = useRef(null);
@@ -25,13 +26,15 @@ export default function Home() {
         userName: login.userName,
         password: login.password,
       });
+      console.log(response);
       const cookies = new Cookies();
       cookies.set("token", response.data.token);
+      btnRef.current.classList.add("bubble-swap");
       // Redirect to dashboard page after successful login
       window.location = "/dashboard";
-      alert(" Login Succssed ");
+      //   alert("Login succeeded");
     } catch (error) {
-      console.error(error);
+      console.log(error);
       // Show error message to user
       alert("Invalid username or password");
     }
@@ -39,78 +42,61 @@ export default function Home() {
 
   return (
     <div className="login-container">
-      <div className="tile">
-        <div className="tile-header">
-          <h2
-            style={{
-              color: "white",
-              opacity: 0.75,
-              fontSize: "4rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            SIGN IN
-          </h2>
+      <form ref={formRef} onSubmit={handleSubmit}>
+        <div id="back">
+          <canvas id="canvas" className="canvas-back"></canvas>
+          <motion.div
+            className="backLeft"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          ></motion.div>
         </div>
-
-        <div className="tile-body">
-          <form ref={formRef} onSubmit={handleSubmit}>
-            <label className="form-input">
-              <i className="material-icons">person</i>
-              <input
-                type="text"
-                name="userName"
-                value={login.userName}
-                onChange={handleInputChange}
-                autoFocus
-                required
-              />
-              <span className="label">Username</span>
-              <span className="underline"></span>
-            </label>
-
-            <label className="form-input">
-              <i className="material-icons">lock</i>
-              <input
-                type="password"
-                name="password"
-                value={login.password}
-                onChange={handleInputChange}
-                required
-              />
-              <span className="label">Password</span>
-              <div className="underline"></div>
-            </label>
-
-            <div
-              className="submit-container clearfix"
-              style={{ marginTop: "2rem" }}
-            >
-              <button
-                ref={btnRef}
-                type="submit"
-                className="btn btn-irenic float-right"
-              >
-                <span>SIGN IN</span>
-              </button>
-
-              <div className="login-pending">
-                <div>
-                  <span className="dot1"></span>
-                  <span className="dot2"></span>
+        <div id="slideBox">
+          <div className="topLayer">
+            <div className="right">
+              <div className="content">
+                <h2>Login</h2>
+                <div className="form-element form-stack">
+                  <label htmlFor="username-login" className="form-label">
+                    Username
+                  </label>
+                  <input
+                    onChange={handleInputChange}
+                    value={login.userName}
+                    id="username-login"
+                    type="text"
+                    name="userName"
+                  ></input>
                 </div>
-
-                <div className="login-granted-content">
-                  <i className="material-icons">done</i>
+                <div className="form-element form-stack">
+                  <label htmlFor="password-login" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    onChange={handleInputChange}
+                    value={login.password}
+                    id="password-login"
+                    type="password"
+                    name="password"
+                  ></input>
+                </div>
+                <div className="form-element form-submit">
+                  <button
+                    ref={btnRef}
+                    id="logIn"
+                    className="login"
+                    type="submit"
+                    name="login"
+                  >
+                    Log In
+                  </button>
                 </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
