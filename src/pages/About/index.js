@@ -11,12 +11,6 @@ const { Content } = Layout;
 const About = () => {
   return (
     <Layout>
-      {/* <div
-        style={{
-          height: "200px",
-          backgroundSize: "cover",
-        }}
-      /> */}
       <Content style={{ padding: "50px", background: "#fff" }}>
         <Row gutter={[16, 16]} justify="center">
           <Col xs={24} sm={24} md={10} style={{ textAlign: "center" }}>
