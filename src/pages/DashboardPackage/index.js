@@ -138,6 +138,34 @@ const Package = () => {
     }
   };
 
+  const imageUpdateResponse = () => {
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("title", title);
+
+    axios
+      .put(`http://localhost:8000/image/${formData.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("response", response);
+
+        const idImage = response.data.newImage._id;
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          idImage,
+        }));
+
+        console.log("idImage", idImage);
+        console.log(formData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     let newForm = formData;
@@ -191,12 +219,6 @@ const Package = () => {
       setData(data.filter((p) => p._id !== _id));
     } catch (error) {
       console.error(error.message);
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Oops...",
-      //   text: "Something went wrong!",
-      // });
-
       setData(originalPackages);
       fetchData();
     }
@@ -576,6 +598,7 @@ const Package = () => {
                   if (result.isConfirmed) {
                     //call put function
                     putPackage();
+                    imageUpdateResponse();
 
                     setEditPop(false);
                     Swal.fire(
