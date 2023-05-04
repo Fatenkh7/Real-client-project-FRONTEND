@@ -1,0 +1,60 @@
+.container-booking {
+    margin-top: -100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .required{
+    color:red
+  }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-container input {
+    margin-bottom: 10px;
+  }
+  
+  /* .ant-table-tbody {
+    height: 800px
+  } */
+  .add--button_container {
+    position: absolute;
+    top: -50px;
+    right: 2.5%;
+  }
+  .ant-table{
+    height:500px;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .container-booking {
+      margin-top: -50px;
+    }
+    
+    .input-container {
+      width: 90%;
+      margin: 0 auto;
+    }
+    
+    .input-container input {
+      margin-bottom: 20px;
+    }
+    
+    .add--button_container {
+      position: absolute;
+      top: -50px;
+      right: 2.5%;
+    }
+  
+    .ant-table {
+      max-height: 300px;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      table-layout: auto;
+    }
+    }
