@@ -10,14 +10,19 @@
 }
 
 .login-container {
-    background: linear-gradient(to bottom, rgb(37, 129, 172), #ddd6d6);
+    /* background-image: url("https://static.toiimg.com/thumb/msid-82145005,imgsize-1008381,width-900,height-1200,resizemode-6/82145005.jpg"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center; /* Add this property */
     color: #454749;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: "Source Sans Pro", sans-serif;
     min-height: 100vh;
-}
+    background-color: #d2d3d3;
+  }
+  
 
 h1,
 h2,
@@ -34,19 +39,20 @@ h6 {
  */
 .tile {
     background-color: #fff9f9;
-    border-radius: 0.1rem;
-    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.2), 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 0 0.95rem 2.5rem rgba(0, 0, 0, 0.2), 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2);
     position: relative;
     width: 100%;
-    min-width: 620px;
-    min-height: 520px;
+    min-width: 120px;
+    min-height: 120px;
     max-width: 24rem;
     overflow: hidden;
 }
 
 .tile .tile-header {
-    background-image: url("https://th.bing.com/th/id/OIP.iWo6FFIoIwW6hzNtFsFgqAHaEo?pid=ImgDet&rs=1");
+    background-image: url("https://static.toiimg.com/thumb/msid-82145005,imgsize-1008381,width-900,height-1200,resizemode-6/82145005.jpg");
     background-position: center;
+    /* background-color: rgb(237, 238, 245); */
     background-size: cover;
     height: 12rem;
 }
@@ -58,10 +64,11 @@ h6 {
 /**
  * Forms
  */
+
 .form-input {
+    margin-bottom: 1rem;
     display: block;
     position: relative;
-    margin-bottom: 1rem;
 }
 
 .form-input>.material-icons {
