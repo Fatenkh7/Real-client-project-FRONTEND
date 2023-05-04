@@ -37,6 +37,7 @@ const MySkeleton = () => {
         dataIndex: 'column5',
         key: 'column5',
       },
+      
   ];
 
   const rows = [
@@ -80,6 +81,7 @@ const MySkeleton = () => {
         column4: <Skeleton active={active} size={size} />,
         column5: <Skeleton active={active} size={size} />,
       },
+     
   ];
 
   return (
