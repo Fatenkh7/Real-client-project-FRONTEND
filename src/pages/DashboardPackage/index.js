@@ -17,7 +17,9 @@ const Package = () => {
   const [editPop, setEditPop] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
 
-  const [edit, setEdit] = useState(null);
+  //edit image
+  const [editImage, setEditImage] = useState(null);
+  const [ImageTitle, setImageTitle] = useState("");
 
   const [formData, setFormData] = useState({
     //package
@@ -96,6 +98,7 @@ const Package = () => {
         formData
       );
       console.log(packageResponse.data);
+      fetchData();
     } catch (error) {
       console.error(error);
     }
@@ -138,19 +141,29 @@ const Package = () => {
     }
   };
 
+  const onImageChange = (info) => {
+    setEditImage(info.file);
+  };
+
+  const onImageTitleChange = (event) => {
+    setImageTitle(event.target.value);
+  };
+
   const imageUpdateResponse = () => {
     const formData = new FormData();
-    formData.append("image", selectedFile);
-    formData.append("title", title);
+
+    formData.append("image", editImage);
+    formData.append("title", ImageTitle);
 
     axios
-      .put(`http://localhost:8000/image/${formData.id}`, formData, {
+      .post(`http://localhost:8000/image/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
         console.log("response", response);
+        console.log('image updated successfully');
 
         const idImage = response.data.newImage._id;
         setFormData((prevFormData) => ({
@@ -550,11 +563,11 @@ const Package = () => {
               name="Image Title"
               allowClear
               value={title}
-              onChange={onTitleChange}
+              onChange={onImageTitleChange}
             />
 
             <Form.Item>
-              <Upload beforeUpload={() => false} onChange={onFileChange}>
+              <Upload beforeUpload={() => false} onChange={onImageChange}>
                 <button
                   style={{
                     height: "100px",
