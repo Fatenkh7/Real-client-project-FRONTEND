@@ -2,11 +2,7 @@ import axios from "axios";
 import { Table, Space, Input, Switch, Form, Upload, Select } from "antd";
 import MySkeleton from "../../components/Skeleton/Skeleton.js";
 import { useEffect, useState } from "react";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import Button from "../../components/Button";
 import "../DashboardAdmin/index.css";
@@ -21,7 +17,10 @@ const Package = () => {
   const [editPop, setEditPop] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
 
-  const [message, setMessage] = useState("");
+  //edit image
+  const [editImage, setEditImage] = useState(null);
+  const [ImageTitle, setImageTitle] = useState("");
+
   const [formData, setFormData] = useState({
     //package
     packageTitle: "",
@@ -33,58 +32,53 @@ const Package = () => {
     idCustomer: "",
   });
 
-  const [imageFile, setImageFile] = useState(null);
+  //image
   const [selectedFile, setSelectedFile] = useState(null);
+  const [title, setTitle] = useState("");
 
   const [users, setUsers] = useState("");
 
   const { Option } = Select;
 
-  const onFileChange = (event) => {
-    setSelectedFile(event.fileList[0]);
+  const onFileChange = (info) => {
+    setSelectedFile(info.file);
   };
 
-  // const handleImageChange = (e) => {
-  //   if (e.target.files.length) {
-  //     setImageFile(e.target.files[0]);
-  //   }
-  // };
-
-  // post a new package
-
-  // event.preventDefault();
-
-  // Upload image and get its id
-
-  const imageUploadResponse = async () => {
-    try {
-      console.log("batata", selectedFile[0]);
-      const imageData = new FormData();
-      imageData.append("image", selectedFile, selectedFile.name);
-      imageData.append("title", formData.title);
-
-      const response = await axios.post(
-        "http://localhost:5000/image/add",
-        imageData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("aaaaaaaaaaaaaaaaaaaa");
-      console.log("@res@", response.data.newImage._id);
-      let imageId = response.data.newImage._id;
-      setFormData({...formData, idImage:imageId});
-
-      setMessage("image added successfully!");
-
-      return response;
-    } catch (error) {
-      console.error(error);
-      setMessage("Error adding image");
-    }
+  const onTitleChange = (event) => {
+    setTitle(event.target.value);
   };
+
+  const imageUploadResponse = () => {
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("title", title);
+
+    axios
+      .post("http://localhost:8000/image/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("response", response);
+
+        const idImage = response.data.newImage._id;
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          idImage,
+        }));
+
+        console.log("idImage", idImage);
+        console.log(formData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    console.log("formData changed: ", formData);
+  }, [formData]);
 
   const getAllUsers = async () => {
     try {
@@ -96,27 +90,27 @@ const Package = () => {
     setLoading(false);
   };
 
-  const postPackage = async (event) => {
-    // Create package data object
+  const postPackage = async () => {
     try {
-      let packageData = {};
-      packageData.packageTitle=formData.packageTitle;
-      packageData.description= formData.description;
-      packageData.locations= JSON.stringify(formData.locations);
-      packageData.duration= formData.duration;
-      packageData.isCustomized= formData.isCustomized;
-      packageData.idImage= formData.idImage;
-      packageData.idCustomer= formData.idCustomer;
-      packageData.idImage= formData.idImage;
-      console.log("forms data batata", packageData)
       const packageResponse = await axios.post(
-        "http://localhost:5000/package/add",
-        packageData
+        "http://localhost:8000/package/add",
+        formData
       );
-
       console.log(packageResponse.data);
+      fetchData();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "locations") {
+      const locationsArray = value.split(",");
+      setFormData({ ...formData, [name]: locationsArray });
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -126,8 +120,71 @@ const Package = () => {
   };
 
   const addPackage = () => {
-    setSelectedRecord(null); // reset selected record
     setAddPop(true); // show add package popup
+  };
+
+  const editPackage = () => {
+    setEditPop(true); // show add package popup
+  };
+
+  // edit a particular package
+  const putPackage = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/package/${formData.id}`,
+        formData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onImageChange = (info) => {
+    setEditImage(info.file);
+  };
+
+  const onImageTitleChange = (event) => {
+    setImageTitle(event.target.value);
+  };
+
+  const imageUpdateResponse = () => {
+    const formData = new FormData();
+
+    formData.append("image", editImage);
+    formData.append("title", ImageTitle);
+
+    axios
+      .post(`http://localhost:8000/image/add`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("response", response);
+        console.log('image updated successfully');
+
+        const idImage = response.data.newImage._id;
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          idImage,
+        }));
+
+        console.log("idImage", idImage);
+        console.log(formData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    let newForm = formData;
+    newForm[name] = value;
+    setFormData({
+      ...newForm,
+    });
   };
 
   // get all packages
@@ -136,11 +193,27 @@ const Package = () => {
       const { data: response } = await axios.get(
         "http://localhost:5000/package"
       );
+      console.log(response);
       setData(response.data);
     } catch (error) {
       console.error(error.message);
     }
     setLoading(false);
+  };
+
+  const handleEdit = (record) => {
+    setSelectedRecord(record);
+    setFormData({
+      id: record._id,
+      packageTitle: record.packageTitle,
+      description: record.description,
+      locations: record.locations.join(","),
+      duration: record.duration,
+      isCustomized: record.isCustomized,
+      idImage: record.idImage._id,
+      idCustomer: record.idCustomer?._id,
+    });
+    setEditPop(true);
   };
 
   //get data after rendering
@@ -150,34 +223,15 @@ const Package = () => {
   }, []);
 
   // delete a particular row
-  // const deleteRow = async (_id) => {
-  //   let originalPackages = [...data];
-  //   try {
-  //     await axios.delete(`http://localhost:5000/package/${_id}`);
-  //     setData(data.filter((p) => p._id !== _id));
-  //   } catch (error) {
-  //     console.error(error.message);
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Oops...",
-  //       text: "Something went wrong!",
-  //     });
-
-  //     setData(originalPackages);
-  //     fetchData();
-  //   }
-  // };
-
   const deleteRow = async (_id) => {
     let originalPackages = [...data];
     try {
-      await axios.delete(`http://localhost:5000/package/${_id}`);
-      setData((prevData) => prevData.filter((p) => p._id !== _id));
-      setMessage("Package deleted successfully!");
+      await axios.delete(`http://localhost:8000/package/${_id}`);
+      setData(data.filter((p) => p._id !== _id));
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       setData(originalPackages);
-      setMessage("Error deleting package!");
+      fetchData();
     }
   };
 
@@ -246,11 +300,10 @@ const Package = () => {
       render: (row) => (
         <Space size="middle">
           {/* edit data icon */}
-          {/* <a onClick={() => handleEdit(record)}>
-              <EditOutlined />
-            </a> */}
 
-          {/* delete data icon */}
+          <a onClick={() => handleEdit(row)}>
+            <EditOutlined />
+          </a>
 
           <a
             onClick={() =>
@@ -299,37 +352,43 @@ const Package = () => {
             <Input
               id="outlined-controlled"
               placeholder="Package Title"
-              name="Package Title"
+              name="packageTitle"
               allowClear
-              onChange={(e)=> {setFormData({...formData, packageTitle:e.target.value})}}
+              value={formData.packageTitle}
+              onChange={handleChange}
             />
             <Input
               id="outlined-uncontrolled"
               placeholder="Description"
-              name="Description"
+              name="description"
               allowClear
-              onChange={(e)=> {setFormData({...formData, description:e.target.value})}}
+              value={formData.description}
+              onChange={handleChange}
             />
             <Input
               id="outlined-uncontrolled"
-              placeholder="Location"
-              name="Location"
+              placeholder="Location1, Location2, Location3..."
+              name="locations"
               allowClear
-              onChange={(e)=> {setFormData({...formData, locations:e.target.value})}}
+              value={formData.locations}
+              onChange={handleChange}
             />
             <Input
               id="outlined-uncontrolled"
               placeholder="Duration"
-              name="Duration"
+              name="duration"
               allowClear
-              onChange={(e)=> {setFormData({...formData, duration:e.target.value})}}
+              value={formData.duration}
+              onChange={handleChange}
             />
             <Form.Item label="Tailored">
               <Switch
                 id="outlined-uncontrolled"
                 placeholder="Tailored"
-                name="Tailored"
+                name="isCustomized"
                 allowClear
+                checked={formData.isCustomized}
+                onChange={(e) => setFormData({ ...formData, isCustomized: e })}
               />
             </Form.Item>
 
@@ -355,83 +414,31 @@ const Package = () => {
               ))}
             </Select>
 
-            <Form.Item
-              name="image"
-              label="Image"
-              rules={[
-                {
-                  required: true,
-                  message: "Please upload an image",
-                },
-              ]}
-            >
-              <Upload
-                accept=".jpg,.jpeg,.png"
-                beforeUpload={(file) => {
-                  setSelectedFile(file);
-                  return false; // Prevent AntD from uploading the file immediately
-                }}
-                onChange={(info) => {
-                  const { status } = info.file;
-                  if (status === "done") {
-                    setMessage("Image uploaded successfully!");
-                  } else if (status === "error") {
-                    setMessage("Error uploading image!");
-                  }
-                }}
-              ></Upload>
-            </Form.Item>
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Image Title"
+              name="Image Title"
+              allowClear
+              value={title}
+              onChange={onTitleChange}
+            />
 
-            <Form.Item
-              name="image"
-              label="Image"
-              rules={[
-                {
-                  required: true,
-                  message: "Please upload an image",
-                },
-              ]}
-            >
-             
-
-<Upload
-  accept=".jpg,.jpeg,.png"
-  beforeUpload={(file) => {
-    setSelectedFile(file);
-    return false; // Prevent AntD from uploading the file immediately
-  }}
-  onChange={(info) => {
-    const { status } = info.file;
-    if (status === "done") {
-      setMessage("Image uploaded successfully!");
-    } else if (status === "error") {
-      setMessage("Error uploading image!");
-    }
-  }}
->
-+
-</Upload>
-
-            </Form.Item>
-            <Form.Item
-              name="title"
-              label="Image Title"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter the image title",
-                },
-              ]}
-            >
-              <Input
-                placeholder="Enter the title for the image"
-                onChange={(e) =>
-                  setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    title: e.target.value,
-                  }))
-                }
-              />
+            <Form.Item>
+              <Upload beforeUpload={() => false} onChange={onFileChange}>
+                <button
+                  style={{
+                    height: "100px",
+                    width: "100px",
+                    borderRadius: "4px",
+                    border: "1px solid #3a70a1",
+                  }}
+                >
+                  <PlusOutlined
+                    style={{ color: "#3a70a1", cursor: "pointer" }}
+                  />{" "}
+                  Upload Image
+                </button>
+              </Upload>
             </Form.Item>
 
             <button
@@ -444,7 +451,7 @@ const Package = () => {
                 border: "none",
                 color: "white",
                 fontSize: "14px",
-                padding: "12px 12px",
+                padding: "12px 30px",
                 borderRadius: "4px",
                 display: "block",
                 margin: "0 auto",
@@ -460,18 +467,16 @@ const Package = () => {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     //call post function
-                    imageUploadResponse().then(function (success) {
-                      console.log("response image",success);
-                      postPackage().then(
-                        function(success){
-                          setEditPop(false);
+                    imageUploadResponse();
+                    postPackage();
+                    setAddPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Package has been added.",
                       "success"
                     );
-                        }
-                      )
+                     }
+                    
                     }).catch(
                       Swal.fire(
                       "Added!",
@@ -482,10 +487,152 @@ const Package = () => {
                     );
                     
                   }
-                }).catch(console.error())
+                }
+              
+            >
+              SUBMIT
+            </button>
+          </div>
+        </Popup>
+      )}
+
+      {/* form to edit package */}
+
+      {editPop && (
+        <Popup title="Edit a Package" close={closePop}>
+          <div className="input-container">
+            <Input
+              id="outlined-controlled"
+              placeholder="Package Title"
+              name="packageTitle"
+              allowClear
+              value={formData.packageTitle}
+              onChange={handleInputChange}
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Description"
+              name="description"
+              allowClear
+              value={formData.description}
+              onChange={handleInputChange}
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Location1, Location2, Location3..."
+              name="locations"
+              allowClear
+              value={formData.locations}
+              onChange={handleInputChange}
+            />
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Duration"
+              name="duration"
+              allowClear
+              value={formData.duration}
+              onChange={handleInputChange}
+            />
+            <Form.Item label="Tailored">
+              <Switch
+                id="outlined-uncontrolled"
+                placeholder="Tailored"
+                name="isCustomized"
+                allowClear
+                checked={formData.isCustomized}
+                onChange={(e) => setFormData({ ...formData, isCustomized: !e })}
+              />
+            </Form.Item>
+
+            <Select
+              showSearch
+              placeholder="Select customer"
+              optionFilterProp="children"
+              value={formData.idCustomer}
+              onChange={(value) => {
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  idCustomer: value,
+                }));
+              }}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {users.map((user) => (
+                <Option key={user._id} value={user._id}>
+                  {user.firstName} {user.lastName}
+                </Option>
+              ))}
+            </Select>
+
+            <Input
+              id="outlined-uncontrolled"
+              placeholder="Image Title"
+              name="Image Title"
+              allowClear
+              value={title}
+              onChange={onImageTitleChange}
+            />
+
+            <Form.Item>
+              <Upload beforeUpload={() => false} onChange={onImageChange}>
+                <button
+                  style={{
+                    height: "100px",
+                    width: "100px",
+                    borderRadius: "4px",
+                    border: "1px solid #3a70a1",
+                  }}
+                >
+                  <PlusOutlined
+                    style={{ color: "#3a70a1", cursor: "pointer" }}
+                  />{" "}
+                  Upload Image
+                </button>
+              </Upload>
+            </Form.Item>
+
+            <button
+              type="primary"
+              ghost
+              shape="round"
+              size="middle"
+              style={{
+                backgroundColor: "#37a2f5",
+                border: "none",
+                color: "white",
+                fontSize: "14px",
+                padding: "12px 30px",
+                borderRadius: "4px",
+                display: "block",
+                margin: "0 auto",
+                marginTop: "10px",
+              }}
+              onClick={() => {
+                Swal.fire({
+                  title: "You are editing this Package",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3a70a1",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, edit it!",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    //call put function
+                    putPackage();
+                    imageUpdateResponse();
+
+                    setEditPop(false);
+                    Swal.fire(
+                      "Edited!",
+                      "This package has been edited.",
+                      "success"
+                    );
+                  }
+                });
               }}
             >
-              Submit
+              EDIT
             </button>
           </div>
         </Popup>
