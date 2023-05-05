@@ -1,0 +1,13 @@
+.btn{
+    background-color: var(--blue);
+    border:none;
+    padding: 8px 12px;
+    color:white;
+    font-size: 40px;
+    border-radius:8px;
+    font-family: "Cormorant Garamond";
+    align-self: flex-end;
+}
+.btn:hover{
+    background-color: #8f8f8f; /*#cbcbcb, #ebd547*/
+}

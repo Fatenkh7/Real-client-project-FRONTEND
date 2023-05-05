@@ -33,3 +33,45 @@
     align-items: center;
     font-size: 18px;
 }
+
+@media (max-width: 768px) {
+
+    .all-contact-form {
+    display: block;
+    }
+    
+    .all-contact-form .div-2 {
+    margin-top: 30px;
+    }
+    
+    .div-2 .phoneNumber, .div-2 .email-form, .div-2 .facebook {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    }
+    
+    }
+    @media (max-width: 480px) {
+
+        .all-contact-form {
+        display: block;
+        }
+        
+        .all-contact-form .div-1, .all-contact-form .div-2 {
+        margin-bottom: 30px;
+        }
+        
+        .div-1 .form1 input, .div-1 .form1 textarea {
+        padding: 5px;
+        font-size: 16px;
+        }
+        
+        .div-2 .phoneNumber, .div-2 .email-form, .div-2 .facebook {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        }
+        
+        }

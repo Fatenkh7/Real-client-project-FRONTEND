@@ -1,0 +1,390 @@
+.sidebar .link{
+    transition: color 0.5s ease;
+    color:#252B42;
+    font-size: larger;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+  :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu{
+    background-color: var(--blue) !important;
+    color:#fff !important;
+    min-height: 60px !important;
+  }
+  :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-item:hover::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-item:hover::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu:hover::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-submenu:hover::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-item-active::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-item-active::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu-active::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-submenu-active::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-item-open::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-item-open::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu-open::after, :where(.css-dev-only-do-not-override-htwhyh).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-submenu-open::after {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--accent);
+}
+:where(.css-dev-only-do-not-override-htwhyh).ant-menu-light .ant-menu-item a:hover{
+    color:var(--accent)
+}
+.sidebar{
+    min-height:60px;
+    width:100vw;
+    margin-right: 2rem;
+    box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+    display:flex;
+    flex-direction: row;
+}
+.sidebar ul{
+    display:flex;
+    flex-direction: row;
+}
+.tab-image {
+    display: inline-block;
+    width: 1px; /* adjust as needed */
+    height: 10px; /* adjust as needed */
+    margin-right: 5px; /* adjust as needed */
+  }
+  
+  .tab-image img {
+    width: 19px;
+    height: 15px;
+    margin-left: -40px;
+   
+  }
+
+.sidebar .tab{
+    transition: background-color 0.5s ease-in-out;
+    padding: 1rem;
+}
+.sidebar .tab_active, .sidebar .tab_hover{
+    background-color: var(--purple);
+}
+.sidebar .link_active{
+    color:var(--white);
+}
+.sidebar{
+    background: var(--white);
+    box-sizing: border-box;
+    padding-top: 1rem;
+    box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+}
+.btn{
+    padding:6px 8px;
+    border:solid 1px white;
+}
+@media screen and (max-width: 768px){
+    .sidebar{
+        position: fixed;
+        z-index: 10;
+        width:100vw;
+        transition: width 0.3s ease-in-out;
+        overflow: clip;
+        height:60px;
+    }
+    .toggler-up{
+        transform: rotate(270deg);
+    }
+    .sidebar>div:first-child{
+        display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 1rem;
+    align-items: center;
+    } .sidebar>div:first-child >a{
+        order: 2;
+    display: flex;
+    }
+    .sidebar .tab{
+        padding-left: 40px;}
+    #logo{
+        height: 40px;
+    }
+    .sidebar_full{
+        height:fit-content;
+        padding-left: 0;
+    }
+    .sidebar_full .tab{
+        padding-left: 5px;
+    }
+    .tab_hidden{
+        display: none;
+    }
+    .toggler-down{
+        transform: rotate(90deg);
+    }
+}
+
+/*@media screen and (max-width:768px) and (min-width:481px) {
+    .sidebar{
+        position: fixed;
+        z-index: 10;
+        background-color: rgb(27, 169, 81);
+        width:40px;
+    }
+}*/
+@media only screen and (min-width:769px) {
+    
+    .toggler{
+        display: none;
+    }
+    .toggler-down, .toggle-up{
+        display: none;
+    }
+}
+@media only screen and (min-width:1025px){
+    .sidebar .link{
+
+    }
+    .toggler-down, .toggle-up{
+        display: none;
+    }
+    .toggler{
+        display: none;
+    }
+}
+/*@media screen and (max-width: 480px){
+    .sidebar{
+        background-color: red;
+        width:100vw;
+        height:100px;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+    .sidebar_full{
+
+    }
+    .tab_hidden{
+        display: none;
+    }
+}
+
+@media screen and (max-width:768px) and (min-width:481px) {
+    .sidebar{
+        background-color: rgb(27, 169, 81);
+        width:100vw;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+}
+@media only screen and (min-width:769px) {
+    .sidebar{
+        height:100vh;
+        width:160px;
+        box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+    }
+}
+@media only screen and (min-width:1025px){
+    .sidebar .link{
+
+    }
+    .sidebar{
+        height:100vh;
+        width:240px;
+        box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+    }
+}*/
+.navbar{
+  height:60px;
+  text-overflow: clip;
+  width:100vw;
+  padding: 12px 40px;
+  background-color: var(--blue);
+  box-sizing: border-box;
+  color:#fff;
+  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.brandLink{
+  font-size: xx-large;
+  text-decoration: none;
+  color:white;
+}
+.navList{
+  display:flex;
+  flex-direction: row;
+}
+.navLink{
+
+  font-size: larger;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+
+}
+.navLink:hover{
+  color:var(--accent);
+
+}
+
+
+.navLink, .submenuItem{
+  text-decoration: none;
+  color:#fff
+}
+
+
+@media screen and (max-width: 768px){
+  .navbar{
+      position: fixed;
+      z-index: 10;
+      width:100vw;
+      background-color: #005D8F;
+      transition: width 0.3s ease-in-out;
+      overflow: clip;
+      height:60px;
+  }
+  .navList, .submenu{
+    display:flex;
+    flex-direction: column;
+    column-gap:20px;
+    color:#fff;
+    list-style:none;
+    align-items: center;
+  }
+  
+  .navbar_full{
+      height:fit-content;
+      padding-left: 0;
+  }
+  .navbar_full .tab{
+      padding-left: 5px;
+  }
+  .tab_hidden{
+      display: none;
+  }
+  .menuIcon{
+    display: block;
+  }
+}
+
+@media screen and (min-width:769px) {
+  .menuIcon{
+      display: none;
+  }
+   .submenu{
+    display:flex;
+    flex-direction: column;
+    column-gap:20px;
+    color:#fff;
+    list-style:none;
+    align-items: center;
+  }
+  .navLink{
+    display: flex;
+    flex-direction: row;
+  }
+  
+
+  .dimmer{
+    display:none
+  }
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: var(--blue);
+}
+
+#logo, .topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+#logo{
+  font-size: x-large;
+}
+.active {
+  background-color: var(--blue);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 17px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: var(--blue);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdownContent a {
+  float: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.topnav a:hover, .topnav a:focus, .dropdown:hover .dropbtn {
+  background-color: var(--accent);
+  color: white;
+}
+
+.dropdownContent a:hover, .dropdownContent a:focus {
+  background-color: var(--accent);
+  color: white;
+}
+
+.dropdown:hover .dropdownContent {
+  display: block;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child), .dropdown .dropbtn {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+  #logo{
+    float:left;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav a:first-child(){
+    margin-top:60px;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav.responsive .dropdown {float: none;}
+  .topnav.responsive .dropdownContent {position: relative;}
+  .topnav.responsive .dropdown .dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}

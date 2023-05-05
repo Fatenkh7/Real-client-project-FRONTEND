@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -21,11 +21,13 @@ import DashboardUser from "./pages/DashboardUser";
 import DashboardBooking from "./pages/DashboardBooking";
 import DashboardBookingMeeting from "./pages/DashboardBookingMeeting";
 import DashboardWebContent from "./pages/DashboardWebContent";
+import { AnimatePresence } from "framer-motion";
 function App() {
   return (
     <div className="App">
+      <AnimatePresence mode="sync">
       <BrowserRouter>
-        <Routes>
+        <Routes >
           <Route path="/" element={<WebContainer />}>
             <Route path="home" element={<Home />} />
             <Route path="about" element={<About />} />
@@ -33,7 +35,7 @@ function App() {
             <Route path="services/package" element={<Package />} />
             <Route path="meraviglia-club" element={<Club />} />
             <Route path="services/types-of-travel" element={<TypeTravel />} />
-            <Route path="services/partners" element={<Partner />} />
+            <Route path="services/partner" element={<Partner />} />
           </Route>
           <Route path="/login" element={<DashboardLogin />} />
           <Route path="/dashboard/" element={<DashboardContainer />}>
@@ -54,6 +56,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </AnimatePresence>
     </div>
   );
 }
