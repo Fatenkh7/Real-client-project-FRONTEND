@@ -132,7 +132,7 @@ export  function ResponNav(){
   return(
     <nav className="topnav" id="myTopnav" ref={topnav}>
       <span id="logo">Meraviglia</span>
-  <Link href="#home" className="active">Home</Link >
+  <Link to="/home">Meraviglia</Link >
   <Link to="/meraviglia-club">Meraviglia Club</Link >
   <Link to="/about">About Meraviglia</Link >
   <div className="dropdown">
@@ -140,9 +140,9 @@ export  function ResponNav(){
       <i className="fa fa-caret-down"></i>
     </button>
     <div className="dropdownContent">
-      <Link to="/services/packages">Our Partners</Link >
+      <Link to="/services/partner">Our Partners</Link >
       <Link to="/services/packages">Travel With Us</Link >
-      <Link to="/services/packages">Packages</Link >
+      <Link to="/services/package">Packages</Link >
     </div>
   </div> 
   <Link to="/about">Contact Us</Link >
