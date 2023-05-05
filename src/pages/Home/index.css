@@ -1,0 +1,157 @@
+.section{
+    width: 100%;
+    box-sizing: border-box;
+    display:block;
+    padding:0;
+    margin:0;
+    margin-bottom:40px ;
+
+}
+/*.dimmer{
+    z-index:1;
+    background-color: rbga(0,0,0,20%);
+    height: 100%;
+    width:100%
+}*/
+/*#hero{
+    height:calc(100vh - 55px);
+    padding:40px;
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items:flex-start;
+    -webkit-backdrop-filter: brightness(50%);
+    backdrop-filter: brightness(50%);
+
+}
+#hero p{
+    margin: 0;
+    font-size: 120px;
+    color:white;
+    display: inline-block;
+    font-weight: 600;
+    -webkit-backdrop-filter: brightness(80%);
+    backdrop-filter: brightness(80%);
+}*/
+#hero{
+    position:absolute;
+    top:30%;
+    left:5%;
+    margin: 0;
+    color:#f7f7f7;
+    font-weight: 600;
+}
+.benefit{
+
+}
+.benefit p{
+    display: none;
+}
+#hero p{
+    font-size: 120px;
+    display: inline-block;
+  /*  backdrop-filter: brightness(80%);*/
+    text-shadow: -20px 4px 20px black;
+
+}
+#benefits, #contact{
+    padding: 40px;
+}
+#benefits>div{
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    column-gap: 40px;
+}
+#benefits>div div p{
+    display: inline-block;
+}
+.benefit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 20px;
+}
+.benefit p{
+    font-size: 30px;
+}
+.sechr{
+    width:70%;
+    margin:auto;
+    border:1px solid var(--accent)
+}
+#services{
+    padding: 40px;
+    margin-bottom: 80px;
+}
+#services h3, #benefits h3, #contact h3{
+    font-size: 60px;
+    margin-bottom: 120px;
+    color:var(--blue)
+}
+#packages{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width:90%;
+    height:50%;
+    column-gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+#clubsection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 40px;
+    padding-bottom: 40px;
+    row-gap: 20px;
+}
+#clubsection h4{
+    font-size: 40px;
+    color:var(--blue)
+}
+#clubsection p{
+    font-size: 30px;
+    color:#f7f7f7;
+}
+.home #banner{
+    width:700px;
+    height:200px;
+}
+#hero span{
+    /*color:var(--accent);*/
+}
+/*.home section:first-child{
+    background-color: rgba(0, 0, 0, 0.3);
+  background-image: url("https://bigseventravel.com/wp-content/uploads/2020/03/italy-4093227_1920.jpg");
+    background-repeat: no-repeat;
+    background-blend-mode: saturation;
+    background-size: cover;
+  
+}*/
+@media screen and (max-width:600px){
+    #hero p{
+        font-size:60px;
+    }
+    #services h3, #benefits h3, #contact h3{
+        font-size: 40px;
+        margin-bottom: 40px;
+        color:var(--blue);
+    }
+    #benefits>div{
+        margin-bottom: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        row-gap: 20px;
+    }
+    .home #banner{
+        width:250px;
+        height:150px;
+    }
+}
