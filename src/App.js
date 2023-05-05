@@ -36,10 +36,10 @@ function App() {
             <Route path="meraviglia-club" element={<Club />} />
             <Route path="services/types-of-travel" element={<TypeTravel />} />
             <Route path="services/partner" element={<Partner />} />
+            <Route path="login" element={<Login />} />
           </Route>
           <Route path="/login" element={<DashboardLogin />} />
           <Route path="/dashboard/" element={<DashboardContainer />}>
-            <Route path="login" element={<Login />} />
             <Route path="admin" element={<DashboardAdmin />} />
             <Route path="user" element={<DashboardUser />} />
             <Route path="booking" element={<DashboardBooking />} />
