@@ -14,7 +14,8 @@ export default function Content(){
 </div>
 <div className="forms-content">
 <img src={sky} alt="hhh"/>
-{ contact?  <ContactForm />:
+{ contact && <ContactForm />}
+   { !contact&&
    <Booking />}
 </div>
         </div>

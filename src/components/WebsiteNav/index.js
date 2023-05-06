@@ -145,8 +145,8 @@ export  function ResponNav(){
       <Link to="/services/package">Packages</Link >
     </div>
   </div> 
-  <Link to="/about">Contact Us</Link >
-  <Link to="/about">Request A Meeting</Link >
+  <Link to="/contact">Contact Us</Link >
+  <Link to="/booking">Request A Meeting</Link >
   <a  style={{fontSize:"15px"}} className="icon" onClick={myFunction}>&#9776;</a >
 </nav>
 
