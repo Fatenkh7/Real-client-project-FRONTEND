@@ -31,7 +31,8 @@ export default function Home(props) {
   const [editedItemId, setEditedItemId] = useState("");
   const [users, setUsers] = useState([]);
   const [admins, setAdmins] = useState([]);
-
+  const [editUsers, setEditUsers] = useState([]);
+  const [editAdmins, setEditAdmins] = useState([]);
 
   const [meetingData, setMeetingData] = useState({
     idUser: "",
@@ -142,17 +143,17 @@ export default function Home(props) {
 
   const handleAddNewMeeting = (event) => {
     //   event.preventDefault();
-      axios.post('http://localhost:5000/bookingmeeting/add', meetingData)
-        .then(response => {
-          // setData(response.data.data);
-          console.log(response)
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
-        console.log(meetingData)
-    }
+    axios
+      .post("http://localhost:5000/bookingmeeting/add", meetingData)
+      .then((response) => {
+        // setData(response.data.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(meetingData);
+  };
 
   const handleAddMeeting = () => {
     setSelectedMeeting(null); // reset selected record
@@ -188,13 +189,17 @@ export default function Home(props) {
       title: "User",
       dataIndex: "idUser",
       render: (_, record) =>
-        record.idUser ? `${record.idUser.firstName} ${record.idUser.lastName}` : "",
+        record.idUser
+          ? `${record.idUser.firstName} ${record.idUser.lastName}`
+          : "",
     },
     {
       title: "Admin",
       dataIndex: "idAdmin",
       render: (_, record) =>
-        record.idAdmin ? `${record.idAdmin.firstName} ${record.idAdmin.lastName}` : "",
+        record.idAdmin
+          ? `${record.idAdmin.firstName} ${record.idAdmin.lastName}`
+          : "",
     },
     {
       title: "Date and Time",
@@ -417,33 +422,45 @@ export default function Home(props) {
       {editPop && (
         <Popup title="Edit meeting" close={closePop}>
           <div className="input-container">
-            <Input
-              id="outlined-controlled"
+            <Select
+              placeholder="Select an admin"
               name="idAdmin"
-              value={meetingData.idAdmin}
-              onChange={handleInputChange}
-              placeholder="Admin"
-            />
-            <Input
-              id="outlined-uncontrolled"
+              onChange={handleAdminSelect}
+              value={editValues.idAdmin}
+              style={{ width: "100%", marginBottom: "10px" }}
+            >
+              {editAdmins.map((admin) => (
+                <Option key={admin._id} value={admin._id}>
+                  {admin.firstName}
+                </Option>
+              ))}
+            </Select>
+            <Select
+              placeholder="Select a user"
               name="idUser"
-              value={meetingData.idUser}
-              onChange={handleInputChange}
-              placeholder="User"
-            />
+              onChange={handleUserSelect}
+              value={editValues.idUser}
+              style={{ width: "100%", marginBottom: "10px" }}
+            >
+              {editUsers.map((user) => (
+                <Option key={user._id} value={user._id}>
+                  {user.firstName}
+                </Option>
+              ))}
+            </Select>
             <DatePicker
               showTime
               format="YYYY-MM-DD HH:mm:ss"
-              value={moment(meetingData.datetime)}
-              onChange={handleDateChange}
+              value={moment(editValues.datetime)}
+              onChange={handleEditValues}
             />
             <Form.Item label="Is Guest">
               <Switch
                 id="outlined-uncontrolled"
                 name="isGuest"
-                checked={meetingData.isGuest}
+                checked={editValues.isGuest}
                 onChange={(value) =>
-                  setMeetingData({ ...meetingData, isGuest: value })
+                  setEditValues({ ...editValues, isGuest: value })
                 }
                 placeholder="Is Guest"
               />
@@ -452,9 +469,9 @@ export default function Home(props) {
               <Switch
                 id="outlined-uncontrolled"
                 name="isConfirmed"
-                checked={meetingData.isConfirmed}
+                checked={editValues.isConfirmed}
                 onChange={(value) =>
-                  setMeetingData({ ...meetingData, isConfirmed: value })
+                  setEditValues({ ...editValues, isConfirmed: value })
                 }
                 placeholder="Is Confirmed"
               />
@@ -477,7 +494,7 @@ export default function Home(props) {
               }}
               onClick={() => {
                 Swal.fire({
-                  title: "Are you sure you want to add this meeting?",
+                  title: "Are you sure you want to edit this meeting?",
                   icon: "question",
                   showCancelButton: true,
                   confirmButtonColor: "#3a70a1",
