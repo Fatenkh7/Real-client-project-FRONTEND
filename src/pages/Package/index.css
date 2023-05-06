@@ -1,0 +1,87 @@
+.packages-page section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
+    padding: 40px;
+}
+.pckg-card{
+    background-color: #f7f7f7;
+    box-shadow: 6px 3px 10px rgba(0,0,0,0.4);
+    position: absolute;
+    z-index: 5;
+    padding: 0;
+}
+.pckg-card button{
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: black;
+    margin:0;
+}
+.pckg-card button:hover{
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: var(--blue);
+}
+.pckg-card .pckg-card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:10px 20px 40px 20px;
+    box-sizing: border-box;
+}
+.pckg-card .pckg-card-content div:first-child{
+    display: flex;
+    justify-content: flex-end;
+}
+.pckg-img{
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+@media screen and (max-width:600px) {
+    .pckg-img{
+        width: 300px;
+        height: 150px;
+    }
+    .pckg-card{
+        width: 300px;
+        min-height:400px;
+        left:40px;
+    }
+    .pckg-card .pckg-card-content div:first-child{
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+    top: 0;
+    right: 0;
+    }
+    .pckg-card .pckg-card-content div:first-child button{
+        background-color: rgba(0,0,0,0.7);
+        padding: 8px;
+        color:white;
+        margin:0;
+    }
+}
+@media screen and (min-width:601px) {
+    .pckg-img{
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+    }
+    .pckg-card{
+        width: 600px;
+        height:600px;
+        font-size: x-large;
+        display: flex;
+        flex-direction: row;
+        right: calc(50vw - 300px);
+
+    }
+    .pckg-card .pckg-card-content{
+        width: 350px;
+    }
+}
+
