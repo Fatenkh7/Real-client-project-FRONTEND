@@ -33,12 +33,12 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
             <Route path="services/package" element={<Package />} />
+            <Route path="login" element={<Login />} />
             <Route path="meraviglia-club" element={<Club />} />
             <Route path="services/types-of-travel" element={<TypeTravel />} />
             <Route path="services/partner" element={<Partner />} />
-            <Route path="login" element={<Login />} />
           </Route>
-          <Route path="/login" element={<DashboardLogin />} />
+          <Route path="/login-admin" element={<DashboardLogin />} />
           <Route path="/dashboard/" element={<DashboardContainer />}>
             <Route path="admin" element={<DashboardAdmin />} />
             <Route path="user" element={<DashboardUser />} />

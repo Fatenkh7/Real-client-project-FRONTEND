@@ -1,10 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect,navigate} from "react";
 import "./index.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { motion } from "framer-motion";
+
 export default function Home() {
   const btnRef = useRef(null);
+  const formRef = useRef(null);
   const [login, setLogin] = useState({
     email: "",
     password: "",
@@ -25,11 +27,12 @@ export default function Home() {
   const handleInputChange = (event) => {
     setLogin({
       ...login,
-      [event.target.id]: event.target.value,
+      [event.target.name]: event.target.value,
     });
   };
 
-  const handleSubmit = async (event) => {
+  
+const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/user/login", {
@@ -38,17 +41,20 @@ export default function Home() {
       });
       console.log(response);
       const cookies = new Cookies();
-      cookies.set("token", response.data.token);
-      btnRef.current.classList.add("bubble-swap");
-      // Redirect to meraviglia-club page after successful login
-      window.location = "/meraviglia-club";
+      cookies.set("data", response.data.data);
+      if (btnRef.current) {
+        btnRef.current.classList.add("bubble-swap");
+      }
+      // Redirect to dashboard page after successful login
+      window.location = "/dashboard";
       //   alert("Login succeeded");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       // Show error message to user
       alert("Invalid email or password");
     }
   };
+  
 
   return (
     <div className="container-user-login">
@@ -64,7 +70,11 @@ export default function Home() {
               Login
               <span className="underline"></span>
             </button>
-            <form className="form form-login" onSubmit={handleSubmit}>
+            <form
+              className="form form-login"
+              ref={formRef}
+              onSubmit={handleSubmit}
+            >
               <fieldset>
                 <legend>
                   Please, enter your email and password for login.
@@ -73,20 +83,22 @@ export default function Home() {
                   <label htmlFor="login-email">E-mail</label>
                   <input
                     id="login-email"
+                    name="email"
                     type="email"
                     required
-                    value={login.email}
                     onChange={handleInputChange}
+                    value={login.email}
                   />
                 </div>
                 <div className="input-block">
                   <label htmlFor="login-password">Password</label>
                   <input
                     id="login-password"
+                    name="password"
                     type="password"
                     required
-                    value={login.password}
                     onChange={handleInputChange}
+                    value={login.password}
                   />
                 </div>
               </fieldset>
@@ -130,7 +142,7 @@ export default function Home() {
                   ></input>
                 </div>
               </fieldset>
-              <button type="submit" class="btn-signup">
+              <button type="submit" className="btn-signup">
                 Continue
               </button>
             </form>
