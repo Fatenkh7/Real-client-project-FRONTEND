@@ -160,11 +160,6 @@ export default function Home(props) {
     setAddPop(true); // show add admin popup
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setMeetingData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
   const handleDateChange = (date) => {
     if (date) {
       setMeetingData((prevData) => ({
