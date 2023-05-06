@@ -50,18 +50,15 @@ export default function DashboardNav() {
           <Menu.Item key="6">
             <Link to="/dashboard/website-content">Web-Content</Link>
           </Menu.Item>
-          <Menu.Item key="7">
-            <Link to="/dashboard/news">News</Link>
-          </Menu.Item>
           <Menu.SubMenu key="sub3" title="Service" className="service-menu">
-            <Menu.Item key="8">
+            <Menu.Item key="7">
               <Link to="/dashboard/partner">Partner</Link>
             </Menu.Item>
-            <Menu.Item key="9">
+            <Menu.Item key="8">
               <Link to="/dashboard/package">Package</Link>
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item key="10">
+          <Menu.Item key="9">
               <Link to="/dashboard/type-travel">Type Travel</Link>
             </Menu.Item>
         </Menu>
