@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect,navigate} from "react";
+import React, { useRef, useState, useEffect, navigate } from "react";
 import "./index.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
@@ -23,6 +23,14 @@ export default function Home() {
       }
     });
   };
+  function showSecondForm() {
+    const firstForm = document.querySelector('.form-signup:first-of-type');
+    const secondForm = document.querySelector('.form-signup:last-of-type');
+    
+    firstForm.style.display = 'none';
+    secondForm.style.display = 'block';
+  }
+  
 
   const handleInputChange = (event) => {
     setLogin({
@@ -31,8 +39,7 @@ export default function Home() {
     });
   };
 
-  
-const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/user/login", {
@@ -54,7 +61,6 @@ const handleSubmit = async (event) => {
       alert("Invalid email or password");
     }
   };
-  
 
   return (
     <div className="container-user-login">
@@ -124,24 +130,81 @@ const handleSubmit = async (event) => {
                   for sign up.
                 </legend>
                 <div className="input-block">
+                  <label htmlFor="signup-firstname">First Name</label>
+                  <input
+                    id="signup-firstname"
+                    type="text"
+                    name="firstName"
+                    required
+                  ></input>
+                </div>
+                <div className="input-block">
+                  <label htmlFor="signup-lastname">Last Name</label>
+                  <input
+                    id="signup-lastname"
+                    type="text"
+                    name="lastName"
+                    required
+                  ></input>
+                </div>
+                <div className="input-block">
                   <label htmlFor="signup-email">E-mail</label>
                   <input id="signup-email" type="email" required></input>
                 </div>
                 <div className="input-block">
-                  <label htmlFor="signup-password">Password</label>
-                  <input id="signup-password" type="password" required></input>
-                </div>
-                <div className="input-block">
-                  <label htmlFor="signup-password-confirm">
-                    Confirm password
-                  </label>
+                  <label htmlFor="signup-phone">Phone</label>
                   <input
-                    id="signup-password-confirm"
-                    type="password"
+                    id="signup-phone"
+                    type="telephone"
+                    name="phone"
                     required
                   ></input>
                 </div>
+                <button
+                  type="button"
+                  className="btn-signup"
+                  onClick={() => showSecondForm()}
+                >
+                  Continue
+                </button>
               </fieldset>
+            </form>
+            <form className="form form-signup">
+              <div className="input-block">
+                <label htmlFor="signup-title">Title</label>
+                <input id="signup-title" type="text" name="title"></input>
+              </div>
+              <div className="input-block">
+                <label htmlFor="signup-passport">Passport Id</label>
+                <input
+                  id="signup-passport"
+                  type="text"
+                  name="passportId"
+                ></input>
+              </div>
+              <div className="input-block">
+                <label htmlFor="signup-destinations">
+                  Preferred Destinations
+                </label>
+                <input
+                  id="signup-destinations"
+                  type="text"
+                  name="preferredDestinations"
+                ></input>
+              </div>
+              <div className="input-block">
+                <label htmlFor="signup-airlines">Preferred Airlines</label>
+                <input
+                  id="signup-airlines"
+                  type="text"
+                  name="preferredAirlines"
+                ></input>
+              </div>
+              <div className="input-block">
+                <label htmlFor="signup-password">Password</label>
+                <input id="signup-password" type="password" required></input>
+              </div>
+              {/* </fieldset> */}
               <button type="submit" className="btn-signup">
                 Continue
               </button>

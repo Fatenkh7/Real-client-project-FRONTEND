@@ -281,3 +281,47 @@
 	box-shadow: inset 0 0 0 2px var(--blue);
 	transform: translateX(30%);
 }
+
+
+.form-signup {
+    display: flex;
+  }
+  
+  .form-signup:last-of-type {
+    display: none;
+  }
+  
+  .input-block {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  
+  .btn-signup {
+    color: var(--blue);
+	background: #fbfdff;
+	box-shadow: inset 0 0 0 2px var(--blue);
+	transform: translateX(30%);
+  }
+  
+  .btn-signup:hover {
+    color: var(--blue);
+	background: #fbfdff;
+	box-shadow: inset 0 0 0 2px var(--blue);
+	transform: translateX(30%);
+  }
+  
