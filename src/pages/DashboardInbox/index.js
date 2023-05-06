@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/inbox")
+      .get("http://localhost:8000/inbox")
       .then((response) => {
         setData(response.data.response);
         console.log(response.data.response);

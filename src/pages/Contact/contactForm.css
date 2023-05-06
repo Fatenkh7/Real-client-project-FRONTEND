@@ -14,7 +14,10 @@
  padding: 10px;
  font-size: 18px;   
 }
-
+.div-2{
+    
+    gap: 20px;
+}
 .div-2 .phoneNumber{
     display: flex;
     gap: 10px;
