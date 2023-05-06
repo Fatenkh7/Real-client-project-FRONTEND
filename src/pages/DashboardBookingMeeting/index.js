@@ -1,17 +1,27 @@
-import { Table, Space, Input, Switch, Form, Upload } from "antd";
+import {
+  Table,
+  Space,
+  Input,
+  Switch,
+  Form,
+  Upload,
+  Select,
+  DatePicker,
+} from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { DatePicker, TimePicker } from "antd";
 import moment from "moment";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
+
+const { Option } = Select;
 
 export default function Home(props) {
   const [data, setData] = useState([]);
@@ -19,21 +29,24 @@ export default function Home(props) {
   const [editPop, setEditPop] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [editedItemId, setEditedItemId] = useState("");
+  const [users, setUsers] = useState([]);
+  const [admins, setAdmins] = useState([]);
+
 
   const [meetingData, setMeetingData] = useState({
     idUser: "",
     idAdmin: "",
     datetime: "",
-    isGuest: false,
-    isConfirmed: false,
+    isGuest: "",
+    isConfirmed: "",
   });
 
   const [editValues, setEditValues] = useState({
     idUser: "",
     idAdmin: "",
     datetime: "",
-    isGuest: false,
-    isConfirmed: false,
+    isGuest: "",
+    isConfirmed: "",
   });
 
   const getEditItem = (id) => {
@@ -60,10 +73,8 @@ export default function Home(props) {
         const response = await axios.get(
           "http://localhost:5000/bookingmeeting"
         );
-        const rawData = response.data.response;
-        if (Array.isArray(rawData)) {
-          setData(rawData);
-        }
+        console.log(response.data.data);
+        setData(response.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -95,25 +106,53 @@ export default function Home(props) {
     }
   };
 
-  const handleAddNewMeeting = async (event) => {
-    try {
-      const newMeeting = new FormData();
-      newMeeting.append("idAdmin", meetingData.idAdmin);
-      newMeeting.append("idUser", meetingData.idUser);
-      newMeeting.append("datetime", meetingData.datetime);
-      newMeeting.append("isConfirmed", meetingData.isConfirmed);
-      newMeeting.append("isGuest", meetingData.isGuest);
-
-      const meetingResponse = await axios.post(
-        "http://localhost:5000/bookingmeeting/add",
-        newMeeting
-      );
-
-      console.log(meetingResponse.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUserSelect = (value) => {
+    setMeetingData((prevData) => ({ ...prevData, idUser: value }));
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/user");
+        console.log(response.data.data);
+        setUsers(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  const handleAdminSelect = (value) => {
+    setMeetingData((prevData) => ({ ...prevData, idAdmin: value }));
+  };
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/admin");
+        console.log(response.data.response);
+        setAdmins(response.data.response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAdmins();
+  }, []);
+
+  const handleAddNewMeeting = (event) => {
+    //   event.preventDefault();
+      axios.post('http://localhost:5000/bookingmeeting/add', meetingData)
+        .then(response => {
+          // setData(response.data.data);
+          console.log(response)
+          
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        console.log(meetingData)
+    }
 
   const handleAddMeeting = () => {
     setSelectedMeeting(null); // reset selected record
@@ -122,7 +161,7 @@ export default function Home(props) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setMeetingData({ ...meetingData, [name]: value });
+    setMeetingData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleDateChange = (date) => {
@@ -146,16 +185,16 @@ export default function Home(props) {
 
   const columns = [
     {
-      title: " User ",
+      title: "User",
       dataIndex: "idUser",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.idUser.localeCompare(b.idUser),
+      render: (_, record) =>
+        record.idUser ? `${record.idUser.firstName} ${record.idUser.lastName}` : "",
     },
     {
       title: "Admin",
       dataIndex: "idAdmin",
-      filters: [],
-      onFilter: (value, record) => record.idAdmin.indexOf(value) === 0,
+      render: (_, record) =>
+        record.idAdmin ? `${record.idAdmin.firstName} ${record.idAdmin.lastName}` : "",
     },
     {
       title: "Date and Time",
@@ -175,8 +214,8 @@ export default function Home(props) {
         <Switch
           checked={isGuest}
           onChange={() => {
-            setMeetingData((prevState) => ({
-              ...prevState,
+            setMeetingData((prevData) => ({
+              ...prevData,
               isGuest: !isGuest,
             }));
           }}
@@ -195,8 +234,8 @@ export default function Home(props) {
         <Switch
           checked={isConfirmed}
           onChange={() => {
-            setMeetingData((prevState) => ({
-              ...prevState,
+            setMeetingData((prevData) => ({
+              ...prevData,
               isConfirmed: !isConfirmed,
             }));
           }}
@@ -256,7 +295,6 @@ export default function Home(props) {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
   };
-
   return (
     <div className="container-meeting">
       <div className="add--button_container">
@@ -280,20 +318,32 @@ export default function Home(props) {
       {addPop && (
         <Popup title="Add meeting" close={closePop}>
           <div className="input-container">
-            <Input
-              id="outlined-controlled"
+            <Select
+              placeholder="Select an admin"
               name="idAdmin"
+              onChange={handleAdminSelect}
               value={meetingData.idAdmin}
-              onChange={handleInputChange}
-              placeholder="Admin"
-            />
-            <Input
-              id="outlined-uncontrolled"
+              style={{ width: "100%", marginBottom: "10px" }}
+            >
+              {admins.map((admin) => (
+                <Option key={admin._id} value={admin._id}>
+                  {admin.firstName}
+                </Option>
+              ))}
+            </Select>
+            <Select
+              placeholder="Select a user"
               name="idUser"
+              onChange={handleUserSelect}
               value={meetingData.idUser}
-              onChange={handleInputChange}
-              placeholder="User"
-            />
+              style={{ width: "100%", marginBottom: "10px" }}
+            >
+              {users.map((user) => (
+                <Option key={user._id} value={user._id}>
+                  {user.firstName}
+                </Option>
+              ))}
+            </Select>
             <DatePicker
               showTime
               format="YYYY-MM-DD HH:mm:ss"
@@ -311,7 +361,7 @@ export default function Home(props) {
                 placeholder="Is Guest"
               />
             </Form.Item>
-            <Form.Item label="Is Super">
+            <Form.Item label="Is Confirmed">
               <Switch
                 id="outlined-uncontrolled"
                 name="isConfirmed"
@@ -348,9 +398,8 @@ export default function Home(props) {
                   confirmButtonText: "Yes, add it!",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    // handleSubmit();
                     handleAddNewMeeting();
-                    setEditPop(false);
+                    setAddPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Meeting has been added.",
