@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import Button from "../../components/Button";
-import "../DashboardAdmin/index.css";
+import "./index.css";
 import Popup from "../../components/Popup";
 import FormData from "form-data";
 
@@ -335,17 +335,25 @@ const Package = () => {
   ];
 
   return (
-    <>
+    <div className="container-packages">
       {loading && <MySkeleton />}
       <Table
         columns={columns}
         dataSource={data.map((row, index) => ({ ...row, key: index }))}
+        pagination={{ pageSize: 8 }}
+        style={{
+          height: "560px",
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+          width: "95%",
+          background: "white",
+          borderRadius: "4px",
+        }}
       />
 
       {/* form to add a new package */}
-
+      <div className="add--button_container">
       {<Button onClick={addPackage}>Add Package</Button>}
-
+</div>
       {addPop && (
         <Popup title="Add a new Package" close={closePop}>
           <div className="input-container">
@@ -637,7 +645,7 @@ const Package = () => {
           </div>
         </Popup>
       )}
-    </>
+    </div>
   );
 };
 

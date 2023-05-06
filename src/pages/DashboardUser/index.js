@@ -5,6 +5,7 @@ import axios from "axios";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
+import "./index.css";
 export default function DashboardUser() {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
