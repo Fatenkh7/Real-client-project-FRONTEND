@@ -5,6 +5,7 @@
     display:flex;
     color:white;
     box-sizing: border-box;
+    margin-top: 40px;
 }
 .footer a{
     color:white;

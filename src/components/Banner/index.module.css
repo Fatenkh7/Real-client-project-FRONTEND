@@ -1,0 +1,16 @@
+.banner{
+    background-position: center;
+    background-color: rgba(0,0,0,0.4);
+    background-blend-mode: saturation;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 100px;
+    color:#f7f7f7;
+    text-align: center;
+    text-justify: inter-cluster;
+    height:50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
