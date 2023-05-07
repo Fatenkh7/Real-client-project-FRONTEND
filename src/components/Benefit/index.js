@@ -2,6 +2,7 @@ import Style from "./index.module.css";
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { motion, AnimatePresence, easeOut, useAnimation } from "framer-motion";
+import Observer from 'react-intersection-observer';
 export default function Benefit(props) {
   const [isHovered, setHover] = useState(false);
   return (

@@ -56,11 +56,18 @@ export default function Home(props) {
     setAddPop(false);
     setEditPop(false);
   };
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
+  
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "id": "6440873447d89363b2a41259",
+      "role": "superAdmin"
+    };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin");
+        const response = await axios.get("http://localhost:5000/admin", { headers });
         const rawData = response.data.response;
         if (Array.isArray(rawData)) {
           setData(rawData);
@@ -81,7 +88,7 @@ export default function Home(props) {
     try {
       const updatedAdmin = { ...editValues };
       const response = await axios.put(
-        `http://localhost:5000/admin/${editedItemId}`,
+        `http://localhost:5000/admin/${editedItemId} , { headers }`,
         updatedAdmin
       );
       setData(
@@ -122,7 +129,7 @@ export default function Home(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/admin/${id}`);
+      await axios.delete(`http://localhost:5000/admin/${id}`, { headers });
       setData((prevState) => prevState.filter((admin) => admin._id !== id));
       console.log("Admin deleted successfully!");
     } catch (error) {
