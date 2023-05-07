@@ -1,4 +1,5 @@
 import {motion} from "framer-motion"
+import Banner from "../../components/Banner";
 import React from "react";
 import {
   Row,
@@ -56,12 +57,11 @@ const About = () => {
   exit={{ opacity: 0 }}
   transition={{ duration: 1.5 }}
 >
-      <Image
-        src={require("./blue-sky.png")}
-        width="100%"
-        height="70vh"
-        alt={"Blue sky"}
+<Banner
+        img={require("./blue-sky.png")}
+        text="Meraviglia"
       />
+
 <div width='100%'>
       <Layout style={{ padding: " 1vw 2vw" }}>
         <Content>

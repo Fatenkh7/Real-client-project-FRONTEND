@@ -14,3 +14,8 @@
     align-items: center;
     margin-bottom: 40px;
 }
+@media screen and (max-width:600px) {
+    .banner{
+        font-size: 60px;
+    }
+}
