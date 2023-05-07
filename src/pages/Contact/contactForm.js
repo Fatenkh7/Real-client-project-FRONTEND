@@ -26,8 +26,9 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0
     };
 
   const sendEmail = (event) => {
+    const URL= process.env.REACT_APP_BASE_URL
     //   event.preventDefault();
-      axios.post('http://localhost:8000/inbox/add', emailValues, { headers })
+      axios.post(`${URL}inbox/add`, emailValues, { headers })
         .then(response => {
           // setData(response.data.data);
           console.log(response)

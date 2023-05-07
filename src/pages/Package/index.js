@@ -10,7 +10,8 @@ export default function Home() {
   const [selectedPackage, setSelectedPackage] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const fetchedPackage = await axios.get("http://localhost:5000/package");
+      const URL= process.env.REACT_APP_BASE_URL
+      const fetchedPackage = await axios.get(`${URL}package`);
       setPackage(fetchedPackage.data.data);
       console.log(fetchedPackage.data.data);
     }

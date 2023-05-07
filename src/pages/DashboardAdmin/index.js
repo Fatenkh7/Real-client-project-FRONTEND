@@ -67,7 +67,8 @@ export default function Home(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin", { headers });
+        const URL= process.env.REACT_APP_BASE_URL
+        const response = await axios.get(`${URL}admin`, { headers });
         const rawData = response.data.response;
         if (Array.isArray(rawData)) {
           setData(rawData);
@@ -86,9 +87,10 @@ export default function Home(props) {
 
   const handleSave = async () => {
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const updatedAdmin = { ...editValues };
       const response = await axios.put(
-        `http://localhost:5000/admin/${editedItemId} , { headers }`,
+        `${URL}admin/${editedItemId} , { headers }`,
         updatedAdmin
       );
       setData(
@@ -105,8 +107,9 @@ export default function Home(props) {
     // event.preventDefault(); // uncomment this line if you want to prevent the default form submission
 
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const response = await axios.post(
-        "http://localhost:5000/admin/add",
+        `${URL}admin/add`,
         adminData
       );
       console.log(response);
@@ -129,7 +132,8 @@ export default function Home(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/admin/${id}`, { headers });
+      const URL= process.env.REACT_APP_BASE_URL
+      await axios.delete(`${URL}admin/${id}`, { headers });
       setData((prevState) => prevState.filter((admin) => admin._id !== id));
       console.log("Admin deleted successfully!");
     } catch (error) {

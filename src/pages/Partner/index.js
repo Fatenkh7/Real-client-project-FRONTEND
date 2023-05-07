@@ -24,10 +24,11 @@ export default function Home() {
   const [tabData, setTabData]=useState([])
   useEffect(() => {
     async function fetchData() {
+      const URL= process.env.REACT_APP_BASE_URL
       const fetchedPartnerType = await axios.get(
-        "http://localhost:5000/partnerType"
+        `${URL}partnerType`
       );
-      const fetchedPartner = await axios.get("http://localhost:5000/partner");
+      const fetchedPartner = await axios.get(`${URL}partner`);
       let tabs=[]
       fetchedPartnerType.data.response.map((e, index )=> {tabs.push({
         key: e._id,

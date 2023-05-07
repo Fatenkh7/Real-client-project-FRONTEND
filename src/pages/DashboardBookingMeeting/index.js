@@ -77,8 +77,9 @@ export default function Home(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const URL= process.env.REACT_APP_BASE_URL
         const response = await axios.get(
-          "http://localhost:5000/bookingmeeting", { headers }
+          `${URL}bookingmeeting`, { headers }
         );
         console.log(response.data.data);
         setData(response.data.data);
@@ -96,9 +97,10 @@ export default function Home(props) {
 
   const handleSave = async () => {
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const updatedMeeting = { ...editValues };
       const response = await axios.put(
-        `http://localhost:5000/bookingmeeting/${editedItemId}` , { headers },
+        `${URL}bookingmeeting/${editedItemId}` , { headers },
         updatedMeeting
       );
       setData(
@@ -126,7 +128,8 @@ export default function Home(props) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user", { headers });
+        const URL= process.env.REACT_APP_BASE_URL
+        const response = await axios.get(`${URL}user`, { headers });
         console.log(response.data.data);
         setUsers(response.data.data);
       } catch (error) {
@@ -146,7 +149,8 @@ export default function Home(props) {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin", { headers });
+        const URL= process.env.REACT_APP_BASE_URL
+        const response = await axios.get(`${URL}admin`, { headers });
         console.log(response.data.response);
         setAdmins(response.data.response);
       } catch (error) {
@@ -158,8 +162,9 @@ export default function Home(props) {
 
   const handleAddNewMeeting = (event) => {
     //   event.preventDefault();
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post("http://localhost:5000/bookingmeeting/add", meetingData, { headers })
+      .post(`${URL}bookingmeeting/add`, meetingData, { headers })
       .then((response) => {
         // setData(response.data.data);
         console.log(response);
@@ -186,7 +191,7 @@ export default function Home(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/bookingmeeting/${id}`, { headers });
+      await axios.delete(`${URL}bookingmeeting/${id}`, { headers });
       setData((prevState) => prevState.filter((meeting) => meeting._id !== id));
       console.log("This meeting deleted successfully!");
     } catch (error) {

@@ -35,7 +35,8 @@ const TypeTravel = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:5000/typeTravel', { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.get(`${URL}typeTravel`, { headers })
         .then(response => {
             setData(response.data.response);
           console.log(response.data)
@@ -46,7 +47,8 @@ const TypeTravel = () => {
     },[]);
     const handleSubmit = (event) => {
     //   event.preventDefault();
-      axios.post('http://localhost:8000/typeTravel/add', formValues, { headers })
+    const URL= process.env.REACT_APP_BASE_URL
+      axios.post(`${URL}typeTravel/add`, formValues, { headers })
         .then(response => {
           // setData(response.data.data);
           console.log(response)
@@ -60,7 +62,8 @@ const TypeTravel = () => {
   
   
     const handleDelete = (id) => {
-      axios.delete(`http://localhost:8000/typeTravel/${id}`, { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.delete(`${URL}typeTravel/${id}`, { headers })
         .then(response => {
         //   message.success('Booking deleted successfully.');
           setData(data.filter(item => item.id !== id));
@@ -82,8 +85,9 @@ const TypeTravel = () => {
     setEditPop(true) ;
   }
   function updateBooking(event) {
+    const URL= process.env.REACT_APP_BASE_URL
     // event.preventDefault();
-     axios.put(`http://localhost:8000/typeTravel/${editedItemId}`, editValues, { headers })
+     axios.put(`${URL}typeTravel/${editedItemId}`, editValues, { headers })
       .then(response => {
         return response.data;
       })

@@ -41,7 +41,8 @@ const Booking = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:5000/booking', { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.get(`${URL}booking`, { headers })
         .then(response => {
           setData(response.data.data);
         })
@@ -50,8 +51,9 @@ const Booking = () => {
         });
     },[]);
     const handleSubmit = (event) => {
+      const URL= process.env.REACT_APP_BASE_URL
     //   event.preventDefault();
-      axios.post('http://localhost:8000/booking/add', formValues, { headers })
+      axios.post(`${URL}booking/add`, formValues, { headers })
         .then(response => {
           // setData(response.data.data);
           console.log(response)
@@ -65,7 +67,8 @@ const Booking = () => {
   
   
     const handleDelete = (id) => {
-      axios.delete(`http://localhost:8000/booking/${id}`, { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.delete(`${URL}booking/${id}`, { headers })
         .then(response => {
         //   message.success('Booking deleted successfully.');
           setData(data.filter(item => item.id !== id));
@@ -91,7 +94,8 @@ const Booking = () => {
   }
   function updateBooking(event) {
     // event.preventDefault();
-     axios.put(`http://localhost:8000/booking/${editedItemId}`, editValues, { headers })
+    const URL= process.env.REACT_APP_BASE_URL
+     axios.put(`${URL}booking/${editedItemId}`, editValues, { headers })
       .then(response => {
         return response.data;
       })

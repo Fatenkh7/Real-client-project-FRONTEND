@@ -23,8 +23,9 @@ export default function Home() {
     "role": "superAdmin"
   };
   useEffect(() => {
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .get("http://localhost:8000/inbox", { headers })
+      .get(`${URL}inbox`, { headers })
       .then((response) => {
         setData(response.data.response);
         console.log(response.data.response);
@@ -41,7 +42,8 @@ export default function Home() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/inbox/${id}`, { headers });
+      const URL= process.env.REACT_APP_BASE_URL
+      await axios.delete(`${URL}inbox/${id}`, { headers });
       setData(data.filter((inbox) => inbox._id !== id));
       console.log("Inbox deleted successfully!");
     } catch (error) {

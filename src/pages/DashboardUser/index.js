@@ -39,7 +39,8 @@ export default function DashboardUser() {
           role: "superAdmin",
         },
       };
-      const data = await axios.get(`http://localhost:5000/user`, config);
+      const URL= process.env.REACT_APP_BASE_URL
+      const data = await axios.get(`${URL}user`, config);
       console.log(data.data.data);
       setUsers(data.data.data);
     };
@@ -56,8 +57,9 @@ export default function DashboardUser() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        const URL= process.env.REACT_APP_BASE_URL
         axios
-          .delete(`http://localhost:5000/admin/${record.key}`)
+          .delete(`${URL}admin/${record.key}`)
           .then((response) => {
             console.log(response.data.response);
           })
@@ -161,8 +163,9 @@ export default function DashboardUser() {
       },
     };
     console.log(record);
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post("http://localhost:5000/user/add", record, config)
+      .post(`${URL}user/add`, record, config)
       .then((response) => {
         console.log("res", response);
         if (response.status === 201) {
@@ -203,8 +206,9 @@ export default function DashboardUser() {
       },
     };
     const record = {};
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .put("http://localhost:5000/user/", record, config)
+      .put(`${URL}user/`, record, config)
       .then((response) => {
         Swal.fire({
           title: "User Added Successfully",

@@ -59,7 +59,8 @@ export default function Home() {
   const handleSubmitLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/user/login", {
+      const URL= process.env.REACT_APP_BASE_URL
+      const response = await axios.post(`${URL}user/login`, {
         email: login.email,
         password: login.password,
       });
@@ -82,7 +83,8 @@ export default function Home() {
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/user/add", {
+      const URL= process.env.REACT_APP_BASE_URL
+      const response = await axios.post(`${URL}user/add`, {
         firstName: signUp.firstName,
         lastName: signUp.lastName,
         email: signUp.email,

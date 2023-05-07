@@ -52,9 +52,9 @@ const Package = () => {
     const formData = new FormData();
     formData.append("image", selectedFile);
     formData.append("title", title);
-
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post("http://localhost:8000/image/add", formData, {
+      .post(`${URL}image/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -82,7 +82,8 @@ const Package = () => {
 
   const getAllUsers = async () => {
     try {
-      const { data: response } = await axios.get("http://localhost:5000/user");
+      const URL= process.env.REACT_APP_BASE_URL
+      const { data: response } = await axios.get(`${URL}user`);
       setUsers(response.data);
     } catch (error) {
       console.error(error.message);
@@ -92,8 +93,9 @@ const Package = () => {
 
   const postPackage = async () => {
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const packageResponse = await axios.post(
-        "http://localhost:8000/package/add",
+        `${URL}package/add`,
         formData
       );
       console.log(packageResponse.data);
@@ -130,8 +132,9 @@ const Package = () => {
   // edit a particular package
   const putPackage = async () => {
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const response = await axios.put(
-        `http://localhost:8000/package/${formData.id}`,
+        `${URL}package/${formData.id}`,
         formData
       );
       console.log(response.data);
@@ -153,9 +156,9 @@ const Package = () => {
 
     formData.append("image", editImage);
     formData.append("title", ImageTitle);
-
+    const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post(`http://localhost:8000/image/add`, formData, {
+      .post(`${URL}image/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -190,8 +193,9 @@ const Package = () => {
   // get all packages
   const fetchData = async () => {
     try {
+      const URL= process.env.REACT_APP_BASE_URL
       const { data: response } = await axios.get(
-        "http://localhost:5000/package"
+        `${URL}/package`
       );
       console.log(response);
       setData(response.data);
@@ -226,7 +230,8 @@ const Package = () => {
   const deleteRow = async (_id) => {
     let originalPackages = [...data];
     try {
-      await axios.delete(`http://localhost:8000/package/${_id}`);
+      const URL= process.env.REACT_APP_BASE_URL
+      await axios.delete(`${URL}package/${_id}`);
       setData(data.filter((p) => p._id !== _id));
     } catch (error) {
       console.error(error.message);

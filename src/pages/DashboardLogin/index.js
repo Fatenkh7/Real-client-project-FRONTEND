@@ -22,7 +22,8 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/admin/login", {
+      const URL= process.env.REACT_APP_BASE_URL
+      const response = await axios.post(`${URL}admin/login`, {
         userName: login.userName,
         password: login.password,
       });

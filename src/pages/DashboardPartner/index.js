@@ -37,7 +37,8 @@ const Partner = () => {
       "role": "superAdmin"
     };
     useEffect(() => {
-      axios.get('http://localhost:5000/partner', { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.get(`${URL}partner`, { headers })
         .then(response => {
             setData(response.data.response);
           console.log(response.data)
@@ -47,8 +48,9 @@ const Partner = () => {
         });
     },[]);
     const handleSubmit = (event) => {
+      const URL= process.env.REACT_APP_BASE_URL
     //   event.preventDefault();
-      axios.post('http://localhost:8000/partner/add', formValues, { headers })
+      axios.post(`${URL}partner/add`, formValues, { headers })
         .then(response => {
           // setData(response.data.data);
           console.log(response)
@@ -62,7 +64,8 @@ const Partner = () => {
   
   
     const handleDelete = (id) => {
-      axios.delete(`http://localhost:8000/partner/${id}`, { headers })
+      const URL= process.env.REACT_APP_BASE_URL
+      axios.delete(`${URL}partner/${id}`, { headers })
         .then(response => {
         //   message.success('Booking deleted successfully.');
           setData(data.filter(item => item.id !== id));
@@ -85,8 +88,9 @@ const Partner = () => {
     setEditPop(true) ;
   }
   function updateBooking(event) {
+    const URL= process.env.REACT_APP_BASE_URL
     // event.preventDefault();
-     axios.put(`http://localhost:8000/partner/${editedItemId}`, editValues, { headers })
+     axios.put(`${URL}partner/${editedItemId}`, editValues, { headers })
       .then(response => {
         return response.data;
       })

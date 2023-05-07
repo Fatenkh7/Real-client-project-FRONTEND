@@ -25,6 +25,7 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0
 
   const sendBooking = (event) => {
     //   event.preventDefault();
+    const URL= process.env.REACT_APP_BASE_URL
       axios.post('http://localhost:8000/inbox/add', bookigValues, { headers })
         .then(response => {
           // setData(response.data.data);
