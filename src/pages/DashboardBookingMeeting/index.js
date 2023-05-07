@@ -97,19 +97,25 @@ export default function Home(props) {
       );
       setData(
         data.map((meeting) =>
-          meeting._id === editedItemId ? updatedMeeting : meeting
+          meeting._id === editedItemId ? { ...meeting, ...updatedMeeting } : meeting
         )
       );
       setEditPop(false);
     } catch (error) {
       console.log(error);
-      Swal.fire("Error!", "There was an error updating the admin.", "error");
+      Swal.fire("Error!", "There was an error updating the meeting.", "error");
     }
   };
+  
 
   const handleUserSelect = (value) => {
     setMeetingData((prevData) => ({ ...prevData, idUser: value }));
   };
+
+  const handleEditUserSelect = (value) => {
+    setEditUsers((prevData) => ({ ...prevData, idUser: value }));
+  };
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -125,6 +131,9 @@ export default function Home(props) {
   }, []);
 
   const handleAdminSelect = (value) => {
+    setMeetingData((prevData) => ({ ...prevData, idAdmin: value }));
+  };
+  const handleEditAdminSelect = (value) => {
     setMeetingData((prevData) => ({ ...prevData, idAdmin: value }));
   };
 
@@ -424,7 +433,7 @@ export default function Home(props) {
               value={editValues.idAdmin}
               style={{ width: "100%", marginBottom: "10px" }}
             >
-              {editAdmins.map((admin) => (
+              {admins.map((admin) => (
                 <Option key={admin._id} value={admin._id}>
                   {admin.firstName}
                 </Option>
@@ -437,7 +446,7 @@ export default function Home(props) {
               value={editValues.idUser}
               style={{ width: "100%", marginBottom: "10px" }}
             >
-              {editUsers.map((user) => (
+              {users.map((user) => (
                 <Option key={user._id} value={user._id}>
                   {user.firstName}
                 </Option>
@@ -460,7 +469,7 @@ export default function Home(props) {
                 placeholder="Is Guest"
               />
             </Form.Item>
-            <Form.Item label="Is Super">
+            <Form.Item label="Is Confirmed">
               <Switch
                 id="outlined-uncontrolled"
                 name="isConfirmed"
@@ -498,7 +507,7 @@ export default function Home(props) {
                 }).then((result) => {
                   if (result.isConfirmed) {
                     // handleSubmit();
-                    handleAddNewMeeting();
+                    handleSave();
                     setEditPop(false);
                     Swal.fire(
                       "Added!",
