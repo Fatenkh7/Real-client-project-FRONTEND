@@ -95,24 +95,19 @@ export default function Home(props) {
   };
 
   const handleAddNewAdmin = async (event) => {
+    // event.preventDefault(); // uncomment this line if you want to prevent the default form submission
+
     try {
-      const newAdmin = new FormData();
-      newAdmin.append("firstName", adminData.firstName);
-      newAdmin.append("lastName", adminData.lastName);
-      newAdmin.append("isSuper", adminData.isSuper);
-      newAdmin.append("userName", adminData.userName);
-      newAdmin.append("email", adminData.email);
-      newAdmin.append("password", adminData.password);
-
-      const adminResponse = await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/admin/add",
-        newAdmin
+        adminData
       );
-
-      console.log(adminResponse.data);
+      console.log(response);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+
+    console.log(adminData);
   };
 
   const handleAddAdmin = () => {
@@ -328,7 +323,7 @@ export default function Home(props) {
                   if (result.isConfirmed) {
                     // handleSubmit();
                     handleAddNewAdmin();
-                    setEditPop(false);
+                    setAddPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Admin has been added.",

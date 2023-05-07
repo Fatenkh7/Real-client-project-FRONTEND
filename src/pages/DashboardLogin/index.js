@@ -31,7 +31,7 @@ export default function Home() {
       cookies.set("token", response.data.token);
       btnRef.current.classList.add("bubble-swap");
       // Redirect to dashboard page after successful login
-      window.location = "/dashboard";
+      window.location = "/dashboard/admin";
       //   alert("Login succeeded");
     } catch (error) {
       console.log(error);
