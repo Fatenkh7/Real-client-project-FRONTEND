@@ -27,8 +27,6 @@ export default function Home(props) {
     email: "",
     password: "",
     isSuper: false,
-    image: null,
-    title: "",
   });
 
   const [editValues, setEditValues] = useState({
@@ -58,11 +56,18 @@ export default function Home(props) {
     setAddPop(false);
     setEditPop(false);
   };
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
+  
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "id": "6440873447d89363b2a41259",
+      "role": "superAdmin"
+    };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin");
+        const response = await axios.get("http://localhost:5000/admin", { headers });
         const rawData = response.data.response;
         if (Array.isArray(rawData)) {
           setData(rawData);
@@ -83,7 +88,7 @@ export default function Home(props) {
     try {
       const updatedAdmin = { ...editValues };
       const response = await axios.put(
-        `http://localhost:5000/admin/${editedItemId}`,
+        `http://localhost:5000/admin/${editedItemId} , { headers }`,
         updatedAdmin
       );
       setData(
@@ -96,62 +101,25 @@ export default function Home(props) {
     }
   };
 
-  const handleAddNewAdmin = async () => {
+  const handleAddNewAdmin = async (event) => {
+    // event.preventDefault(); // uncomment this line if you want to prevent the default form submission
+
     try {
-      if (!adminData.image || !adminData.title) {
-        throw new Error("Please select an image and title.");
-      }
-  
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      formData.append("title", adminData.title);
-      const imageResponse = await axios.post(
-        "http://localhost:5000/image/add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      const newAdminData = { ...adminData, image: imageResponse.data._id };
-      const addAdminResponse = await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/admin/add",
-        newAdminData
+        adminData
       );
-      setData((prevState) => [...prevState, addAdminResponse.data.response]);
-      setAddPop(false);
-      setAdminData({
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
-        isSuper: false,
-        image: null,
-        title: "",
-      });
+      console.log(response);
     } catch (error) {
       console.log(error);
-      Swal.fire("Error!", "There was an error creating the admin.", "error");
     }
-  };  
+
+    console.log(adminData);
+  };
 
   const handleAddAdmin = () => {
     setSelectedAdmin(null); // reset selected record
     setAddPop(true); // show add admin popup
-  };
-
-  const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    if (image) {
-      setAdminData((prevState) => ({
-        ...prevState,
-        image,
-        imageUrl: URL.createObjectURL(image),
-      }));
-      setImageFile(image);
-    }
   };
 
   const handleInputChange = (e) => {
@@ -161,7 +129,7 @@ export default function Home(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/admin/${id}`);
+      await axios.delete(`http://localhost:5000/admin/${id}`, { headers });
       setData((prevState) => prevState.filter((admin) => admin._id !== id));
       console.log("Admin deleted successfully!");
     } catch (error) {
@@ -170,21 +138,6 @@ export default function Home(props) {
   };
 
   const columns = [
-    {
-      title: "Image",
-      dataIndex: "image",
-      filters: [],
-      onFilter: (value, record) => record.image.indexOf(value) === 0,
-      sorter: (a, b) => a.image.length - b.image.length,
-      sortDirections: ["descend"],
-      render: (image, record) => (
-        <img
-          src={`http://localhost:5000/image/${record.image}`}
-          alt="Admin Avatar"
-          style={{ width: 50, height: 50 }}
-        />
-      ),
-    },
     {
       title: "First Name",
       dataIndex: "firstName",
@@ -349,43 +302,6 @@ export default function Home(props) {
               onChange={handleInputChange}
               placeholder="Password"
             />
-            <Form.Item name="image" label="Image">
-              <Upload
-                beforeUpload={handleImageChange}
-                fileList={imageFile ? [imageFile] : []}
-                showUploadList={false} // added this to hide the file list
-              >
-                {adminData.image || imageFile ? (
-                  <img
-                    src={
-                      adminData.image
-                        ? `http://localhost:5000/image/${adminData.image}`
-                        : URL.createObjectURL(imageFile)
-                    }
-                    alt="Admin"
-                    style={{ maxWidth: "100%" }}
-                  />
-                ) : (
-                  <Button icon={<UploadOutlined />}>Upload</Button>
-                )}
-              </Upload>
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                ref={inputFileRef}
-                onChange={handleImageChange}
-              />
-              <Form.Item name="title" label="Title">
-                <Input
-                  name="title"
-                  placeholder="Image Title"
-                  value={adminData.title}
-                  onChange={handleInputChange}
-                />
-              </Form.Item>
-            </Form.Item>
-
             <button
               type="primary"
               ghost
@@ -414,7 +330,7 @@ export default function Home(props) {
                   if (result.isConfirmed) {
                     // handleSubmit();
                     handleAddNewAdmin();
-                    setEditPop(false);
+                    setAddPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Admin has been added.",
