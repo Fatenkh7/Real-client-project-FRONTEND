@@ -67,12 +67,18 @@ export default function Home(props) {
     setAddPop(false);
     setEditPop(false);
   };
-
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
+  
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "id": "6440873447d89363b2a41259",
+      "role": "superAdmin"
+    };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/bookingmeeting"
+          "http://localhost:5000/bookingmeeting", { headers }
         );
         console.log(response.data.data);
         setData(response.data.data);
@@ -92,7 +98,7 @@ export default function Home(props) {
     try {
       const updatedMeeting = { ...editValues };
       const response = await axios.put(
-        `http://localhost:5000/bookingmeeting/${editedItemId}`,
+        `http://localhost:5000/bookingmeeting/${editedItemId}` , { headers },
         updatedMeeting
       );
       setData(
@@ -120,7 +126,7 @@ export default function Home(props) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user");
+        const response = await axios.get("http://localhost:5000/user", { headers });
         console.log(response.data.data);
         setUsers(response.data.data);
       } catch (error) {
@@ -140,7 +146,7 @@ export default function Home(props) {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin");
+        const response = await axios.get("http://localhost:5000/admin", { headers });
         console.log(response.data.response);
         setAdmins(response.data.response);
       } catch (error) {
@@ -153,7 +159,7 @@ export default function Home(props) {
   const handleAddNewMeeting = (event) => {
     //   event.preventDefault();
     axios
-      .post("http://localhost:5000/bookingmeeting/add", meetingData)
+      .post("http://localhost:5000/bookingmeeting/add", meetingData, { headers })
       .then((response) => {
         // setData(response.data.data);
         console.log(response);
@@ -180,7 +186,7 @@ export default function Home(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/bookingmeeting/${id}`);
+      await axios.delete(`http://localhost:5000/bookingmeeting/${id}`, { headers });
       setData((prevState) => prevState.filter((meeting) => meeting._id !== id));
       console.log("This meeting deleted successfully!");
     } catch (error) {
