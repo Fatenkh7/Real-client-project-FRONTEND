@@ -20,17 +20,23 @@ export default function DashboardNav() {
           style={{
             float: "left",
             width: 120,
-            height: 31,
-            margin: "16px 24px 16px 0",
+            height: 41,
+            margin: "16px 14px 26px 10px",
             background: "#3a70a1",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "#fff",
           }}
-        />
+        >
+          MERAVEGLIA
+        </div>
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["1"]}
-          style={{ background: "#f7f7f7",
-        color:"#000000" }}
+          style={{ background: "#f7f7f7", color: "#000000" }}
         >
           <Menu.Item key="1">
             <Link to="/dashboard/admin">Admins</Link>
@@ -56,8 +62,8 @@ export default function DashboardNav() {
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.Item key="8">
-              <Link to="/dashboard/type-travel">Type Travel</Link>
-            </Menu.Item>
+            <Link to="/dashboard/type-travel">Type Travel</Link>
+          </Menu.Item>
         </Menu>
       </Header>
     </Layout>
