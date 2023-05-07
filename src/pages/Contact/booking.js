@@ -1,11 +1,45 @@
 import { Button, Form, Input } from 'antd';
 import {PhoneOutlined,MailOutlined } from '@ant-design/icons';
-import './contactForm.css'
+import './contactForm.css';
+import React, {  useState } from 'react';
+import axios from "axios";
 
 const { TextArea } = Input;
 
 
-const Booking = () => (<div div className='all-contact-form'>
+const Booking = () => {
+
+  const [bookigValues, setbookingValues] = useState({
+    firstName: '',
+    lastName: '',
+    from_email: '',
+    feedback: ''
+  });
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgzNDA3MjcwLCJleHAiOjE2ODM0MjE2NzB9.QduVAhUBzOxwEsvMW844IpiIphJwH5NHJpOhJG0P5_E';
+  
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "id": "6440873447d89363b2a41259",
+      "role": "superAdmin"
+    };
+
+  const sendBooking = (event) => {
+    //   event.preventDefault();
+      axios.post('http://localhost:8000/inbox/add', bookigValues, { headers })
+        .then(response => {
+          // setData(response.data.data);
+          console.log(response)
+          
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        console.log(bookigValues)
+    }
+ 
+  return (
+
+<div div className='all-contact-form'>
 
     
     <div className='div-1'>
@@ -82,5 +116,6 @@ rules={[
 </div>
 </div> */}
   </div>
-);
+)
+};
 export default Booking;
