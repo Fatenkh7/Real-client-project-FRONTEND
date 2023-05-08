@@ -30,7 +30,7 @@ export default function Home() {
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0 }}
+      exit={{ opacity: 0, transition:{duration: 1.5} }}
       transition={{ duration: 1.5 }}
       className="packages-page"
     >
@@ -49,6 +49,12 @@ export default function Home() {
               hoverable
               className="partner-card"
               key={e._id}
+              cover={
+                <img
+                  alt="example"
+                  src={require("../../images/hero.jpeg")}
+                />
+              }
             >
               <Meta
                 title={

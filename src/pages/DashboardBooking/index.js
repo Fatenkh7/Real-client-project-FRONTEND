@@ -6,6 +6,7 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Popup from '../../components/Popup/index.js'
 import Button from '../../components/Button';
 import Swal from "sweetalert2";
+import Cookies from "universal-cookie";
 
 const Booking = () => {
     const [data, setData] = useState([]);
@@ -33,13 +34,13 @@ const Booking = () => {
         setOpenPop(false);
         setEditPop(false);
       };
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgzMDA3OTA5LCJleHAiOjE2ODMwMjIzMDl9.F3kR88_7jri5tKBvBE5V8Nb_fiJpcqd-Kb8SNz4KJI8';
-  
+    const cookie= new Cookies()
     const headers = {
-      Authorization: `Bearer ${token}`,
-      "id": "6440873447d89363b2a41259",
-      "role": "superAdmin"
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role")
     };
+   
     useEffect(() => {
       const URL= process.env.REACT_APP_BASE_URL
       axios.get(`${URL}booking`, { headers })

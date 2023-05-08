@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
 import "./index.css";
+import Cookies from "universal-cookie"
 export default function DashboardUser() {
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
@@ -30,17 +31,17 @@ export default function DashboardUser() {
     setEditPop(false);
     setMorePop(false);
   };
+  const cookie= new Cookies()
+    const headers = {
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role")
+    };
   useEffect(() => {
     const fetchUsers = async () => {
-      const config = {
-        headers: {
-          authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTAyNzg0LCJleHAiOjE2ODI1MTcxODR9.DoQmPzWQtPvRFhY1EviAPFWVv09mFbJ3NDpOtiBmOVA`,
-          id: "6440873447d89363b2a41259",
-          role: "superAdmin",
-        },
-      };
+     
       const URL= process.env.REACT_APP_BASE_URL
-      const data = await axios.get(`${URL}user`, config);
+      const data = await axios.get(`${URL}user`, {headers});
       console.log(data.data.data);
       setUsers(data.data.data);
     };
@@ -59,7 +60,7 @@ export default function DashboardUser() {
       if (result.isConfirmed) {
         const URL= process.env.REACT_APP_BASE_URL
         axios
-          .delete(`${URL}admin/${record.key}`)
+          .delete(`${URL}admin/${record.key}`, {headers})
           .then((response) => {
             console.log(response.data.response);
           })
@@ -155,17 +156,11 @@ export default function DashboardUser() {
   ];
 
   const handleSubmitUser = (record) => {
-    const config = {
-      headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTAyNzg0LCJleHAiOjE2ODI1MTcxODR9.DoQmPzWQtPvRFhY1EviAPFWVv09mFbJ3NDpOtiBmOVA`,
-        id: "6440873447d89363b2a41259",
-        role: "superAdmin",
-      },
-    };
+   
     console.log(record);
     const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post(`${URL}user/add`, record, config)
+      .post(`${URL}user/add`, record, {headers})
       .then((response) => {
         console.log("res", response);
         if (response.status === 201) {
@@ -198,17 +193,11 @@ export default function DashboardUser() {
       });
   };
   const handleEditUser = () => {
-    const config = {
-      headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTAyNzg0LCJleHAiOjE2ODI1MTcxODR9.DoQmPzWQtPvRFhY1EviAPFWVv09mFbJ3NDpOtiBmOVA`,
-        id: "6440873447d89363b2a41259",
-        role: "superAdmin",
-      },
-    };
+  
     const record = {};
     const URL= process.env.REACT_APP_BASE_URL
     axios
-      .put(`${URL}user/`, record, config)
+      .put(`${URL}user/`, record, {headers})
       .then((response) => {
         Swal.fire({
           title: "User Added Successfully",

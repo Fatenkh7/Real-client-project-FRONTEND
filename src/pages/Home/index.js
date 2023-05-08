@@ -7,7 +7,8 @@ import per from "../../images/pers_travel_icon.png";
 import { useInView } from "react-intersection-observer";
 import Card from "../../components/PackageCard";
 import { Carousel } from "antd";
-import img6 from "../../images/image 6.png"
+import img6 from "../../images/image.png"
+import {Link} from "react-router-dom"
 import Benefit from "../../components/Benefit"
 const slide1 = {
   height: "80vh",
@@ -104,6 +105,12 @@ export default function Home() {
         </div>
         <hr className="sechr"></hr>
       </motion.section>
+      <motion.section className="section" id="clubsection">
+        <h4>Meraviglia Club: Unlock All The Benefits</h4>
+        <p>Join  Meraviglia Luxury Club and enjoy <br/>  the benefits our valubale members have. </p>
+      
+      <Btn><Link to="/meraviglia-club">Join</Link></Btn>
+      </motion.section>
       <motion.section className="section" id="services">
         <h3>Discover Our Top Packages</h3>
         <div id="packages">
@@ -111,16 +118,8 @@ export default function Home() {
           <Card />
           <Card />
         </div>
-        <hr className="sechr"></hr>
       </motion.section>
-      <motion.section className="section" id="clubsection">
-        <h4>Meraviglia Club: Unlock All The Benefits</h4>
-        <p>Join our Meraviglia Luxury Club and enjoy the benefits our valubale members have. </p>
-        <div id="banner" style={{backgroundImage:`url(http://localhost:3000/static/media/image%206.008379f0bfa507060ef2.png)`,   
-        backgroundPosition: 'top',
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat'}}></div>
-      </motion.section>
+     
       {/*<motion.section className="section" id="contact">
         <h3>Trips Tailored For You</h3>
         <h4>Request a Meeting With Your Trip Advisor </h4>

@@ -20,7 +20,7 @@ import "./index.css";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
-
+import Cookies from "universal-cookie"
 const { Option } = Select;
 
 export default function Home(props) {
@@ -67,12 +67,11 @@ export default function Home(props) {
     setAddPop(false);
     setEditPop(false);
   };
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
-  
+    const cookie= new Cookies()
     const headers = {
-      Authorization: `Bearer ${token}`,
-      "id": "6440873447d89363b2a41259",
-      "role": "superAdmin"
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role")
     };
   useEffect(() => {
     const fetchData = async () => {

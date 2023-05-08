@@ -15,18 +15,11 @@ const Booking = () => {
     from_email: '',
     feedback: ''
   });
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgzNDA3MjcwLCJleHAiOjE2ODM0MjE2NzB9.QduVAhUBzOxwEsvMW844IpiIphJwH5NHJpOhJG0P5_E';
-  
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "id": "6440873447d89363b2a41259",
-      "role": "superAdmin"
-    };
 
   const sendBooking = (event) => {
     //   event.preventDefault();
     const URL= process.env.REACT_APP_BASE_URL
-      axios.post('http://localhost:8000/inbox/add', bookigValues, { headers })
+      axios.post('http://localhost:5000/bookingmeeting/add', bookigValues)
         .then(response => {
           // setData(response.data.data);
           console.log(response)
@@ -100,7 +93,7 @@ rules={[
     <TextArea rows={4} placeholder="enter your emaill" maxLength={255} />
     </Form.Item> */}
     <Form.Item label=" ">
-      <Button type="primary" htmlType="submit"  size="large">
+      <Button type="primary" htmlType="submit" onClick={sendBooking}  size="large">
         Send
       </Button>
     </Form.Item>

@@ -177,6 +177,10 @@
         box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
     }
 }*/
+.ant-menu-overflow-item.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child {
+  background-color: #37a2f5;
+  color: #fff !important;
+}
 .navbar{
   height:60px;
   text-overflow: clip;

@@ -3,8 +3,10 @@ import "./index.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { motion } from "framer-motion";
-
+import { RoleContext} from "../../App";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+  const config=React.useContext(RoleContext)
   const btnRef = useRef(null);
   const formRef = useRef(null);
   const [login, setLogin] = useState({
@@ -18,6 +20,7 @@ export default function Home() {
       [event.target.name]: event.target.value,
     });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,13 +30,18 @@ export default function Home() {
         userName: login.userName,
         password: login.password,
       });
-      console.log(response);
+      console.log("bosbos",response.data.data);
+      config.changeConfig(response.data.data, response.data.id, response.data.role)
       const cookies = new Cookies();
-      cookies.set("token", response.data.token);
+      cookies.set("token", response.data.data);
+      cookies.set("id", response.data.id);
+      cookies.set("role", response.data.role);
       btnRef.current.classList.add("bubble-swap");
+      
       // Redirect to dashboard page after successful login
-      window.location = "/dashboard/admin";
+      //window.location = "/dashboard/admin";
       //   alert("Login succeeded");
+      navigate("/dashboard/admin");
     } catch (error) {
       console.log(error);
       // Show error message to user
@@ -42,15 +50,16 @@ export default function Home() {
   };
 
   return (
-    <div className="login-container">
+    <motion.div  initial={{ opacity: 0, x: -10 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ y: 30}}
+    transition={{ duration: 1.5 }} className="login-container">
       <form ref={formRef} onSubmit={handleSubmit}>
         <div id="back">
           <canvas id="canvas" className="canvas-back"></canvas>
           <motion.div
             className="backLeft"
-            initial={{ opacity: 0, transition: { duration: 1 } }}
-            animate={{ opacity: 1, transition: { duration: 1 } }}
-            exit={{ opacity: 0 }}
+         
           ></motion.div>
         </div>
         <div id="slideBox">
@@ -98,6 +107,6 @@ export default function Home() {
           </div>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 }

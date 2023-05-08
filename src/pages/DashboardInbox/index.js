@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
 import Swal from "sweetalert2";
+import Cookies from "universal-cookie"
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -15,13 +16,12 @@ export default function Home() {
     setAddPop(false);
     setEditPop(false);
   };
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
-  
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    "id": "6440873447d89363b2a41259",
-    "role": "superAdmin"
-  };
+  const cookie= new Cookies()
+    const headers = {
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role")
+    };
   useEffect(() => {
     const URL= process.env.REACT_APP_BASE_URL
     axios

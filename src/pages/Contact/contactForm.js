@@ -1,13 +1,14 @@
 import { Button, Form, Input } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext, createContext, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import { PhoneOutlined, MailOutlined, FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
 import './contactForm.css';
 import axios from "axios";
+import { RoleContext} from "../../App";
 
 const { TextArea } = Input;
-
 const ContactUs = () => {
+  const config=React.useContext(RoleContext)
   const name = useRef();
   const email = useRef();
   const message = useRef();
@@ -58,9 +59,11 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0
   //     [name]: value
   //   }));
   // };
+
+  useEffect( ()=>      {console.log("batbat",config)}
+  , [])
   return (
     <div div className='all-contact-form'>
-
 
       <div className='div-1'>
 

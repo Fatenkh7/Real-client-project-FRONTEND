@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
+import {AdminCheck, SuperAdminCheck, UserCheck} from "./auth"
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -22,12 +23,34 @@ import DashboardBooking from "./pages/DashboardBooking";
 import DashboardBookingMeeting from "./pages/DashboardBookingMeeting";
 import DashboardWebContent from "./pages/DashboardWebContent";
 import { AnimatePresence } from "framer-motion";
+import {useState, createContext} from "react";
+export   const RoleContext = createContext()
 function App() {
+  /*const changeConfig=(token, id, role)=>{
+    setConfig({
+      ...config, Authorization: `Bearer ${token}`,
+      id: id,
+      role: role, 
+    })
+  }*/
+  const changeConfig=(token, id, role)=>{
+    setConfig(prevState => ({
+      ...prevState, Authorization: `Bearer ${token}`,
+      id: id,
+      role: role, 
+    }))
+  }
+  const [config, setConfig]=useState({
+    Authorization: `Bearer `,
+    id: "",
+    role: "", changeConfig
+  })
   return (
+    <RoleContext.Provider value={config}>
     <div className="App">
-      <AnimatePresence mode="sync">
-      <BrowserRouter>
-        <Routes >
+      <AnimatePresence mode="wait">
+      <BrowserRouter key="batata">
+        <Routes  >
           <Route path="/" element={<WebContainer />}>
             <Route path="home" element={<Home />} />
             <Route path="about" element={<About />} />
@@ -41,24 +64,25 @@ function App() {
           </Route>
           <Route path="/login-admin" element={<DashboardLogin />} />
           <Route path="/dashboard/" element={<DashboardContainer />}>
-            <Route path="admin" element={<DashboardAdmin />} />
-            <Route path="user" element={<DashboardUser />} />
-            <Route path="booking" element={<DashboardBooking />} />
+            <Route path="admin" element={<SuperAdminCheck><DashboardAdmin /></SuperAdminCheck>} />
+            <Route path="user" element={<AdminCheck><DashboardUser /></AdminCheck>} />
+            <Route path="booking" element={<AdminCheck><DashboardBooking /></AdminCheck>} />
             <Route
               path="bookingmeeting"
-              element={<DashboardBookingMeeting />}
+              element={<AdminCheck><DashboardBookingMeeting /></AdminCheck>}
             />
             <Route path="website-content" element={<DashboardWebContent />} />
-            <Route path="inbox" element={<DashboardInbox />} />
+            <Route path="inbox" element={<AdminCheck><DashboardInbox /> </AdminCheck>} />
             <Route path="type-travel" element={<DashboardTypeTravel />} />
             <Route path="news" element={<DashboardNews />} />
-            <Route path="package" element={<DashboardPackage />} />
-            <Route path="partner" element={<DashboardPartner />} />
+            <Route path="package" element={<AdminCheck><DashboardPackage /></AdminCheck>} />
+            <Route path="partner" element={<AdminCheck><DashboardPartner /></AdminCheck>} />
           </Route>
         </Routes>
       </BrowserRouter>
       </AnimatePresence>
     </div>
+    </RoleContext.Provider>
   );
 }
 

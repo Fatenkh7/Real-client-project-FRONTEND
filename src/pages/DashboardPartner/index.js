@@ -6,7 +6,7 @@ import "./index.css";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
-
+import Cookies from "universal-cookie"
 const Partner = () => {
     const [data, setData] = useState([]);
     const [editedItemId,setEditedItemId]=useState('')
@@ -17,6 +17,7 @@ const Partner = () => {
         rate: '',
         link: '',
     });
+    
     const [editPop, setEditPop] = useState(false);
     const [editValues, seteditValues] = useState({
   
@@ -25,17 +26,17 @@ const Partner = () => {
       rate: '',
       link: '',
     });
+    const cookie= new Cookies()
+    const headers = {
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role")
+    };
     const closePop = () => {
         setOpenPop(false);
         setEditPop(false);
       };
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0N2Q4OTM2M2IyYTQxMjU5IiwidXNlck5hbWUiOiJzdXBlckFkbWluIiwiaWF0IjoxNjgyNTc1OTIxLCJleHAiOjE2ODI1OTAzMjF9.jf7LDujBr-uFKL1HrdQ1_iC6XEPGJ0sr6RrTIE8KAM4';
-  
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "id": "6440873447d89363b2a41259",
-      "role": "superAdmin"
-    };
+
     useEffect(() => {
       const URL= process.env.REACT_APP_BASE_URL
       axios.get(`${URL}partner`, { headers })

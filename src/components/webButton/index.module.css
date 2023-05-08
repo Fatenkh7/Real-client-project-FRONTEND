@@ -6,7 +6,10 @@
     font-size: 40px;
     border-radius:8px;
     font-family: "Cormorant Garamond";
-    align-self: flex-end;
+}
+.btn a{
+    text-decoration: none;
+    color:white;
 }
 .btn:hover{
     background-color: #8f8f8f; /*#cbcbcb, #ebd547*/

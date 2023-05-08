@@ -8,7 +8,7 @@ import Button from "../../components/Button";
 import "./index.css";
 import Popup from "../../components/Popup";
 import FormData from "form-data";
-
+import Cookies from "universal-cookie"
 const Package = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,14 @@ const Package = () => {
     idImage: "",
     idCustomer: "",
   });
+  const cookie= new Cookies()
+    const headers = {
+      Authorization: `Bearer ${cookie.get("token")}`,
+      "id": cookie.get("id"),
+      "role": cookie.get("role"),
+      "Content-Type": "multipart/form-data",
 
+    };
   //image
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
@@ -54,11 +61,7 @@ const Package = () => {
     formData.append("title", title);
     const URL= process.env.REACT_APP_BASE_URL
     axios
-      .post(`${URL}image/add`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(`${URL}image/add`, formData, { headers })
       .then((response) => {
         console.log("response", response);
 
@@ -83,7 +86,7 @@ const Package = () => {
   const getAllUsers = async () => {
     try {
       const URL= process.env.REACT_APP_BASE_URL
-      const { data: response } = await axios.get(`${URL}user`);
+      const { data: response } = await axios.get(`${URL}user`, {headers});
       setUsers(response.data);
     } catch (error) {
       console.error(error.message);
@@ -96,7 +99,7 @@ const Package = () => {
       const URL= process.env.REACT_APP_BASE_URL
       const packageResponse = await axios.post(
         `${URL}package/add`,
-        formData
+        formData, {headers}
       );
       console.log(packageResponse.data);
       fetchData();
@@ -195,7 +198,7 @@ const Package = () => {
     try {
       const URL= process.env.REACT_APP_BASE_URL
       const { data: response } = await axios.get(
-        `${URL}/package`
+        `${URL}/package`, {headers}
       );
       console.log(response);
       setData(response.data);
@@ -231,7 +234,7 @@ const Package = () => {
     let originalPackages = [...data];
     try {
       const URL= process.env.REACT_APP_BASE_URL
-      await axios.delete(`${URL}package/${_id}`);
+      await axios.delete(`${URL}package/${_id}`, {headers});
       setData(data.filter((p) => p._id !== _id));
     } catch (error) {
       console.error(error.message);
