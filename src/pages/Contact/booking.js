@@ -19,7 +19,7 @@ const Booking = () => {
   const sendBooking = (event) => {
     //   event.preventDefault();
     const URL= process.env.REACT_APP_BASE_URL
-      axios.post('http://localhost:5000/bookingmeeting/add', bookigValues)
+      axios.post(`${URL}bookingmeeting/add`, bookigValues)
         .then(response => {
           // setData(response.data.data);
           console.log(response)

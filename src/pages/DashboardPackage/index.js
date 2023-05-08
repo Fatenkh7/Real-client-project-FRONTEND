@@ -54,7 +54,7 @@ const Package = () => {
   const onTitleChange = (event) => {
     setTitle(event.target.value);
   };
-
+  const URL= process.env.REACT_APP_BASE_URL
   const imageUploadResponse = () => {
     const formData = new FormData();
     formData.append("image", selectedFile);
@@ -255,7 +255,7 @@ const Package = () => {
       key: "idImage",
       render: (idImage) => (
         <img
-          src={`http://localhost:5000/${idImage.image}`}
+          src={`${URL}${idImage.image}`}
           alt={idImage.title}
           width="100"
         />
