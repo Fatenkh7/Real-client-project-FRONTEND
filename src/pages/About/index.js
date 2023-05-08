@@ -1,6 +1,6 @@
 import {motion} from "framer-motion"
 import Banner from "../../components/Banner";
-import React from "react";
+import React, { useState } from "react";
 import {
   Row,
   Col,
@@ -9,26 +9,30 @@ import {
   Avatar,
   Divider,
   Carousel,
-  Image,Space
+  Image,
+  Card,
+  Button,
 } from "antd";
 
 import {
   TwitterOutlined,
   PhoneOutlined,
   LinkedinOutlined,
-  LikeOutlined,
-  HeartOutlined,
-  DislikeOutlined,
+  StarFilled,
+  StarOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
+import "./index.css";
 
 const { Title, Text } = Typography;
+
 const { Content } = Layout;
 
 const About = () => {
   const teamMembers = [
     {
       name: "Emma Nguyen",
-      poste: "CEO",
+      poste: "Manager",
       avatar: require("./avatar1.png"),
       bio: "Lorem ipsum dolor sit amet, consectetur adipiscing  consectetur  consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed.",
     },
@@ -43,191 +47,278 @@ const About = () => {
   const testimonials = [
     {
       author: "Ethan Williams",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. orem ipsum dolor orem ipsum dolor sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed orem ipsum dolor sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed.",
+      text: "Lorem ipsum dolor sit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed orem ipsum dolor sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed.",
+      headshot: <Avatar size={140}  src={require("./test1.png")} alt={"Blue sky"} />,
     },
     {
+      headshot: <Avatar  size={140}  src={require("./test2.png")} alt={"Blue sky"} />,
       author: "Olivia Lee",
       text: "Praesent eget odio magna. Fusce nec tristique orem ipsum dolor sit amet, consectetur adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus quam vestibulum sed sapien. Nunc hendrerit leo vitae lectus vehicula, vel consectetur eros aliquam.",
     },
+    {
+      headshot: <Avatar size={140} src={require("./test3.png")} alt={"Blue sky"} />,
+      author: "Evelyn Brown",
+      text: "Aluctus quam vestibulum sed sapien. luctus quam vestibulum sed sapien.raesent eget odio magna. consectetur adipiscing elit.  luctus quam vestibulum sed sapien. luctus quam vestibulum sed sapien. luctus quam vestibulum sed sapien. luctus quam vestibulum sed sapien. Nunc hendrerit leo vitae  lectus vehicula, vel consectetur eros aliquam.",
+    },
   ];
 
-  return(<motion.div
+  const managers = [
+    // {
+    //   name: "Lorem ipsum",
+    //   imageSrc: require("./avatar1.png"), width: "30vw",
+    //   align: "left",
+    //   description:
+    //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis magna sed tortor fringilla, vel rhoncus sapien laoreet. Aliquam erat volutpat.",
+    //   icons: [{ type: "twitter" }, { type: "linkedin" }, { type: "phone" }],
+    // },
+    {
+      name: "Lorem ipsum",
+      imageSrc: require("./avatar1.png"), 
+      align: "center",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis magna sed tortor fringilla, vel rhoncus sapien laoreet. Aliquam erat volutpat.",
+      icons: [{ type: "twitter" }, { type: "linkedin" }, { type: "phone" }],
+    },
+    {
+      name: "Lorem ipsum",
+      imageSrc: require("./avatar2.png") , 
+      align: "right",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis magna sed tortor fringilla, vel rhoncus sapien laoreet. Aliquam erat volutpat.",
+      icons: [{ type: "twitter" }, { type: "linkedin" }, { type: "phone" }],
+    },
+  ];
+
+
+  return (
+    <motion.div
     initial={{ opacity: 0, x:-10 }}
   animate={{ opacity: 1, x:0 }}
   exit={{ opacity: 0 }}
-  transition={{ duration: 1.5 }}
->
-<Banner
+  transition={{ duration: 1.5 }}>
+    <Banner
         img={require("./blue-sky.png")}
         text="Meraviglia"
       />
+      <Col span={24}>
+        <Image
+          src={require("./blue-sky.png")}
+          width="100%"
+          height="70vh"
+          alt={"Blue sky"}
+        />
+      </Col>
+      <div width="100%">
+        <Layout style={{ padding: "2vw" }}>
+          <Content>
+            <Row>
+              <Col span={24}>
+                <Title align="left">We’ll Do the Planning For You!</Title>
+                <Text style={{textAlign:'right', fontSize:"1.2rem"}}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aenean hendrerit ultrices nibh, Lorem ipsum dolor sit amet,
+                  consectetur adipiscing elit. Aenean hendrerit ultrices nibh,
+                  vitae luctus quam vestibulum sed. Nullam euismod pellentesque
+                  nisi, quis blandit enim convallis at. Lorem ipsum dolor sit
+                  amet, consectetur adipiscing elit. Aenean hendrerit ultrices
+                  nibh, vitae luctus quam vestibulum sed. Nullam euismod
+                  pellentesqueu nisi, quis blandit enim convallis at. vitae
+                  luctus quam vestibulum sed. Nullam euismod pellentesque nisi,
+                  quis blandit enim convallis at.
+                </Text>
 
-<div width='100%'>
-      <Layout style={{ padding: " 1vw 2vw" }}>
-        <Content>
-          <Row>
-            <Col span={16}>
-              <Title style={{ marginLeft: "2vw" }}>About Us</Title>
-              <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                hendrerit ultrices nibh, Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Aenean hendrerit ultrices nibh, vitae luctus
-                quam vestibulum sed. Nullam euismod pellentesque nisi, quis
-                blandit enim convallis at. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Aenean hendrerit ultrices nibh,
-                vitae luctus quam vestibulum sed. Nullam euismod pellentesqueu
-                nisi, quis blandit enim convallis at. vitae luctus quam
-                vestibulum sed. Nullam euismod pellentesque nisi, quis blandit
-                enim convallis at.
-              </Text>
 
-              <Divider />
-              <Title level={2} style={{ marginLeft: "2vw" }}>
-                Our Team
-              </Title>
-              {teamMembers.map((member) => (
-                <Row key={member.name} align="middle">
-                   {/* <Space align="baseline"> */}
-                  <Col span={6}>
-                    <Avatar
-                      src={member.avatar}
-                      size={230}
-                      style={{ margin: "1.5vw 5vw 1.5vw 5vw" }}
-                    />
-                    <Title level={5} style={{ margin: "0.8vw 2vw 1vw 8vw" }}>
-                      {member.name}
-                    </Title>
-
-                    <div style={{ margin: "0vw 2vw 1.5vw 9vw" }}>
-                      <a style={{ marginRight: "0.4rem" }}>
-                        <TwitterOutlined style={{ fontSize: "1.1rem" ,color:'#0077b6'}} />
-                      </a>
-                      <a style={{ marginRight: "0.4rem" }}>
-                        <LinkedinOutlined style={{ fontSize: "1.1rem",color:'#0077b6' }} />
-                      </a>
-                      <a>
-                        <PhoneOutlined style={{ fontSize: "1.1rem" ,color:'#0077b6'}} />
-                      </a>
-                    </div>
-                  </Col>
-                  <Col span={18}>
-                    <Title level={3}>{member.poste}</Title>
-                    <Text style={{ width: "100%" }}>{member.bio}</Text>
-                  </Col>
-                  {/* </Space> */}
-                </Row>
-              ))}
-              <Divider />
-
-              <div></div>
-
-              <div
-                style={{
-                  padding: "20px",
-                  boxShadow: "#00F0FF",
-                  backgroundColor: "white",
-                }}
-              >
-                <Title level={2}>Words From Our Clients!</Title>
-                <Carousel autoplay>
-                  {testimonials.map((testimonial) => (
-                    <div key={testimonial.author}>
-                      <Text>{testimonial.text}</Text>
-                      <Text strong>- {testimonial.author}</Text>
+                <div className="container">
+                  {managers.map((manager, index) => (
+                    <div key={index} className="manager">
+                      <Image src={manager.imageSrc} width="35vw" alt={manager.name} />
+                      <div className="description">
+                        <h2>{manager.name}</h2>
+                        <p>{manager.description}</p>
+                        <div>
+                          {manager.icons.map((icon, index) => (
+                            <a key={index} style={{ marginRight: "0.4rem" }}>
+                              {icon.type === "twitter" && (
+                                <TwitterOutlined
+                                  style={{ fontSize: "1.1rem", color: "white" }}
+                                />
+                              )}
+                              {icon.type === "linkedin" && (
+                                <LinkedinOutlined
+                                  style={{ fontSize: "1.1rem", color: "white" }}
+                                />
+                              )}
+                              {icon.type === "phone" && (
+                                <PhoneOutlined
+                                  style={{ fontSize: "1.1rem", color: "white" }}
+                                />
+                              )}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   ))}
-                </Carousel>
-
-                <div style={{ textAlign: "right", marginTop: "2rem" }}>
-                  <a style={{ marginRight: "1rem" }}>
-                    <HeartOutlined
-                      style={{ fontSize: "1.3rem", color:'#0077b6'}}
-                    />
-                  </a>
-                  <a style={{ marginRight: "1rem" }}>
-                    <LikeOutlined
-                      style={{ fontSize: "1.3rem",  color:'#0077b6' }}
-                    />
-                  </a>
-                  <a>
-                    <DislikeOutlined
-                      style={{ fontSize: "1.3rem", color:'#0077b6'}}
-                    />
-                  </a>
                 </div>
-              </div>
-            </Col>
-          </Row>
+
+{/* 
+<div className="container">
+                  <div align="left" className="manager">
+                    <Image src={require("./avatar1.png")}  width="30vw"  alt="Manager 1" />
+                    <div className="description">
+                      <h2>Lorem ipsum</h2>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed lobortis magna sed tortor fringilla, vel rhoncus
+                        sapien laoreet. Aliquam erat volutpat.
+                      </p>
+                    </div>
+                  </div>
+                  <div align="center" className="manager" >
+                    <Image src={require("./avatar2.png")} width="30vw" alt="Manager 2" />
+                    <div className="description">
+                      <h2>Lorem ipsum</h2>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed lobortis magna sed tortor fringilla, vel rhoncus
+                        sapien laoreet. Aliquam erat volutpat.
+                      </p>
+                    </div>
+                  </div>
+                  <div align="right" className="manager">
+                    <Image src={require("./avatar3.png")}  alt="Manager 3" />
+                    <div className="description">
+                      <h2>Lorem ipsum</h2>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Sed lobortis magna sed tortor fringilla, vel rhoncus
+                        sapien laoreet. Aliquam erat volutpat.
+                      </p>
+
+                      <div>
+                      <a style={{ marginRight: "0.4rem" }}>
+                        <TwitterOutlined style={{ fontSize: "1.1rem" ,color:'white'}} />
+                      </a>
+                      <a style={{ marginRight: "0.4rem" }}>
+                        <LinkedinOutlined style={{ fontSize: "1.1rem",color:'white' }} />
+                      </a>
+                      <a>
+                        <PhoneOutlined style={{ fontSize: "1.1rem" ,color:'white'}} />
+                      </a>
+                    </div>
 
 
-        </Content>
-      </Layout>
-    </div>
-     </motion.div>)
-} 
+                    </div>
+                  </div>
+                </div> */}
 
+                <Divider></Divider>
 
-const About2 = () => {
-  return (
-    <Layout>
-      <Content style={{ padding: "50px", background: "#fff" }}>
-        <Row gutter={[16, 16]} justify="center">
-          <Col xs={24} sm={24} md={10} style={{ textAlign: "center" }}>
-            <Avatar size={150} src={require("./avatar.png")} />
-            <h2 style={{ marginTop: "20px" }}>Fake Name</h2>
-            <p style={{ color: "#888" }}>Manager</p>
-            <div style={{ marginTop: "30px" }}>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ marginRight: "10px" }}
-              >
-                <TwitterOutlined style={{ fontSize: "20px" }} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ marginRight: "10px" }}
-              >
-                <LinkedinOutlined style={{ fontSize: "20px" }} />
-              </a>
-              <a href="tel:123456789">
-                <PhoneOutlined style={{ fontSize: "20px" }} />
-              </a>
-            </div>
-          </Col>
-          <Col xs={24} sm={24} md={14}>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24} md={12}>
-                <img
-                  src={require("./aboutImg.png")}
-                  alt="About Image"
-                  style={{ maxWidth: "100%" }}
-                />
-              </Col>
-              <Col xs={24} sm={24} md={12}>
-                <h2 style={{ marginBottom: "20px" }}>Title</h2>
-                <p style={{ marginBottom: "20px" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  non risus. Suspendisse lectus tortor, dignissim sit amet,
-                  adipiscing nec, ultricies sed, dolor.
-                </p>
-                <p style={{ marginBottom: "20px" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  non risus. Suspendisse lectus tortor, dignissim sit amet,
-                  adipiscing nec, ultricies sed, dolor. Cras elementum ultrices
-                  diam. Maecenas ligula massa, varius a, semper congue, euismod
-                  non, mi.
-                </p>
+                <div
+                  style={{
+                    padding: "1.5vw",
+                    boxShadow: "#00F0FF",
+                    backgroundColor: "white",
+                    margin:'1.9vw'
+                  }}
+                >
+                  <div>
+                    <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+
+                    }}
+                    >
+                      <Title level={2}>Words From Our Clients!</Title>
+                      <Button type="primary">
+                        <PlusOutlined /> Add Your Voice
+                      </Button>
+                    </div>
+                    <Carousel autoplay>
+                      {testimonials.map((testimonial) => (
+                        <div key={testimonial.author}>
+                          <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            marginTop:'1.5vh'
+                          }}
+                          >
+                            <div height="5vh" width="5vh"className="zoom" >
+                              {testimonial.headshot}
+                            </div>
+
+                            <div>
+                            <Text style={{ padding: "0 1.2rem", fontSize:"1.4rem" }} strong>{testimonial.author}</Text>
+                              <Text style={{ padding: "0 1.2rem", fontSize:"1.2rem", display:'flex', alignItems:'flex-start'}}>{testimonial.text}</Text>
+                            </div>
+                          </div>
+
+                          <br />
+
+                          <div style={{ marginTop: "2rem" }}>
+                            <div className="signatureAndStars">
+                              <Text className="signature">
+                                - {testimonial.author}
+                              </Text>
+                              <a>
+                                <StarFilled
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                                {"  "}
+                                <StarFilled
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                                {"  "}
+                                <StarFilled
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                                {"  "}
+                                <StarFilled
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                                {"  "}
+                                <StarFilled
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                                <StarOutlined
+                                  style={{
+                                    fontSize: "1.3rem",
+                                    color: "#0077b6",
+                                  }}
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </Carousel>
+                  </div>
+                </div>
               </Col>
             </Row>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+          </Content>
+        </Layout>
+      </div>
+    </motion.div>
   );
 };
-export{ About2};
 export default About;
