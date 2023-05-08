@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 import { motion } from "framer-motion";
 import { RoleContext} from "../../App";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 export default function Home() {
   const config=React.useContext(RoleContext)
   const btnRef = useRef(null);
@@ -45,7 +46,10 @@ export default function Home() {
     } catch (error) {
       console.log(error);
       // Show error message to user
-      alert("Invalid username or password");
+      Swal.fire({
+        title: "Wrong Credentials",
+        icon: "warning",
+      })
     }
   };
 
