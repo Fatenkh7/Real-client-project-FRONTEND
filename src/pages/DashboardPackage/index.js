@@ -98,7 +98,8 @@ const Package = () => {
         formData
       );
       console.log(packageResponse.data);
-      fetchData();
+      window.location.reload()
+
     } catch (error) {
       console.error(error);
     }
@@ -136,6 +137,7 @@ const Package = () => {
         formData
       );
       console.log(response.data);
+      window.location.reload()
     } catch (error) {
       console.error(error);
     }
@@ -334,7 +336,6 @@ const Package = () => {
       ),
     },
   ];
-
   return (
     <>
       {loading && <MySkeleton />}
@@ -355,7 +356,7 @@ const Package = () => {
               placeholder="Package Title"
               name="packageTitle"
               allowClear
-              value={formData.packageTitle}
+              // value={formData.packageTitle}
               onChange={handleChange}
             />
             <Input
@@ -363,7 +364,7 @@ const Package = () => {
               placeholder="Description"
               name="description"
               allowClear
-              value={formData.description}
+              // value={formData.description}
               onChange={handleChange}
             />
             <Input
@@ -371,7 +372,7 @@ const Package = () => {
               placeholder="Location1, Location2, Location3..."
               name="locations"
               allowClear
-              value={formData.locations}
+              // value={formData.locations}
               onChange={handleChange}
             />
             <Input
@@ -379,7 +380,7 @@ const Package = () => {
               placeholder="Duration"
               name="duration"
               allowClear
-              value={formData.duration}
+              // value={formData.duration}
               onChange={handleChange}
             />
             <Form.Item label="Tailored">
@@ -388,7 +389,7 @@ const Package = () => {
                 placeholder="Tailored"
                 name="isCustomized"
                 allowClear
-                checked={formData.isCustomized}
+                // checked={formData.isCustomized}
                 onChange={(e) => setFormData({ ...formData, isCustomized: e })}
               />
             </Form.Item>
@@ -420,7 +421,7 @@ const Package = () => {
               placeholder="Image Title"
               name="Image Title"
               allowClear
-              value={title}
+              // value={title}
               onChange={onTitleChange}
             />
 
