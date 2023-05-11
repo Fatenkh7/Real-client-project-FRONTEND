@@ -1,34 +1,38 @@
 import { Button, Form, Input } from 'antd';
 import {PhoneOutlined,MailOutlined } from '@ant-design/icons';
 import './contactForm.css';
-import React, {  useState } from 'react';
+import React, {  useState , useRef} from 'react';
 import axios from "axios";
+import Swal from "sweetalert2"
 
 const { TextArea } = Input;
 
 
 const Booking = () => {
 
-  const [bookigValues, setbookingValues] = useState({
-    firstName: '',
-    lastName: '',
-    from_email: '',
-    feedback: ''
-  });
-
+  const fullName=useRef()
+  const email=useRef();
   const sendBooking = (event) => {
     //   event.preventDefault();
+    try{
     const URL= process.env.REACT_APP_BASE_URL
-      axios.post(`${URL}bookingmeeting/add`, bookigValues)
+    const meeting={fullName: fullName.current.input.value, email:email.current.input.value, isGuest:true}
+
+     axios.post(`${URL}bookingmeeting/add`, meeting)
         .then(response => {
           // setData(response.data.data);
-          console.log(response)
+          console.log("@hbhghgh")
+          Swal.fire(
+            "Your message is sent!",
+            "We will contact you.",
+            "success"
+          );
           
         })
-        .catch(error => {
+        console.log(meeting)}
+        catch(error){
           console.log(error);
-        });
-        console.log(bookigValues)
+        }
     }
  
   return (
@@ -58,6 +62,7 @@ const Booking = () => {
     <Form.Item
       label="Enter your name"
       name="name"
+      
       placeholder="enter your name"
       rules={[
         {
@@ -65,7 +70,7 @@ const Booking = () => {
         },
       ]}
     >
-      <Input />
+      <Input ref={fullName} />
     </Form.Item>
 
     <Form.Item
@@ -78,7 +83,8 @@ const Booking = () => {
         },
       ]}
     >
-      <Input />
+      <Input  ref={email}
+/>
       
     </Form.Item>
 {/* <Form.Item 

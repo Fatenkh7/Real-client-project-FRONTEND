@@ -7,6 +7,10 @@
     margin-bottom:40px ;
 
 }
+.home{
+    min-height: calc(100vh - 60px);
+    margin:0;
+}
 /*.dimmer{
     z-index:1;
     background-color: rbga(0,0,0,20%);
@@ -49,7 +53,7 @@
     display: none;
 }
 #hero p{
-    font-size: 120px;
+    font-size: 90px;
     display: inline-block;
   /*  backdrop-filter: brightness(80%);*/
     text-shadow: -8px 4px 20px black;
@@ -96,11 +100,11 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width:90%;
-    height:50%;
-    column-gap: 20px;
-    row-gap: 20px;
-    justify-content: space-between;
+    width:100%;
+    min-height:50%;
+    column-gap: 80px;
+    row-gap: 40px;
+    justify-content: center;
     margin-bottom: 40px;
 }
 #clubsection{
@@ -136,7 +140,10 @@
 }*/
 @media screen and (max-width:600px){
     #hero p{
-        font-size:60px;
+        font-size:40px;
+    }
+    #packages{
+        justify-content: center;
     }
     #services h3, #benefits h3, #contact h3{
         font-size: 40px;

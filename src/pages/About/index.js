@@ -232,9 +232,7 @@ const About = () => {
                     }}
                     >
                       <Title level={2}>Words From Our Clients!</Title>
-                      <Button type="primary">
-                        <PlusOutlined /> Add Your Voice
-                      </Button>
+                     
                     </div>
                     <Carousel autoplay>
                       {testimonials.map((testimonial) => (

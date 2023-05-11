@@ -4,11 +4,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f7f7f7;
-
 }
 :root{
-  --blue:#005D8F;
-  --accent:#28C3D4;
+  --blue:#044436;
+  --accent:#85b1be;
 }
 html{
   overflow-x: hidden

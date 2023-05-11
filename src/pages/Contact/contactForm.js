@@ -5,6 +5,7 @@ import { PhoneOutlined, MailOutlined, FacebookOutlined, InstagramOutlined } from
 import './contactForm.css';
 import axios from "axios";
 import { RoleContext} from "../../App";
+import Swal from "sweetalert2"
 
 const { TextArea } = Input;
 const ContactUs = () => {
@@ -29,14 +30,22 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0
   const sendEmail = (event) => {
     const URL= process.env.REACT_APP_BASE_URL
     //   event.preventDefault();
-      axios.post(`${URL}inbox/add`, emailValues, { headers })
+      axios.post(`${URL}inbox/add`, emailValues,)
         .then(response => {
           // setData(response.data.data);
-          console.log(response)
+          Swal.fire(
+            "Your message is sent!",
+            "We will contact you.",
+            "success"
+          );
           
         })
         .catch(error => {
-          console.log(error);
+          Swal.fire(
+            "We faced a problm sending your message",
+            "Please try again",
+            "warning"
+          );
         });
         console.log(emailValues)
     }
@@ -60,8 +69,6 @@ const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ0MDg3MzQ0
   //   }));
   // };
 
-  useEffect( ()=>      {console.log("batbat",config)}
-  , [])
   return (
     <div div className='all-contact-form'>
 

@@ -12,3 +12,8 @@
 .benefit:hover p{
     display: block;
 }
+@media screen and (max-width:600px) {
+    .benefit{
+        width:100%;
+    }
+}

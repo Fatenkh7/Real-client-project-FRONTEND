@@ -1,3 +1,6 @@
+.packages-page{
+    min-height: 100vh;
+}
 .packages-page section{
     display: flex;
     flex-direction: row;

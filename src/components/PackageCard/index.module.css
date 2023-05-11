@@ -1,8 +1,8 @@
 .card{
-    width:400px;
+    width:500px;
 }
 @media screen and (max-width:600px){
     .card{
-        width:80%;
+        width:95%;
     }
 }

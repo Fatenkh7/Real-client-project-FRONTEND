@@ -1,10 +1,11 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useState } from 'react';
+import logo from "../../images/logo.png"
+import logo1 from "../../images/logo 1.png"
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import styles from "./index.module.css";
 import "./Sidebar.css"
+import {MenuOutlined} from "@ant-design/icons"
 const { Header } = Layout;
 
 //import Styles from "./index2.module.css"
@@ -33,20 +34,45 @@ const items = [
 
 ];
 const WebsiteNav = () => { 
+  const [current, setCurrent]=useState({current:""})
+  const handleClick=(e)=>{
+    setCurrent({ current: e.key })
+  }
   return (
-    <Menu 
-  overflowedIndicator={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" 
-  width="15px">
-    <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" fill="#ffffff"/></svg>}	 mode="horizontal" items={items} />
+    
 
+
+
+
+  <Menu 
+  onClick={handleClick} selectedKeys={[current]} mode="horizontal" overflowedIndicator={<MenuOutlined />} >
+    <div style={{width:"80px"}}><img src={logo} alt="logo" width="60"/></div>
+   <Menu.Item key="finance" >
+    <Link href="/finances"> Finances </Link>
+   </Menu.Item>
+   <Menu.Item key="santé"  >
+   <Link href="/sante">  Santé </Link>
+   </Menu.Item>
+   <Menu.Item key="apmathsp"  >
+   <Link href="/mathematiques">   Mathématiques </Link>
+   </Menu.Item>
+   <Menu.Item key="autres" >
+     Autres
+   </Menu.Item>
+   
+ </Menu>
   );
 };
 export default WebsiteNav;
 
 
+  /* <Menu 
+  overflowedIndicator={<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" 
+  width="15px">
+    <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" fill="#ffffff"/></svg>}	 mode="horizontal" items={items} />
+  */
 
-
-export function Sidebar(props) {
+/*export function Sidebar(props) {
   const isSuper = true;
   let sidebar = useRef();
   let submenu = useRef();
@@ -87,9 +113,9 @@ export function Sidebar(props) {
 
     </nav>
   );
-}
+}*/
 
-export  function ResponNav(){
+/*export  function ResponNav(){
   const topnav=useRef()
   function myFunction() {
     let x = document.getElementById("myTopnav");
@@ -123,4 +149,28 @@ export  function ResponNav(){
 </nav>
 
   )
+}*/
+
+
+export function TopNav() {
+  const [isResponsive, setIsResponsive] = useState(false);
+
+  const handleMenuClick = () => {
+    setIsResponsive(!isResponsive);
+  };
+
+  return (
+    <div className={`topnav ${isResponsive ? "responsive" : ""}`} id="myTopnav">
+      <Link style={{height:"50px"}}to="/home" className="active">
+        <img src={logo1} alt="logo" height="50px"/>
+      </Link>
+      <Link to="/services/package">Packages</Link>
+      <Link to="/services/partner">Packages</Link>
+      <Link to="/contact">Contact</Link>
+      <Link to="/about">About</Link>
+      <a  className="icon" onClick={handleMenuClick}>
+        <i className="fa fa-bars"></i>
+      </a>
+    </div>
+  );
 }

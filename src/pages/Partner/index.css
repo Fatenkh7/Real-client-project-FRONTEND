@@ -1,7 +1,9 @@
 :where(.css-dev-only-do-not-override-htwhyh).ant-tabs >.ant-tabs-nav .ant-tabs-nav-wrap, :where(.css-dev-only-do-not-override-htwhyh).ant-tabs >div>.ant-tabs-nav .ant-tabs-nav-wrap{
     justify-content: center;
 }
-
+.partners-page{
+    min-height: 100vh;
+}
 .partners-page .tab{
     display: flex;
     flex-direction: row;
