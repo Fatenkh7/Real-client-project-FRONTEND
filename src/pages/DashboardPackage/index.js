@@ -37,9 +37,11 @@ const Package = () => {
       "id": cookie.get("id"),
       "role": cookie.get("role"),
       "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*"
 
     };
   //image
+  const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
 
@@ -55,33 +57,45 @@ const Package = () => {
     setTitle(event.target.value);
   };
   const URL= process.env.REACT_APP_BASE_URL
-  const imageUploadResponse = () => {
-    const formData = new FormData();
-    formData.append("image", selectedFile);
-    formData.append("title", title);
-    const URL= process.env.REACT_APP_BASE_URL
+  const imageUploadResponse = async () => {
+    try{
+    const formData2 = new FormData();
+    formData2.append("image", selectedFile, selectedFile.name[0]);
+    formData2.append("title", title);
     axios
-      .post(`${URL}image/add`, formData, { headers })
+      .post(`${URL}image/add`, formData2, { headers })
       .then((response) => {
-        console.log("response", response);
-
+        console.log("image.then", response);
         const idImage = response.data.newImage._id;
-        setFormData((prevFormData) => ({
+        /*setFormData((prevFormData) => ({
           ...prevFormData,
           idImage,
-        }));
+        }));*/
+        console.log("form.then", formData);
+         axios.post(
+          `${URL}package/add`,
+          formData, {
+            Authorization: `Bearer ${cookie.get("token")}`,
+            "id": cookie.get("id"),
+            "role": cookie.get("role"),
+      
+          }
+        ).then(
+          function(success){console.log("wow successs w khara")}
+        );
 
-        console.log("idImage", idImage);
-        console.log(formData);
       })
       .catch((error) => {
         console.log(error);
-      });
+      });}catch(error){
+        Swal.fire("Error")
+      }
   };
 
   useEffect(() => {
-    console.log("formData changed: ", formData);
-  }, [formData]);
+    fetchData();
+    getAllUsers();
+  }, []);
 
   const getAllUsers = async () => {
     try {
@@ -94,20 +108,20 @@ const Package = () => {
     setLoading(false);
   };
 
-  const postPackage = async () => {
+  /*const postPackage = async () => {
     try {
       const URL= process.env.REACT_APP_BASE_URL
       const packageResponse = await axios.post(
         `${URL}package/add`,
         formData, {headers}
       );
-      console.log(packageResponse.data);
+      console.log("res",packageResponse);
       window.location.reload()
 
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -164,10 +178,8 @@ const Package = () => {
     const URL= process.env.REACT_APP_BASE_URL
     axios
       .post(`${URL}image/add`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+        headers
+  })
       .then((response) => {
         console.log("response", response);
         console.log('image updated successfully');
@@ -200,7 +212,7 @@ const Package = () => {
     try {
       const URL= process.env.REACT_APP_BASE_URL
       const { data: response } = await axios.get(
-        `${URL}/package`, {headers}
+        `${URL}package`, {headers}
       );
       console.log(response);
       setData(response.data);
@@ -441,7 +453,21 @@ const Package = () => {
             />
 
             <Form.Item>
-              <Upload beforeUpload={() => false} onChange={onFileChange}>
+              <Upload 
+              beforeUpload={(file) => {
+                    setSelectedFile(file);
+                     return false
+                    }
+                } 
+              onChange={(info) => {
+                const { status } = info.file;
+                if (status === "done") {
+                  setMessage("Image uploaded successfully!");
+                } else if (status === "error") {
+                  setMessage("Error uploading image!");
+                }
+              }}
+              >
                 <button
                   style={{
                     height: "100px",
@@ -483,17 +509,20 @@ const Package = () => {
                   confirmButtonText: "Yes, add it!",
                 }).then((result) => {
                   if (result.isConfirmed) {
+                    console.log("lets try")
                     //call post function
-                    imageUploadResponse();
-                    postPackage();
-                    setAddPop(false);
+                    imageUploadResponse().then(function (success) {
+                      console.log("response image",success);
+                      /*postPackage().then(
+                        function(success){
+                          setEditPop(false);
                     Swal.fire(
                       "Added!",
                       "Your Package has been added.",
                       "success"
                     );
-                     }
-                    
+                        }
+                      )*/
                     }).catch(
                       Swal.fire(
                       "Added!",
@@ -502,6 +531,9 @@ const Package = () => {
                     )
                     
                     );
+                     }
+                    
+                    })
                     
                   }
                 }
