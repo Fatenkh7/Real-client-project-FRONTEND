@@ -8,6 +8,7 @@ body {
 :root{
   --blue:#044436;
   --accent:#85b1be;
+  --blueOpaq:rgba(4, 68, 54, 0.5);
 }
 html{
   overflow-x: hidden

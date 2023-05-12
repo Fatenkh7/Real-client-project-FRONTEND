@@ -23,9 +23,16 @@
   height: 800px
 } */
 .add--button_container {
-  position: absolute;
-  top: -50px;
-  right: 2.5%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width:90vw;
+}
+.ant-input-affix-wrapper{
+  width: max-content;
+}
+.add--button_container span input{
+  width:250px;
 }
 .ant-table{
   height:500px;

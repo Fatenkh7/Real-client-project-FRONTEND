@@ -1,14 +1,16 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined,SearchOutlined } from "@ant-design/icons";
 import { Space, Input, Switch, Form, Table } from "antd";
 import axios from "axios";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
+import Highlighter from 'react-highlight-words';
 import Swal from "sweetalert2";
 import "./index.css";
 import Cookies from "universal-cookie"
 export default function DashboardUser() {
-  const [filteredInfo, setFilteredInfo] = useState({});
+  const [filteredInfo, setFilteredInfo] = useState(null);
+  const [searchedN, setSearchedN]=useState("")
   const [sortedInfo, setSortedInfo] = useState({});
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [addPop, setAddPop] = useState(false);
@@ -87,7 +89,91 @@ export default function DashboardUser() {
     setSelectedRecord(record);
     setMorePop(true);
   };
-
+  /*const getColumnSearchProps = () => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search First Name`}
+          value={selectedKeys[0]}
+          onChange={(e)=> setSearchedN(e.target.value)}
+          /*onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          //onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+         
+          <Button
+            onClick={() => setSearchedN("")}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+              setSearchedN("")
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });*/
   const columns = [
     {
       title: "First Name",
@@ -154,7 +240,14 @@ export default function DashboardUser() {
       ),
     },
   ];
-
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
   const handleSubmitUser = (record) => {
    
     console.log(record);
@@ -192,6 +285,11 @@ export default function DashboardUser() {
         });
       });
   };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  
   const handleEditUser = () => {
   
     const record = {};
@@ -214,9 +312,19 @@ export default function DashboardUser() {
   };
   return (
     <div className="container-users">
-      <div className="add--button_container">
+      <div className="add--button_container" style={{display:"flex"}}>
+      <Input
+                id="outlined-uncontrolled"
+                placeholder="Search"
+                name="phone"
+                onChange={(e)=> {setSearchedN(e.target.value); }}
+                allowClear
+                value={searchedN}
+              />
         <Button onClick={handleAdd}>Add User</Button>
+        
       </div>
+      {console.log(searchedN)}
       <Table
         columns={columns}
         scroll={{ x: 400 }}
@@ -226,7 +334,11 @@ export default function DashboardUser() {
           background: "white",
           borderRadius: "4px",
         }}
-        dataSource={users}
+        dataSource={users.filter(e => {
+          if(searchedN!=""){return e.firstName.includes(searchedN)}
+          else{return e}
+        } 
+          )}
         onChange={handleChange}
         rowKey="_id"
       />

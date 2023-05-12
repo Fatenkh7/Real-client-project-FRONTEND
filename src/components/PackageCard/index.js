@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import Style from "./index.module.css";
 import { useEffect } from "react";
-import image from "../../images/hero.jpeg"
+import image from "../../images/heroDimmed.png"
 import { useInView } from 'react-intersection-observer';
 import { motion, AnimatePresence, easeOut, useAnimation } from "framer-motion";
 
@@ -20,12 +20,30 @@ useEffect(() => {
     control.start("hidden");
   }
 }, [control, inView]);
+if(props.row==="reverse"){
+
   return (
     <motion.div className={Style.card} ref={ref}
     variants={boxVariant}
     initial="hidden"
     animate={control}>
-      <Card className="web"
+      <img src={image} />
+      <div style={{order:-1}}>
+        <h4>Sweet Batata Package</h4>
+        <p>lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum
+        lorem osum lorem osum lorem osum lorem osumlorem osum
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+  return (
+    <motion.div className={Style.card} ref={ref}
+    variants={boxVariant}
+    initial="hidden"
+    animate={control} style={props.style}>
+      {/*<Card className="web"
         hoverable
         style={{
           width: "100%",
@@ -39,7 +57,14 @@ useEffect(() => {
         
       >
         <Meta title="Europe Street beat" description="www.instagram.com" />
-      </Card>
+      </Card>*/}
+      <img src={image} />
+      <div>
+        <h4>Sweet Batata Package</h4>
+        <p>lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum
+        lorem osum lorem osum lorem osum lorem osumlorem osum
+        </p>
+      </div>
     </motion.div>
   );
 }

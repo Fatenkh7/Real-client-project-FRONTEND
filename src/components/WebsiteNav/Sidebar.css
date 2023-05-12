@@ -1,6 +1,9 @@
 .topnav {
   overflow: hidden;
-  background-color: var(--blue);
+  background-color: var(--blueOpaq);
+  position: sticky;
+  width: 100vw;
+  z-index: 500;
 }
 
 .topnav a {
@@ -31,14 +34,19 @@
 
 @media screen and (max-width: 600px) {
   .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
+  .icon{
+    width:40px
   }
-  .topnav.responsive a {
+  .topnav.responsive a{
     float: none;
+    width:100%;
     display: block;
+    text-align: left;
+  }
+  .topnav.responsive a:first-child {
+    float: none;
+    width:50%;
+    display: inline-block;
     text-align: left;
   }
   .topnav img{

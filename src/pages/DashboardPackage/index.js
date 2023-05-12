@@ -271,7 +271,8 @@ const Package = () => {
         <img
           src={`${URL}${idImage.image}`}
           alt={idImage.title}
-          width="100"
+          width="60px"
+          style={{width:"60px"}}
         />
       ),
     },
@@ -357,7 +358,6 @@ const Package = () => {
   ];
   return (
     <div className="container-packages">
-      {loading && <MySkeleton />}
       <Table
         columns={columns}
         dataSource={data.map((row, index) => ({ ...row, key: index }))}

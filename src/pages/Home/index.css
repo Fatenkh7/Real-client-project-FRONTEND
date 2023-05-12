@@ -98,14 +98,15 @@
 }
 #packages{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     width:100%;
     min-height:50%;
     column-gap: 80px;
-    row-gap: 40px;
+    row-gap: 80px;
     justify-content: center;
     margin-bottom: 40px;
+    align-items: center
 }
 #clubsection{
     display: flex;

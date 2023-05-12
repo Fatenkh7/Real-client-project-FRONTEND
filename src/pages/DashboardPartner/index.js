@@ -172,7 +172,7 @@ const Partner = () => {
     };
   
     return (
-        <div className="container-partner">
+        <div className="container-packages">
         <div className="add--button_container">
           <Button onClick={() => {
         setOpenPop(true)

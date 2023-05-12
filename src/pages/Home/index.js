@@ -115,7 +115,7 @@ export default function Home() {
         <h3>Discover Our Top Packages</h3>
         <div id="packages">
           <Card />
-          <Card />
+          <Card row="reverse"/>
           <Card />
         </div>
       </motion.section>
