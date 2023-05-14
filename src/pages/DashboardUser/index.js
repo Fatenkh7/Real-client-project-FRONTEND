@@ -44,7 +44,6 @@ export default function DashboardUser() {
      
       const URL= process.env.REACT_APP_BASE_URL
       const data = await axios.get(`${URL}user`, {headers});
-      console.log(data.data.data);
       setUsers(data.data.data);
     };
     fetchUsers().catch(console.error);
@@ -179,7 +178,7 @@ export default function DashboardUser() {
       title: "First Name",
       dataIndex: ["firstName", "lastName"],
       render: (text, record) => (
-        <p onClick={(e) => handleMore(record)}>
+        <p className="table-user-name" onClick={(e) => handleMore(record)}>
           {record["firstName"]} {record["lastName"]}
         </p>
       ),
@@ -290,20 +289,18 @@ export default function DashboardUser() {
     setSearchText('');
   };
   
-  const handleEditUser = () => {
+  const handleEditUser = (data) => {
   
     const record = {};
     const URL= process.env.REACT_APP_BASE_URL
     axios
-      .put(`${URL}user/`, record, {headers})
+      .put(`${URL}user/${selectedRecord._id}`, data, {headers})
       .then((response) => {
-        Swal.fire({
-          title: "User Added Successfully",
-          position: "top-end",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        Swal.fire(
+          "Edited!",
+          "Your admin has been edited.",
+          "success"
+        );
         setAddPop(false); // hide the add admin popup
       })
       .catch((error) => {
@@ -345,9 +342,7 @@ export default function DashboardUser() {
       {addPop && (
         <Popup title="Add User" close={closePop}>
           <div className="input-container">
-            <label>
-              First Name <span className="required">*</span>
-            </label>
+            
             <Input
               id="outlined-controlled"
               placeholder="First Name"
@@ -357,9 +352,6 @@ export default function DashboardUser() {
               status="error"
               ref={fname}
             />
-            <label>
-              Last Name <span className="required">*</span>
-            </label>
             <Input
               id="outlined-uncontrolled"
               placeholder="Last Name"
@@ -367,9 +359,7 @@ export default function DashboardUser() {
               allowClear
               ref={lname}
             />
-            <label>
-              Phone Number <span className="required">*</span>
-            </label>
+            
             <Input
               id="outlined-uncontrolled"
               placeholder="Phone Number"
@@ -377,7 +367,6 @@ export default function DashboardUser() {
               allowClear
               ref={phone}
             />
-            <label>Email</label>
             <Input
               id="outlined-uncontrolled"
               placeholder="Email"
@@ -385,7 +374,6 @@ export default function DashboardUser() {
               allowClear
               ref={email}
             />
-            <label>Passport Number</label>
             <Input
               id="outlined-uncontrolled"
               placeholder="Passport Number"
@@ -552,13 +540,9 @@ export default function DashboardUser() {
                       ) {
                         form.passportId = editpassport.current.input.value;
                       }
-                      console.log(form);
+                      handleEditUser(form);
                       setEditPop(false);
-                      Swal.fire(
-                        "Edited!",
-                        "Your admin has been edited.",
-                        "success"
-                      );
+                      
                     }
                   });
                 }}
@@ -570,8 +554,32 @@ export default function DashboardUser() {
         )}
       {morePop && selectedRecord && (
         <Popup title="User Information" close={closePop}>
-          {console.log(selectedRecord)}
-          <p>First Name: {selectedRecord.firstName}</p>
+          <div className="selected-user-info">
+            <table>
+              <tr><td>First Name</td> <td>{selectedRecord.firstName}</td></tr>
+              <tr><td>Last Name</td> <td>{selectedRecord.lastName}</td></tr>
+              <tr><td>Email</td> <td>{selectedRecord.email}</td></tr>
+              <tr><td>Phone</td> <td>{selectedRecord.phone}</td></tr>
+              <tr><td>Points</td> <td>{selectedRecord.points}</td></tr>
+              <tr><td>Passport</td> <td> {selectedRecord.passportId ? selectedRecord.passportId : ""}
+</td></tr>
+<tr><td>Preferred Airlines</td> <td>{selectedRecord.preferredDestinations.length > 0
+              ? JSON.parse(selectedRecord.preferredDestinations).map((e) => {
+                  return <span key={e}>{e} </span>;
+                })
+              : ""}</td></tr>
+              <tr><td>Preferred Destination</td><td>{selectedRecord.preferredAirlines.length > 0
+              ? JSON.parse(selectedRecord.preferredAirlines).map((e) => {
+                  return <span key={e}>{e} </span>;
+                })
+              : " "}</td></tr>
+
+
+
+
+
+            </table>
+          {/*<p>First Name: {selectedRecord.firstName}</p>
           <p>Last Name: {selectedRecord.lastName}</p>
           <p>Phone Number: {selectedRecord.phone}</p>
           <p>Email: {selectedRecord.email}</p>
@@ -595,7 +603,8 @@ export default function DashboardUser() {
                   return <span key={e}>{e} </span>;
                 })
               : " "}
-          </p>
+          </p>*/}
+          </div>
         </Popup>
       )}
     </div>

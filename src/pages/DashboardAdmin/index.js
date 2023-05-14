@@ -14,6 +14,12 @@ import { RoleContext} from "../../App";
 import Cookies from "universal-cookie";
 
 export default function Home(props) {
+  const editFN=React.useRef()
+  const editLN=React.useRef()
+  const editUN=React.useRef()
+  const editE=React.useRef()
+  const editBool=React.useRef()
+  const editP=React.useRef()
   const config=React.useContext(RoleContext)
   const [data, setData] = useState([]);
   const [addPop, setAddPop] = useState(false);
@@ -70,7 +76,6 @@ export default function Home(props) {
     const fetchData = async () => {
       try {
         const URL= process.env.REACT_APP_BASE_URL
-        console.log(headers)
         const response = await axios.get(`${URL}admin`, {headers});
         const rawData = response.data.response;
         if (Array.isArray(rawData)) {
@@ -93,8 +98,8 @@ export default function Home(props) {
       const URL= process.env.REACT_APP_BASE_URL
       const updatedAdmin = { ...editValues };
       const response = await axios.put(
-        `${URL}admin/${editedItemId}` , { headers },
-        updatedAdmin
+        `${URL}admin/${editedItemId}` ,
+        updatedAdmin, { headers }
       );
       setData(
         data.map((admin) => (admin._id === editedItemId ? updatedAdmin : admin))
@@ -359,6 +364,7 @@ export default function Home(props) {
               id="outlined-controlled"
               placeholder="First Name"
               name="firstName"
+              ref={editFN}
               onChange={(e) => {
                 setEditValues((prevState) => ({
                   ...prevState,
@@ -371,6 +377,8 @@ export default function Home(props) {
               id="outlined-uncontrolled"
               placeholder="Last Name"
               name="lastName"
+              ref={editLN}
+
               onChange={(e) => {
                 setEditValues((prevState) => ({
                   ...prevState,
@@ -381,6 +389,7 @@ export default function Home(props) {
             />
             <Input
               id="outlined-uncontrolled"
+              ref={editUN}
               name="userName"
               onChange={(e) => {
                 setEditValues((prevState) => ({
@@ -394,6 +403,7 @@ export default function Home(props) {
             <Input
               id="outlined-uncontrolled"
               placeholder="Email"
+              ref={editE}
               name="email"
               onChange={(e) => {
                 setEditValues((prevState) => ({
@@ -408,6 +418,7 @@ export default function Home(props) {
                 id="outlined-uncontrolled"
                 placeholder="Is Super"
                 name="isSuper"
+                ref={editBool}
                 onChange={(value) => {
                   setEditValues((prevState) => ({
                     ...prevState,
@@ -420,6 +431,7 @@ export default function Home(props) {
             <Input
               id="outlined-uncontrolled"
               placeholder="Password"
+              ref={editP}
               name="password"
               type="password"
               // value={editValues.password}

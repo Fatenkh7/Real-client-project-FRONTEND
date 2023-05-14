@@ -1,13 +1,11 @@
 import { motion, AnimatePresence, easeOut, useAnimation } from "framer-motion";
 import Btn from "../../components/webButton";
 import "./index.css";
-import enter from "../../images/flight_enter.jpg";
-import vip from "../../images/vip.svg";
-import per from "../../images/pers_travel_icon.png";
+//import video from "../../images/video.m4v"
+
 import { useInView } from "react-intersection-observer";
 import Card from "../../components/PackageCard";
 import { Carousel } from "antd";
-import img6 from "../../images/image.png"
 import {Link} from "react-router-dom"
 import Benefit from "../../components/Benefit"
 const slide1 = {
@@ -19,8 +17,7 @@ const slide1 = {
     "url(https://blogs.worldbank.org/sites/default/files/styles/share/public/2023-02/al-saranda-780.png)",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-  backgroundColor: "rgba(0, 0, 0, 0.3)",
-  backgroundBlendMode: "saturation",
+
 };
 const slide2 = {
   height: "80vh",
@@ -31,8 +28,7 @@ const slide2 = {
     "url(https://bigseventravel.com/wp-content/uploads/2020/03/italy-4093227_1920.jpg)",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-  backgroundColor: "rgba(0, 0, 0, 0.3)",
-  backgroundBlendMode: "saturation",
+
 };
 const slide3 = {
   height: "80vh",
@@ -43,8 +39,7 @@ const slide3 = {
     "url(../../images/heroFlipped.png)",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-  backgroundColor: "rgba(0, 0, 0, 0.3)",
-  backgroundBlendMode: "saturation",
+
 };
 export default function Home() {
   const control = useAnimation();
@@ -73,9 +68,12 @@ export default function Home() {
           <div>
             <div style={slide2}></div>
           </div>
-        </Carousel>
+  </Carousel>
+        {/*<video controls style={{width:"100vw"}}>
+        <source src={video} type="video/mp4" />
+        </video>*/}
         <div id="hero">
-          <p>Luxury Travel </p>
+          <p>Luxury Travel </p> <br/>
           <p> Beyond Your Imagination</p>
         </div>
       </section>
@@ -114,9 +112,9 @@ export default function Home() {
       <motion.section className="section" id="services">
         <h3>Discover Our Top Packages</h3>
         <div id="packages">
-          <Card />
-          <Card row="reverse"/>
-          <Card />
+          <Card img={require("../../images/image002.jpg")} desc="lorem ipsum" title="Lorem Ipsum"/>
+          <Card img={require("../../images/image003.jpg")} desc="lorem ipsum" title="Lorem Ipsum" row="reverse"/>
+          <Card img={require("../../images/image004.jpg")} desc="lorem ipsum" title="Lorem Ipsum"/>
         </div>
       </motion.section>
      

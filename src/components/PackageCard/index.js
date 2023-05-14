@@ -27,11 +27,10 @@ if(props.row==="reverse"){
     variants={boxVariant}
     initial="hidden"
     animate={control}>
-      <img src={image} />
+      <img src={props.img} />
       <div style={{order:-1}}>
-        <h4>Sweet Batata Package</h4>
-        <p>lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum
-        lorem osum lorem osum lorem osum lorem osumlorem osum
+        <h4>{props.title}</h4>
+        <p>{props.desc}
         </p>
       </div>
     </motion.div>
@@ -58,11 +57,10 @@ if(props.row==="reverse"){
       >
         <Meta title="Europe Street beat" description="www.instagram.com" />
       </Card>*/}
-      <img src={image} />
+      <img src={props.img} />
       <div>
-        <h4>Sweet Batata Package</h4>
-        <p>lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum lorem osum
-        lorem osum lorem osum lorem osum lorem osumlorem osum
+        <h4>{props.title}</h4>
+        <p>{props.desc}
         </p>
       </div>
     </motion.div>

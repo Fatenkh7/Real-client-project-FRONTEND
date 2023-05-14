@@ -6,7 +6,7 @@
 body{
   background-color: #f7f7f7;
 }
-.navbar {
+/*.navbar {
   padding-bottom: 1px;
   border-bottom: solid 1px #e8e8e8;
   background-color: white;
@@ -114,6 +114,6 @@ body{
   .username {
     display: inline-block;
   }
-}
+}*/
 
 /* Navbar End */

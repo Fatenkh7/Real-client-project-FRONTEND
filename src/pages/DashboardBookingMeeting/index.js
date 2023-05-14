@@ -22,7 +22,7 @@ import Popup from "../../components/Popup";
 import Swal from "sweetalert2";
 import Cookies from "universal-cookie"
 const { Option } = Select;
-
+const {RangePicker}=DatePicker
 export default function Home(props) {
   const [data, setData] = useState([]);
   const [addPop, setAddPop] = useState(false);
@@ -183,7 +183,7 @@ export default function Home(props) {
     if (date) {
       setMeetingData((prevData) => ({
         ...prevData,
-        datetime: date.format("YYYY-MM-DD HH:mm:ss"),
+        datetime: date.format("YYYY-MM-DD HH:mm"),
       }));
     }
   };
@@ -200,12 +200,15 @@ export default function Home(props) {
 
   const columns = [
     {
-      title: "User",
-      dataIndex: "idUser",
-      render: (_, record) =>
-        record.idUser
-          ? `${record.idUser.firstName} ${record.idUser.lastName}`
-          : "",
+      title: "User/Guest",
+      dataIndex: "_id",
+      render: (_, record) =>{
+        if(record.isGuest){
+          return <><p> Name:{record.fullName} </p> <p> Email:{record.email}</p></>
+        }
+        else{return `${record.idUser.firstName} ${record.idUser.lastName}` }
+      }
+  
     },
     {
       title: "Admin",
@@ -225,8 +228,8 @@ export default function Home(props) {
       title: "Is Guest",
       dataIndex: "isGuest",
       filters: [
-        { text: "Yes", value: "yes" },
-        { text: "No", value: "no" },
+        { text: "yes", value: "true" },
+        { text: "no", value: "false" },
       ],
       onFilter: (value, record) => record.isGuest.indexOf(value) === 0,
       render: (isGuest, record) => (
@@ -365,10 +368,9 @@ export default function Home(props) {
             </Select>
             <DatePicker
               showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              value={moment(meetingData.datetime)}
               onChange={handleDateChange}
             />
+           
             <Form.Item label="Is Guest">
               <Switch
                 id="outlined-uncontrolled"
@@ -380,6 +382,24 @@ export default function Home(props) {
                 placeholder="Is Guest"
               />
             </Form.Item>
+            {meetingData.isGuest && <>
+              <Input
+              id="outlined-uncontrolled"
+              name="fullName"
+              value=""
+              onChange={(value) =>
+                setMeetingData({ ...meetingData, fullName: value })}
+              placeholder="Password"
+            />
+            <Input
+              id="outlined-uncontrolled"
+              name="email"
+              value=""
+              onChange={(value) =>
+                setMeetingData({ ...meetingData, email: value })}
+              placeholder="Password"
+            />
+            </>}
             <Form.Item label="Is Confirmed">
               <Switch
                 id="outlined-uncontrolled"

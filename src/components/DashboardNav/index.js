@@ -24,6 +24,7 @@ export default function DashboardNav() {
             margin: "16px 14px 26px 10px",
             background: "#3a70a1",
             textAlign: "center",
+            fontFamily:"Arial, Helvetica, sans-serif",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -36,7 +37,8 @@ export default function DashboardNav() {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["1"]}
-          style={{ background: "#f7f7f7", color: "#000000" }}
+          style={{ background: "#f7f7f7", color: "#000000", fontFamily:"Arial, Helvetica, sans-serif !important"
+        }}
         >
           <Menu.Item key="1">
             <Link to="/dashboard/admin">Admins</Link>
@@ -44,9 +46,9 @@ export default function DashboardNav() {
           <Menu.Item key="2">
             <Link to="/dashboard/user">Users</Link>
           </Menu.Item>
-          <Menu.Item key="3">
+          {/*<Menu.Item key="3">
             <Link to="/dashboard/booking">Booking</Link>
-          </Menu.Item>
+      </Menu.Item>*/}
           <Menu.Item key="4">
             <Link to="/dashboard/bookingmeeting">Meeting</Link>
           </Menu.Item>
@@ -61,9 +63,9 @@ export default function DashboardNav() {
               <Link to="/dashboard/package">Package</Link>
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item key="8">
+         {/* <Menu.Item key="8">
             <Link to="/dashboard/type-travel">Type Travel</Link>
-          </Menu.Item>
+      </Menu.Item>*/}
         </Menu>
       </Header>
     </Layout>

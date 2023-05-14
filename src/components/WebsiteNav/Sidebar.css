@@ -1,4 +1,4 @@
-.topnav {
+/*.topnav {
   overflow: hidden;
   background-color: var(--blueOpaq);
   position: sticky;
@@ -54,5 +54,130 @@
   }
   .topnav.responsive img{
     opacity: 0;
+  }
+}*/
+
+/*---Google font---*/
+/*---Bases---*/
+*
+{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+ul
+{
+  list-style:none;
+}
+a
+{
+  text-decoration:none;
+  transition: color 0.5s ease-in-out;
+}
+/*---Header---*/
+/*.header
+{
+  height:100vh;
+  width:100vw;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2Njg2MjIwNTY&ixlib=rb-4.0.3&q=80');
+  background-size:cover; 
+}*/
+/*---Navbar---*/
+.navbar
+{
+  position:fixed;
+  background-color: rgba(35,35,35,0.6);
+  width:100%;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  top: 0;
+  margin-bottom: 20px;
+  z-index: 99990;
+}
+.navbar .logo
+{
+  font-size:2em;
+  font-weight:bold;
+}
+.navbar .nav-links ul
+{
+  display:flex;
+}
+.navbar .nav-links ul li
+{
+  margin:0 25px;
+}
+.navbar .nav-links ul li a:hover
+{
+  color:var(--accent);
+  font-weight:600;
+}
+.navbar a 
+{
+  color:rgb(255, 255, 255);
+}
+.navbar .menu-hamburger
+{
+  display:none;
+  color:rgb(255, 255, 255);
+  position:absolute;
+  top:50px;
+  right:50px;
+  font-size:35px;
+  cursor:pointer;
+}
+
+@media screen and (max-width:900px)
+{
+  .navbar
+  {
+    padding:0 !important;
+  }
+  .navbar .logo
+  {
+    display:none !important;
+  }
+  .navbar .menu-hamburger
+  {
+    display:block !important;
+  }
+  .nav-links
+  {
+    top:0 !important;
+    left:-100% !important;
+    position:absolute !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    background-color:rgba(0,0,0,0.5) !important;
+    backdrop-filter:blur(8px) !important;
+    width:100% !important;
+    height:100vh !important;
+    transition: left 0.5s ease !important;
+    
+  }
+  .nav-links.mobile-menu
+  {
+  left:0 !important;
+    
+  }
+
+  .nav-links ul
+  {
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+  }
+  .navbar .nav-links ul li
+  {
+  margin:25px 0 !important;
+  font-size:1.2em !important;
+  }
+  .menu-hamburger
+  {
+    display:block !important;
   }
 }

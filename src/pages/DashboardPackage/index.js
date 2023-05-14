@@ -37,7 +37,6 @@ const Package = () => {
       "id": cookie.get("id"),
       "role": cookie.get("role"),
       "Content-Type": "multipart/form-data",
-      "Access-Control-Allow-Origin": "*"
 
     };
   //image
@@ -66,7 +65,8 @@ const Package = () => {
       .post(`${URL}image/add`, formData2, { headers })
       .then((response) => {
         console.log("image.then", response);
-        const idImage = response.data.newImage._id;
+        const pckgimg = response.data.newImage._id;
+        setFormData({...formData, idImage:pckgimg})
         /*setFormData((prevFormData) => ({
           ...prevFormData,
           idImage,
@@ -81,7 +81,11 @@ const Package = () => {
       
           }
         ).then(
-          function(success){console.log("wow successs w khara")}
+          function(success){Swal.fire(
+            "Added!",
+            "Your Package has been added.",
+            "success"
+          );}
         );
 
       })
@@ -511,26 +515,7 @@ const Package = () => {
                   if (result.isConfirmed) {
                     console.log("lets try")
                     //call post function
-                    imageUploadResponse().then(function (success) {
-                      console.log("response image",success);
-                      /*postPackage().then(
-                        function(success){
-                          setEditPop(false);
-                    Swal.fire(
-                      "Added!",
-                      "Your Package has been added.",
-                      "success"
-                    );
-                        }
-                      )*/
-                    }).catch(
-                      Swal.fire(
-                      "Added!",
-                      "Error",
-                      "warning"
-                    )
-                    
-                    );
+                    imageUploadResponse()
                      }
                     
                     })
