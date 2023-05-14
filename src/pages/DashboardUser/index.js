@@ -4,7 +4,6 @@ import { Space, Input, Switch, Form, Table } from "antd";
 import axios from "axios";
 import Button from "../../components/Button";
 import Popup from "../../components/Popup";
-import Highlighter from 'react-highlight-words';
 import Swal from "sweetalert2";
 import "./index.css";
 import Cookies from "universal-cookie"
